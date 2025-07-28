@@ -1,0 +1,87 @@
+###########################
+# Visual Studio Specific  #
+###########################
+
+# User-specific files
+*.suo
+*.user
+*.userprefs
+
+# Debugging and build artifacts
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+[Tt]emp/
+*.[Tt]mp
+*.log
+*.vspscc
+*.vssscc
+*.buildscc
+*.pidb
+*.vshost.exe
+*.vshost.exe.config
+*.resharper
+*.resharper.user
+*.dotsettings.user
+*.cache
+*.designer.cs.opendb
+*.pdb # Program Database file (debug info)
+*.idl # Interface Definition Language file (sometimes generated)
+*.lib # Library files (often generated from projects)
+*.exp # Export files (often generated from projects)
+
+# Resharper or similar extensions
+_ReSharper.*/
+*.ReSharper/
+*.ReSharper.user
+*.dotsettings
+*.dotsettings.user
+.idea/ # JetBrains IDEs (Rider, etc.)
+
+# Visual Studio temporary files
+*.vs/
+[Cc]ompiled[Dd]esignTime[Cc]ss/
+*.scc
+*.svn
+
+# NuGet packages
+packages/ # 古いPackageReference方式でない場合
+# または、グローバルパッケージキャッシュを除外
+.nuget/NuGet/
+.nuget/packages/
+.nuget/tmp/
+.nuget/SolutionCache/
+
+# Visual Studio Code specific (if also using VS Code)
+.vscode/
+
+# Local history for Visual Studio
+.vs/
+*.vsl
+*.vssettings
+*.userprefs
+
+# MSTest test results
+*.trx
+
+# NUnit test results
+*.nunit
+
+# DotNet CLI files
+.config/
+
+# Rider related files (if using JetBrains Rider)
+.idea/
+*.sln.DotSettings
+*.sln.DotSettings.user
+
+# Mac specific files
+.DS_Store # macOS hidden file
+
+# Windows specific files
+Thumbs.db
+
+# Any other machine-specific or temporary files you encounter
+# If you find other files that are specific to your local machine
+# or are generated during the build process, add them here.
