@@ -3,6 +3,7 @@ using System.Data;
 using System.Windows;
 using WpfScheduledApp20250729.Services;
 using WpfScheduledApp20250729.ViewModels;
+using WpfScheduledApp20250729.Views;
 
 namespace WpfScheduledApp20250729
 {
@@ -19,7 +20,7 @@ namespace WpfScheduledApp20250729
             var windowService = new WindowService();
 
             // MainWindowとViewModelを作成
-            var mainWindow = new MainWindow();
+            var mainWindow = new ReadTasksWindow();
             var mainViewModel = new ReadTasksViewModel(windowService);
 
             mainWindow.DataContext = mainViewModel;
