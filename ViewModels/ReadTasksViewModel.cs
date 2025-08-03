@@ -16,9 +16,24 @@ namespace WpfScheduledApp20250729.ViewModels
         public ReadTasksViewModel(IWindowService windowService)
         {
             _windowService = windowService;
-            _windowService.ShowAddTaskWindow();
         }
 
-
+        private DelegateCommand _addTaskCommand;
+        public DelegateCommand AddTaskCommand
+        {
+            get
+            {
+                return this._addTaskCommand ?? (this._addTaskCommand = new DelegateCommand(
+                _ =>
+                {
+                    _windowService.ShowAddTaskWindow();
+                },
+                _ =>
+                {
+                    return true;
+                }
+                ));
+            }
+        }
     }
 }
