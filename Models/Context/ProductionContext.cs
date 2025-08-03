@@ -25,6 +25,8 @@ namespace WpfScheduledApp20250729.Models.Context
         public DbSet<MiddleTask> MiddleTasks { get; set; }
         public DbSet<LowTask> LowTasks { get; set; }
         public DbSet<Webpage> Webpages { get; set; }
+        public DbSet<RelationExtensionApp> RelationExtensionApps { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

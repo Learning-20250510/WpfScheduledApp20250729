@@ -16,10 +16,10 @@ namespace WpfScheduledApp20250729.Models.Entities
 
         [Column("id")]
         public int Id { get; set; }
-        [Column("base_task_information_id")]
+        [Column("middle_task_id")]
         [Required]
         [ForeignKey(nameof(MiddleTask))]
-        public int MiddleTask { get; set; }
+        public int MiddleTaskId { get; set; }
         [Column("project_name_id")]
         [Required]
         [ForeignKey(nameof(Project))]

@@ -13,7 +13,7 @@ namespace WpfScheduledApp20250729.Models.Entities
         public int Id { get; private set; }
 
         // 外部キー
-        [Column("high_task")]
+        [Column("high_task_id")]
         public int HighTaskId { get; set; }
         public HighTask HighTask { get; set; } = null!;
 

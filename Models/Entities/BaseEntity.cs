@@ -39,10 +39,10 @@ namespace WpfScheduledApp20250729.Models.Entities
         // デフォルト FALSE を DB で設定
         [Column("archived")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public bool Archived { get; private set; }
+        public bool Archived { get; private set; } = false;
 
         [Column("disabled")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public bool Disabled { get; private set; }
+        public bool Disabled { get; private set; } = false;
     }
 }
