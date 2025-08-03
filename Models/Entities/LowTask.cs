@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WpfScheduledApp20250629.Models.Entities
+{
+    [Table("low_task")]
+    internal class LowTask
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
+        [Column("id")]
+        public int Id { get; set; }
+        [Column("base_task_information_id")]
+        [Required]
+        [ForeignKey(nameof(MiddleTask))]
+        public int MiddleTask { get; set; }
+        [Column("project_name_id")]
+        [Required]
+        [ForeignKey(nameof(Project))]
+        public string ProjectNameId { get; set; }
+        [Column("estimated_time")]
+        public int EstimatedTime { get; set; }
+
+        [Column("description")]
+        public string Description { get; set; }
+        [Column("execution_date")]
+        public DateOnly ExecutionDate { get; set; }
+        [Column("execution_time")]
+        public TimeOnly ExecutionTime { get; set; }
+        [Column("can_auto_reschedule")]
+        public bool CanAutoReschedule { get; set; }
+        [Column("lastcleared_at")]
+        public DateTime LastClearedAt { get; set; }
+        [Column("clear_times_intime")]
+        public int ClearTimesInTime { get; set; }
+        [Column("clear_times_outoftime")]
+        public int ClearTimesOutofTime { get; set; }
+
+        [NotMapped]
+        public bool CheckBox { get; set; }
+        [NotMapped]
+        public string BaseTaskInformationTaskName { get; set; }
+        [NotMapped]
+        public string HowToLearnName { get; set; }
+        [NotMapped]
+        public string ProjectName { get; set; }
+    }
+}
