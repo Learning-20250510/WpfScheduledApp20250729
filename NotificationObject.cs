@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfScheduledApp20250629
+namespace WpfScheduledApp20250729
 {
     internal abstract class NotificationObject : INotifyPropertyChanged
     {

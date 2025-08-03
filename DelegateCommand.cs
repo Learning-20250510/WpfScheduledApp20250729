@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace WpfScheduledApp20250629
+namespace WpfScheduledApp20250729
 {
     internal class DelegateCommand : ICommand
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfScheduledApp20250629.Models.Entities
+namespace WpfScheduledApp20250729.Models.Entities
 {
     [Table("low_task")]
     internal class LowTask

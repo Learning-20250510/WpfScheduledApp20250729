@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WpfScheduledApp20250629.Models.Entities
+namespace WpfScheduledApp20250729.Models.Entities
 {
     [Table("architecture")]
     internal class Architecture : BaseEntity

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace WpfScheduledApp20250629.Models.Entities
+namespace WpfScheduledApp20250729.Models.Entities
 {
     [Table("webpage")]
     internal class Webpage : BaseEntity
