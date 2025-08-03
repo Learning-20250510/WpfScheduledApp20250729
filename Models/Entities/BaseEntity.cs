@@ -20,15 +20,7 @@ namespace WpfScheduledApp20250729.Models.Entities
         [Column("touched_at")]
         public DateTime TouchedAt { get; set; }
 
-        // アプリ側で都度セット（既定値不要）
-        [Column("last_upd_pgm_at")]
-        public int LastUpdPgmId { get; set; }
-
-        [Column("last_upd_user")]
-        [MaxLength(100)]
-        public string LastUpdUser { get; set; } = string.Empty;
-
-        [Column("last_upd_method_name")]
+        [Column("last_touched_method_name")]
         [MaxLength(200)]
         public string LastUpdMethodName { get; set; } = string.Empty;
 
