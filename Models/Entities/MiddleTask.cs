@@ -15,25 +15,18 @@ namespace WpfScheduledApp20250729.Models.Entities
         // 外部キー
         [Column("high_task_id")]
         public int HighTaskId { get; set; }
-        public HighTask HighTask { get; set; } = null!;
 
         [Column("htl_id")]
         public int HtlId { get; set; }
-        public HowToLearn HowToLearn { get; set; } = null!;
 
 
-        [Column("project_name_id")]
-        public int ProjectNameId { get; set; }
-        public Project Project { get; set; } = null!;
+        [Column("project_id")]
+        public int ProjectId { get; set; }
 
         [Column("description")]
         [MaxLength(1000)]
         public string? Description { get; set; }
 
-        [Column("task_name")]
-        [Required]
-        [MaxLength(200)]
-        public string TaskName { get; set; } = string.Empty;
 
         [Column("can_auto_reschedule")]
         public bool CanAutoReschedule { get; set; }
@@ -52,7 +45,6 @@ namespace WpfScheduledApp20250729.Models.Entities
 
         [Column("periodically_cycles_id")]
         public int PeriodicallyCyclesId { get; set; }
-        public PeriodicallyCycle PeriodicallyCycle { get; set; } = null!;
 
         [Column("file_name")]
         [MaxLength(255)]

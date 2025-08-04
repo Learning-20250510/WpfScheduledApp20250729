@@ -20,10 +20,9 @@ namespace WpfScheduledApp20250729.Models.Entities
         [Required]
         [ForeignKey(nameof(MiddleTask))]
         public int MiddleTaskId { get; set; }
-        [Column("project_name_id")]
+        [Column("project_id")]
         [Required]
-        [ForeignKey(nameof(Project))]
-        public string ProjectNameId { get; set; }
+        public int ProjectId { get; set; }
         [Column("estimated_time")]
         public int EstimatedTime { get; set; }
 

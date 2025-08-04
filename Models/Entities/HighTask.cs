@@ -21,6 +21,11 @@ namespace WpfScheduledApp20250729.Models.Entities
         [Column("taskname")]
         [Required]
         public required string TaskName { get; set; } = string.Empty;
+        [Column("description")]
+        [MaxLength(1000)]
+        public string? Description { get; set; }
+        [Column("project_id")]
+        public int ProjectId { get; set; }
         [Column("clear_times_intime")]
         public int ClearTimesInTime { get; set; }
         [Column("clear_times_outoftime")]
