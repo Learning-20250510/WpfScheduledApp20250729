@@ -10,16 +10,16 @@ namespace WpfScheduledApp20250729
 {
     internal abstract class NotificationObject : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        protected void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
         {
             var h = PropertyChanged;
             if (h != null) h(this, new PropertyChangedEventArgs(propertyName));
         }
 
 
-        protected bool SetProperty<T>(ref T target, T value, [CallerMemberName] string propertyName = null)
+        protected bool SetProperty<T>(ref T target, T value, [CallerMemberName] string? propertyName = null)
         {
             if (Equals(target, value))
             {

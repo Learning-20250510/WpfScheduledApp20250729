@@ -18,7 +18,7 @@ namespace WpfScheduledApp20250729.ViewModels
             _windowService = windowService;
         }
 
-        private DelegateCommand _addTaskCommand;
+        private DelegateCommand? _addTaskCommand;
         public DelegateCommand AddTaskCommand
         {
             get

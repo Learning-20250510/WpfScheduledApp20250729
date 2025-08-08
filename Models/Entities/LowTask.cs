@@ -27,7 +27,7 @@ namespace WpfScheduledApp20250729.Models.Entities
         public int EstimatedTime { get; set; }
 
         [Column("description")]
-        public string Description { get; set; }
+        public required string Description { get; set; }
         [Column("execution_date")]
         public DateOnly ExecutionDate { get; set; }
         [Column("execution_time")]
@@ -44,10 +44,10 @@ namespace WpfScheduledApp20250729.Models.Entities
         [NotMapped]
         public bool CheckBox { get; set; }
         [NotMapped]
-        public string BaseTaskInformationTaskName { get; set; }
+        public required string MiddleTaskMName { get; set; }
         [NotMapped]
-        public string HowToLearnName { get; set; }
+        public  required string HowToLearnName { get; set; }
         [NotMapped]
-        public string ProjectName { get; set; }
+        public required string ProjectName { get; set; }
     }
 }

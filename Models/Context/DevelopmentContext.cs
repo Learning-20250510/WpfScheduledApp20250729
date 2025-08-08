@@ -21,7 +21,6 @@ namespace WpfScheduledApp20250729.Models.Context
         public DbSet<HighTask> HighTasks { get; set; }
         public DbSet<Architecture> Architectures { get; set; }
         public DbSet<HowToLearn> HowToLearns { get; set; }
-        public DbSet<LastUpdPgm> LastUpdPgms { get; set; }
         public DbSet<PeriodicallyCycle> PeriodicallyCycles { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<TaskSpecifiedDate> TaskSpecifiedDates { get; set; }
@@ -40,7 +39,8 @@ namespace WpfScheduledApp20250729.Models.Context
                     .AddJsonFile("appsettings.json")
                     .Build();
 
-                string connectionString = config.GetConnectionString("DevelopmentConnection");
+                string connectionString = config.GetConnectionString("DevelopmentConnection") 
+                    ?? throw new InvalidOperationException("Connection string 'DevelopmentConnection' not found.");
                 optionsBuilder.UseNpgsql(connectionString);
             }
         }

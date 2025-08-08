@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="ReadTasksWindow" Height="450" Width="800">
     <Grid>
-        
+        <Button
+               Content="Search"
+               Command="{Binding AddTaskCommand}"
+               Margin="10" />
+
     </Grid>
 </Window>

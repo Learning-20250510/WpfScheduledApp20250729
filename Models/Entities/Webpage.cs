@@ -17,6 +17,6 @@ namespace WpfScheduledApp20250729.Models.Entities
         [Column("id")]
         public int Id { get; set; }
         [Column("url")]
-        public string Url { get; set; }
+        public required string Url { get; set; }
     }
 }

@@ -27,7 +27,8 @@ namespace WpfScheduledApp20250729.Models.Context
                     .AddJsonFile("appsettings.json")
                     .Build();
 
-                string connectionString = config.GetConnectionString("WebPageConnection");
+                string connectionString = config.GetConnectionString("WebPageConnection") 
+                    ?? throw new InvalidOperationException("Connection string 'WebPageConnection' not found.");
                 optionsBuilder.UseNpgsql(connectionString);
             }
         }
