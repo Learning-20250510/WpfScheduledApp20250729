@@ -17,12 +17,14 @@ namespace WpfScheduledApp20250729.ViewModels
         private readonly IWindowService _windowService;
         private readonly HighTaskService _highTaskService;
         private readonly ArchitectureService _architectureService;
+        private readonly ProjectService _projectService;
 
-        public ReadTasksViewModel(IWindowService windowService, HighTaskService highTaskService, ArchitectureService architectureService)
+        public ReadTasksViewModel(IWindowService windowService, HighTaskService highTaskService, ArchitectureService architectureService, ProjectService projectService)
         {
             _windowService = windowService;
             _highTaskService = highTaskService;
             _architectureService = architectureService;
+            _projectService = projectService;
         }
 
         private DelegateCommand? _addTaskCommand;
@@ -38,13 +40,29 @@ namespace WpfScheduledApp20250729.ViewModels
                         // 1. まずArchitectureを作成または取得
                         var architecture = await _architectureService.GetOrCreateDefaultArchitectureAsync();
                         
-                        // 2. HighTaskを作成（有効なArchitectureIdを使用）
+                        // 2. Projectを作成または取得
+                        var allProjects = await _projectService.GetAllAsync();
+                        var defaultProject = allProjects.FirstOrDefault(p => p.ProjectName == "Default Project");
+                        if (defaultProject == null)
+                        {
+                            defaultProject = new Project
+                            {
+                                ProjectName = "Default Project",
+                                CreatedAt = DateTime.UtcNow,
+                                UpdatedAt = DateTime.UtcNow,
+                                TouchedAt = DateTime.UtcNow,
+                                LastUpdMethodName = "AddTaskCommand_CreateProject"
+                            };
+                            defaultProject = await _projectService.AddAsync(defaultProject);
+                        }
+                        
+                        // 3. HighTaskを作成（有効なArchitectureIdとProjectIdを使用）
                         var newTask = new HighTask
                         {
                             TaskName = "テストタスク",
                             Description = "ボタンクリックで追加されたタスク",
                             ArchitectureId = architecture.Id,  // 有効なArchitectureIdを設定
-                            ProjectId = 1,  // TODO: ProjectServiceも作成して対応
+                            ProjectId = defaultProject.Id,     // 有効なProjectIdを設定
                             ClearTimesInTime = 0,
                             ClearTimesOutofTime = 0,
                             CreatedAt = DateTime.UtcNow,

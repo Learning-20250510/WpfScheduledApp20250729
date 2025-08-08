@@ -57,7 +57,7 @@ namespace WpfScheduledApp20250729
 
                 // MainWindowとViewModelを作成
                 var mainWindow = new ReadTasksWindow();
-                var mainViewModel = new ReadTasksViewModel(windowService, highTaskService, architectureService);
+                var mainViewModel = new ReadTasksViewModel(windowService, highTaskService, architectureService, projectService);
 
                 mainWindow.DataContext = mainViewModel;
                 mainWindow.Show();
