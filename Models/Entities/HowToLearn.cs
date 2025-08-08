@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace WpfScheduledApp20250729.Models.Entities
 {
     [Table("how_to_learn")]
-    internal class HowToLearn : BaseEntity
+    public class HowToLearn : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

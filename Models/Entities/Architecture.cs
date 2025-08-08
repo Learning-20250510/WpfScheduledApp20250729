@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WpfScheduledApp20250729.Models.Entities
 {
     [Table("architecture")]
-    internal class Architecture : BaseEntity
+    public class Architecture : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

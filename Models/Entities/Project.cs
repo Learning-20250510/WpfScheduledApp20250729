@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WpfScheduledApp20250729.Models.Entities
 {
     [Table("project")]
-    internal class Project : BaseEntity
+    public class Project : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

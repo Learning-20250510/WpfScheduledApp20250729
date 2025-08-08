@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace WpfScheduledApp20250729.Models.Entities
 {
     [Table("low_task")]
-    internal class LowTask
+    public class LowTask
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

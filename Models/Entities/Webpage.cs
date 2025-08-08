@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 namespace WpfScheduledApp20250729.Models.Entities
 {
     [Table("webpage")]
-    internal class Webpage : BaseEntity
+    public class Webpage : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

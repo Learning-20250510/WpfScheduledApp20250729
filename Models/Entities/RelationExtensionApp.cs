@@ -10,7 +10,7 @@ namespace WpfScheduledApp20250729.Models.Entities
 {
 
     [Table("relation_extension_app")]
-    internal class RelationExtensionApp : BaseEntity
+    public class RelationExtensionApp : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace WpfScheduledApp20250729.Models.Entities
 {
     [Table("high_task")]
-    internal class HighTask : BaseEntity
+    public class HighTask : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

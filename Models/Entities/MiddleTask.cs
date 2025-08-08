@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WpfScheduledApp20250729.Models.Entities
 {
     [Table("middle_task")]
-    internal class MiddleTask : BaseEntity
+    public class MiddleTask : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

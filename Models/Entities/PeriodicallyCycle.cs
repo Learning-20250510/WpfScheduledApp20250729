@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WpfScheduledApp20250729.Models.Entities
 {
     [Table("periodically_cycle")]
-    internal class PeriodicallyCycle : BaseEntity
+    public class PeriodicallyCycle : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

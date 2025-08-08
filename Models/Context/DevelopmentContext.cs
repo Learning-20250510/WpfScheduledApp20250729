@@ -12,7 +12,7 @@ using WpfScheduledApp20250729.Models.Entities;
 
 namespace WpfScheduledApp20250729.Models.Context
 {
-    internal class DevelopmentContext : DbContext
+    public class DevelopmentContext : DbContext
     {
         public DevelopmentContext(DbContextOptions<DevelopmentContext> options) : base(options) { }
         public DevelopmentContext() { }
@@ -23,7 +23,6 @@ namespace WpfScheduledApp20250729.Models.Context
         public DbSet<HowToLearn> HowToLearns { get; set; }
         public DbSet<PeriodicallyCycle> PeriodicallyCycles { get; set; }
         public DbSet<Project> Projects { get; set; }
-        public DbSet<TaskSpecifiedDate> TaskSpecifiedDates { get; set; }
         public DbSet<MiddleTask> MiddleTasks { get; set; }
         public DbSet<LowTask> LowTasks { get; set; }
         public DbSet<Webpage> Webpages { get; set; }

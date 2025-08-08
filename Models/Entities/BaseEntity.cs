@@ -4,17 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WpfScheduledApp20250729.Models.Entities
 {
-    internal abstract class BaseEntity
+    public abstract class BaseEntity
     {
-        // INSERT 時に DB 側で自動設定
+        // INSERT 時にアプリ側で設定
         [Column("created_at")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedAt { get; private set; }
+        public DateTime CreatedAt { get; set; }
 
-        // INSERT/UPDATE 時に DB 側で自動更新
+        // UPDATE 時にアプリ側で設定
         [Column("updated_at")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime UpdatedAt { get; private set; }
+        public DateTime UpdatedAt { get; set; }
 
         // 任意のタイミングでアプリ側から明示更新
         [Column("touched_at")]
@@ -28,13 +26,11 @@ namespace WpfScheduledApp20250729.Models.Entities
         [MaxLength(1000)]
         public string? ErrorMessage { get; set; }
 
-        // デフォルト FALSE を DB で設定
+        // デフォルト FALSE を設定
         [Column("archived")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public bool Archived { get; private set; } = false;
+        public bool Archived { get; set; } = false;
 
         [Column("disabled")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public bool Disabled { get; private set; } = false;
+        public bool Disabled { get; set; } = false;
     }
 }
