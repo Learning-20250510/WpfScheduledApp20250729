@@ -44,6 +44,8 @@ namespace WpfScheduledApp20250729
                 var periodicallyCycleService = new PeriodicallyCycleService(dbContext);
                 var relationExtensionAppService = new RelationExtensionAppService(dbContext);
                 var highTaskService = new HighTaskService(dbContext);
+                var middleTaskService = new MiddleTaskService(dbContext);
+                var lowTaskService = new LowTaskService(dbContext);
 
                 // 初期データ作成サービス
                 var dataSeeder = new DataSeederService(
@@ -75,7 +77,7 @@ namespace WpfScheduledApp20250729
 
                 // MainWindowとViewModelを作成
                 var mainWindow = new ReadTasksWindow();
-                var mainViewModel = new ReadTasksViewModel(windowService, highTaskService, architectureService, projectService);
+                var mainViewModel = new ReadTasksViewModel(windowService, highTaskService, middleTaskService, lowTaskService, architectureService, projectService);
 
                 mainWindow.DataContext = mainViewModel;
                 mainWindow.Show();

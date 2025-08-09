@@ -13,5 +13,11 @@ namespace WpfScheduledApp20250729.ViewModels
         {
 
         }
+
+        public UpdateTaskViewModel(object taskEntity)
+        {
+            // ここでオブジェクトの型に応じて処理を分岐
+            // taskEntityの型を確認して適切な処理を行う
+        }
     }
 }

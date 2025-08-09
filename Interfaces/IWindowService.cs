@@ -14,6 +14,9 @@ namespace WpfScheduledApp20250729.Interfaces
             where TWindow : Window, new()
             where TViewModel : class, new();
 
+        void ShowWindow<TViewModel>()
+            where TViewModel : class, new();
+
         bool? ShowDialog<TWindow, TViewModel>()
             where TWindow : Window, new()
             where TViewModel : class, new();
@@ -21,6 +24,7 @@ namespace WpfScheduledApp20250729.Interfaces
         // 特定用途メソッド（オプション）
         void ShowAddTaskWindow();
         void ShowUpdateTaskWindow(int taskId);
+        void ShowUpdateTaskWindow(object taskEntity);
         bool? ShowAddTaskDialog();
         bool? ShowUpdateTaskDialog(int taskId);
     }

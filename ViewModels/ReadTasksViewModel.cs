@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WpfScheduledApp20250729.Controls;
+using System;
+using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using WpfScheduledApp20250729;
 using WpfScheduledApp20250729.Interfaces;
-using WpfScheduledApp20250729.Views;
 using WpfScheduledApp20250729.Services;
-using WpfScheduledApp20250729.Models.Entities;
 
 namespace WpfScheduledApp20250729.ViewModels
 {
@@ -16,88 +13,154 @@ namespace WpfScheduledApp20250729.ViewModels
     {
         private readonly IWindowService _windowService;
         private readonly HighTaskService _highTaskService;
+        private readonly MiddleTaskService _middleTaskService;
+        private readonly LowTaskService _lowTaskService;
         private readonly ArchitectureService _architectureService;
         private readonly ProjectService _projectService;
 
-        public ReadTasksViewModel(IWindowService windowService, HighTaskService highTaskService, ArchitectureService architectureService, ProjectService projectService)
+        private ObservableCollection<object> _tasks = new();
+        public ObservableCollection<object> Tasks 
+        { 
+            get => _tasks; 
+            set => SetProperty(ref _tasks, value); 
+        }
+
+        private UserControl _currentView = new ReadTaskControl();
+        public UserControl CurrentView
+        {
+            get => _currentView;
+            set => SetProperty(ref _currentView, value);
+        }
+
+        private bool _letsStartCheckBox;
+        public bool LetsStartCheckBox
+        {
+            get => _letsStartCheckBox;
+            set => SetProperty(ref _letsStartCheckBox, value);
+        }
+
+        public ReadTasksViewModel(IWindowService windowService, HighTaskService highTaskService, MiddleTaskService middleTaskService, LowTaskService lowTaskService, ArchitectureService architectureService, ProjectService projectService)
         {
             _windowService = windowService;
             _highTaskService = highTaskService;
+            _middleTaskService = middleTaskService;
+            _lowTaskService = lowTaskService;
             _architectureService = architectureService;
             _projectService = projectService;
         }
 
-        private DelegateCommand? _addTaskCommand;
-        public DelegateCommand AddTaskCommand
+        private DelegateCommand? _highTaskCommand;
+        public DelegateCommand HighTaskCommand
         {
             get
             {
-                return this._addTaskCommand ?? (this._addTaskCommand = new DelegateCommand(
+                return _highTaskCommand ?? (_highTaskCommand = new DelegateCommand(
                 async _ =>
                 {
                     try
                     {
-                        // 1. まずArchitectureを作成または取得
-                        var architecture = await _architectureService.GetOrCreateDefaultArchitectureAsync();
-                        
-                        // 2. Projectを作成または取得
-                        var allProjects = await _projectService.GetAllAsync();
-                        var defaultProject = allProjects.FirstOrDefault(p => p.ProjectName == "Default Project");
-                        if (defaultProject == null)
+                        var highTasks = await _highTaskService.GetAllAsync();
+                        Tasks.Clear();
+                        foreach (var task in highTasks)
                         {
-                            defaultProject = new Project
-                            {
-                                ProjectName = "Default Project",
-                                CreatedAt = DateTime.UtcNow,
-                                UpdatedAt = DateTime.UtcNow,
-                                TouchedAt = DateTime.UtcNow,
-                                LastUpdMethodName = "AddTaskCommand_CreateProject"
-                            };
-                            defaultProject = await _projectService.AddAsync(defaultProject);
+                            Tasks.Add(task);
                         }
-                        
-                        // 3. HighTaskを作成（有効なArchitectureIdとProjectIdを使用）
-                        var newTask = new HighTask
-                        {
-                            TaskName = "テストタスク",
-                            Description = "ボタンクリックで追加されたタスク",
-                            ArchitectureId = architecture.Id,  // 有効なArchitectureIdを設定
-                            ProjectId = defaultProject.Id,     // 有効なProjectIdを設定
-                            ClearTimesInTime = 0,
-                            ClearTimesOutofTime = 0,
-                            CreatedAt = DateTime.UtcNow,
-                            UpdatedAt = DateTime.UtcNow,
-                            TouchedAt = DateTime.UtcNow,
-                            LastUpdMethodName = "AddTaskCommand"
-                        };
-
-                        await _highTaskService.AddHighTaskAsync(newTask);
-                        // 成功時の処理
-                        System.Diagnostics.Debug.WriteLine("HighTask追加成功");
+                        CurrentView = new HighTaskControl();
                     }
                     catch (Exception ex)
                     {
-                        // 詳細なエラー情報を出力
-                        System.Diagnostics.Debug.WriteLine($"=== INSERT ERROR ===");
-                        System.Diagnostics.Debug.WriteLine($"Message: {ex.Message}");
-                        System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
-                        System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
-                        System.Diagnostics.Debug.WriteLine($"ex: {ex}");
-
-                        
-                        // MessageBoxでもエラーを表示
-                        MessageBox.Show($"エラーが発生しました:\n{ex.Message}\n\nInnerException:\n{ex.InnerException?.Message}", 
-                                      "データベースエラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show($"HighTask取得エラー: {ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-
-                    _windowService.ShowAddTaskWindow();
                 },
-                _ =>
-                {
-                    return true;
-                }
-                ));
+                _ => true));
             }
         }
+
+        private DelegateCommand? _middleTaskCommand;
+        public DelegateCommand MiddleTaskCommand
+        {
+            get
+            {
+                return _middleTaskCommand ?? (_middleTaskCommand = new DelegateCommand(
+                async _ =>
+                {
+                    try
+                    {
+                        var middleTasks = await _middleTaskService.GetAllAsync();
+                        Tasks.Clear();
+                        foreach (var task in middleTasks)
+                        {
+                            Tasks.Add(task);
+                        }
+                        CurrentView = new ReadTaskControl();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"MiddleTask取得エラー: {ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                },
+                _ => true));
+            }
+        }
+
+        private DelegateCommand? _lowTaskCommand;
+        public DelegateCommand LowTaskCommand
+        {
+            get
+            {
+                return _lowTaskCommand ?? (_lowTaskCommand = new DelegateCommand(
+                async _ =>
+                {
+                    try
+                    {
+                        var lowTasks = await _lowTaskService.GetAllAsync();
+                        Tasks.Clear();
+                        foreach (var task in lowTasks)
+                        {
+                            Tasks.Add(task);
+                        }
+                        CurrentView = new LowTaskControl();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"LowTask取得エラー: {ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                },
+                _ => true));
+            }
+        }
+
+        private DelegateCommand? _searchCommand;
+        public DelegateCommand SearchCommand
+        {
+            get
+            {
+                return _searchCommand ?? (_searchCommand = new DelegateCommand(
+                _ =>
+                {
+                    MessageBox.Show("検索機能は実装中です。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
+                },
+                _ => true));
+            }
+        }
+
+        private DelegateCommand? _showDetailCommand;
+        public DelegateCommand ShowDetailCommand
+        {
+            get
+            {
+                return _showDetailCommand ?? (_showDetailCommand = new DelegateCommand(
+                param =>
+                {
+                    if (param != null)
+                    {
+                        // 編集ウィンドウを開く
+                        _windowService.ShowUpdateTaskWindow(param);
+                    }
+                },
+                param => param != null));
+            }
+        }
+
     }
 }

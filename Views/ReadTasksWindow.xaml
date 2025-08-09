@@ -7,10 +7,48 @@
         mc:Ignorable="d"
         Title="ReadTasksWindow" Height="450" Width="800">
     <Grid>
-        <Button
-               Content="Search"
-               Command="{Binding AddTaskCommand}"
-               Margin="10" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-    </Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBox Grid.Row="0" Text="検索ボックスクエリ" Width="300"/>
+            <Button
+               Content="Search"
+               Command="{Binding SearchCommand}"
+               Margin="10" />
+        </StackPanel>
+
+        <CheckBox
+                Grid.Row="0"
+                Grid.Column="1"
+                Content="Start."
+                IsChecked="{Binding LetsStartCheckBox}" 
+                VerticalAlignment="Center"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button
+                Content="HighTask"
+                Command="{Binding HighTaskCommand}"
+                Margin="10" />
+            <Button
+                Content="MiddleTask"
+                Command="{Binding MiddleTaskCommand}"
+                Margin="10" />
+            <Button
+                Content="LowTask"
+                Command="{Binding LowTaskCommand}"
+                Margin="10" />
+        </StackPanel>
+
+        <ContentControl Grid.Row="2" Content="{Binding CurrentView}" />
+    </Grid>    
+
 </Window>

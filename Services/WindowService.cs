@@ -23,6 +23,33 @@ namespace WpfScheduledApp20250729.Services
             window.Show();
         }
 
+        public void ShowWindow<TViewModel>()
+            where TViewModel : class, new()
+        {
+            // ViewModelの型に基づいて適切なWindowを決定
+            Window? window = null;
+            var viewModel = new TViewModel();
+
+            if (typeof(TViewModel) == typeof(ActionTaskViewModel))
+            {
+                window = new ActionTaskWindow();
+            }
+            else if (typeof(TViewModel) == typeof(AddTaskViewModel))
+            {
+                window = new AddTaskWindow();
+            }
+            else if (typeof(TViewModel) == typeof(UpdateTaskViewModel))
+            {
+                window = new UpdateTaskWindow();
+            }
+
+            if (window != null)
+            {
+                window.DataContext = viewModel;
+                window.Show();
+            }
+        }
+
         public bool? ShowDialog<TWindow, TViewModel>()
             where TWindow : Window, new()
             where TViewModel : class, new()
@@ -43,6 +70,14 @@ namespace WpfScheduledApp20250729.Services
         {
             var window = new UpdateTaskWindow();
             var viewModel = new UpdateTaskViewModel(taskId); // パラメータ付き
+            window.DataContext = viewModel;
+            window.Show();
+        }
+
+        public void ShowUpdateTaskWindow(object taskEntity)
+        {
+            var window = new UpdateTaskWindow();
+            var viewModel = new UpdateTaskViewModel(taskEntity); // オブジェクト型パラメータ付き
             window.DataContext = viewModel;
             window.Show();
         }
