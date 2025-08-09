@@ -10,19 +10,22 @@ namespace WpfScheduledApp20250729.Services
         private readonly ProjectService _projectService;
         private readonly HowToLearnService _howToLearnService;
         private readonly PeriodicallyCycleService _periodicallyCycleService;
+        private readonly RelationExtensionAppService _relationExtensionAppService;
 
         public DataSeederService(
             BaseDbContext context,
             ArchitectureService architectureService,
             ProjectService projectService,
             HowToLearnService howToLearnService,
-            PeriodicallyCycleService periodicallyCycleService)
+            PeriodicallyCycleService periodicallyCycleService,
+            RelationExtensionAppService relationExtensionAppService)
         {
             _context = context;
             _architectureService = architectureService;
             _projectService = projectService;
             _howToLearnService = howToLearnService;
             _periodicallyCycleService = periodicallyCycleService;
+            _relationExtensionAppService = relationExtensionAppService;
         }
 
         /// <summary>
@@ -91,6 +94,20 @@ namespace WpfScheduledApp20250729.Services
                     throw;
                 }
 
+                // 5. RelationExtensionApp初期データ
+                try
+                {
+                    await SeedRelationExtensionAppsAsync();
+                    System.Diagnostics.Debug.WriteLine("RelationExtensionApp初期データ作成完了");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"=== RelationExtensionApp作成エラー ===");
+                    System.Diagnostics.Debug.WriteLine($"Message: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
+                    throw;
+                }
+
                 System.Diagnostics.Debug.WriteLine("=== 初期データ作成完了 ===");
             }
             catch (Exception ex)
@@ -108,6 +125,9 @@ namespace WpfScheduledApp20250729.Services
             var defaultArchitectures = new[]
             {
                 "Action",
+                "Freeplane",
+                "Webpage", 
+                "PDF"
             };
 
             foreach (var name in defaultArchitectures)
@@ -161,13 +181,7 @@ namespace WpfScheduledApp20250729.Services
         {
             var defaultHowToLearns = new[]
             {
-                "Reading Documentation",
-                "Online Tutorials",
-                "Video Courses", 
-                "Practice Projects",
-                "Code Reviews",
-                "Books",
-                "Mentoring"
+                "LearnFromTheWorld"
             };
 
             foreach (var name in defaultHowToLearns)
@@ -194,12 +208,43 @@ namespace WpfScheduledApp20250729.Services
         {
             var defaultCycles = new[]
             {
+                "One-time",
                 "Daily",
-                "Weekly",
-                "Monthly", 
-                "Quarterly",
-                "Yearly",
-                "As Needed"
+                "Weekly Monday",
+                "Weekly Tuesday",
+                "Weekly Wednesday",
+                "Weekly Thursday",
+                "Weekly Friday",
+                "Weekly Saturday",
+                "Weekly Sunday",
+                "Monthly 1st Monday",
+                "Monthly 2nd Monday",
+                "Monthly 3rd Monday",
+                "Monthly 4th Monday",
+                "Monthly 1st Tuesday",
+                "Monthly 2nd Tuesday",
+                "Monthly 3rd Tuesday",
+                "Monthly 4th Tuesday",
+                "Monthly 1st Wednesday",
+                "Monthly 2nd Wednesday",
+                "Monthly 3rd Wednesday",
+                "Monthly 4th Wednesday",
+                "Monthly 1st Thursday",
+                "Monthly 2nd Thursday",
+                "Monthly 3rd Thursday",
+                "Monthly 4th Thursday",
+                "Monthly 1st Friday",
+                "Monthly 2nd Friday",
+                "Monthly 3rd Friday",
+                "Monthly 4th Friday",
+                "Monthly 1st Saturday",
+                "Monthly 2nd Saturday",
+                "Monthly 3rd Saturday",
+                "Monthly 4th Saturday",
+                "Monthly 1st Sunday",
+                "Monthly 2nd Sunday",
+                "Monthly 3rd Sunday",
+                "Monthly 4th Sunday"
             };
 
             foreach (var name in defaultCycles)
@@ -218,6 +263,82 @@ namespace WpfScheduledApp20250729.Services
                     };
                     await _periodicallyCycleService.AddAsync(newCycle);
                     System.Diagnostics.Debug.WriteLine($"PeriodicallyCycle作成: {name}");
+                }
+            }
+        }
+
+        private async Task SeedRelationExtensionAppsAsync()
+        {
+            var defaultExtensionApps = new[]
+            {
+                ("", "VisualStudioCode"), // 空文字
+                ("py", "VisualStudioCode"), // Python
+                ("cs", "VisualStudioCode"), // C#
+                ("js", "VisualStudioCode"), // JavaScript
+                ("ts", "VisualStudioCode"), // TypeScript
+                ("java", "VisualStudioCode"), // Java
+                ("cpp", "VisualStudioCode"), // C++
+                ("c", "VisualStudioCode"), // C
+                ("html", "VisualStudioCode"), // HTML
+                ("css", "VisualStudioCode"), // CSS
+                ("scss", "VisualStudioCode"), // SCSS
+                ("json", "VisualStudioCode"), // JSON
+                ("xml", "VisualStudioCode"), // XML
+                ("sql", "VisualStudioCode"), // SQL
+                ("php", "VisualStudioCode"), // PHP
+                ("rb", "VisualStudioCode"), // Ruby
+                ("go", "VisualStudioCode"), // Go
+                ("rs", "VisualStudioCode"), // Rust
+                ("swift", "VisualStudioCode"), // Swift
+                ("kt", "VisualStudioCode"), // Kotlin
+                ("dart", "VisualStudioCode"), // Dart
+                ("vue", "VisualStudioCode"), // Vue
+                ("jsx", "VisualStudioCode"), // JSX
+                ("tsx", "VisualStudioCode"), // TSX
+                ("md", "VisualStudioCode"), // Markdown
+                ("yml", "VisualStudioCode"), // YAML
+                ("yaml", "VisualStudioCode"), // YAML
+                ("toml", "VisualStudioCode"), // TOML
+                ("ini", "VisualStudioCode"), // INI
+                ("cfg", "VisualStudioCode"), // Config
+                ("conf", "VisualStudioCode"), // Config
+                ("sh", "VisualStudioCode"), // Shell
+                ("bat", "VisualStudioCode"), // Batch
+                ("ps1", "VisualStudioCode"), // PowerShell
+                ("r", "VisualStudioCode"), // R
+                ("m", "VisualStudioCode"), // Objective-C
+                ("scala", "VisualStudioCode"), // Scala
+                ("clj", "VisualStudioCode"), // Clojure
+                ("hs", "VisualStudioCode"), // Haskell
+                ("elm", "VisualStudioCode"), // Elm
+                ("ex", "VisualStudioCode"), // Elixir
+                ("erl", "VisualStudioCode"), // Erlang
+                ("lua", "VisualStudioCode"), // Lua
+                ("pl", "VisualStudioCode"), // Perl
+                ("tcl", "VisualStudioCode"), // Tcl
+                ("vb", "VisualStudioCode"), // Visual Basic
+                ("fs", "VisualStudioCode"), // F#
+                ("pas", "VisualStudioCode"), // Pascal
+                ("asm", "VisualStudioCode") // Assembly
+            };
+
+            foreach (var (extension, application) in defaultExtensionApps)
+            {
+                var allRelations = await _relationExtensionAppService.GetAllAsync();
+                var existing = allRelations.FirstOrDefault(r => r.Extension == extension);
+                if (existing == null)
+                {
+                    var newRelation = new Models.Entities.RelationExtensionApp
+                    {
+                        Extension = extension,
+                        Application = application,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow,
+                        TouchedAt = DateTime.UtcNow,
+                        LastUpdMethodName = "SeedRelationExtensionApps"
+                    };
+                    await _relationExtensionAppService.AddAsync(newRelation);
+                    System.Diagnostics.Debug.WriteLine($"RelationExtensionApp作成: {extension} -> {application}");
                 }
             }
         }

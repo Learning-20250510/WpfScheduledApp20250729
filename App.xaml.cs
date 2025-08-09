@@ -42,6 +42,7 @@ namespace WpfScheduledApp20250729
                 var projectService = new ProjectService(dbContext);
                 var howToLearnService = new HowToLearnService(dbContext);
                 var periodicallyCycleService = new PeriodicallyCycleService(dbContext);
+                var relationExtensionAppService = new RelationExtensionAppService(dbContext);
                 var highTaskService = new HighTaskService(dbContext);
 
                 // 初期データ作成サービス
@@ -50,7 +51,8 @@ namespace WpfScheduledApp20250729
                     architectureService, 
                     projectService, 
                     howToLearnService, 
-                    periodicallyCycleService);
+                    periodicallyCycleService,
+                    relationExtensionAppService);
 
                 // データベース接続確認と初期データ作成
                 if (await dataSeeder.CanConnectToDatabaseAsync())
