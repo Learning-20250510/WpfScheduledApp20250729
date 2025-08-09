@@ -25,8 +25,8 @@ namespace WpfScheduledApp20250729.Models.Context
                     .AddJsonFile("appsettings.json")
                     .Build();
 
-                string connectionString = config.GetConnectionString("PostgreSQLConnection") 
-                    ?? throw new InvalidOperationException("Connection string 'PostgreSQLConnection' not found.");
+                string connectionString = config.GetConnectionString("ProductionConnection") 
+                    ?? throw new InvalidOperationException("Connection string 'ProductionConnection' not found.");
                 optionsBuilder.UseNpgsql(connectionString);
             }
         }
