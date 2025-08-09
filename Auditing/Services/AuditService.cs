@@ -38,12 +38,12 @@ namespace WpfScheduledApp20250729.Auditing.Services
             Logger.LogInfo("AuditService initialized", nameof(AuditService), nameof(AuditService));
         }
 
-        public async Task StartAsync()
+        public Task StartAsync()
         {
             if (_isRunning)
             {
                 Logger.LogWarning("AuditService is already running", nameof(StartAsync), nameof(AuditService));
-                return;
+                return Task.CompletedTask;
             }
 
             _isRunning = true;
@@ -54,14 +54,16 @@ namespace WpfScheduledApp20250729.Auditing.Services
 
             // 定期実行タイマーを設定
             _timer = new Timer(async _ => await ExecuteAuditAsync(), null, _interval, _interval);
+            
+            return Task.CompletedTask;
         }
 
-        public async Task StopAsync()
+        public Task StopAsync()
         {
             if (!_isRunning)
             {
                 Logger.LogWarning("AuditService is not running", nameof(StopAsync), nameof(AuditService));
-                return;
+                return Task.CompletedTask;
             }
 
             _isRunning = false;
@@ -69,7 +71,7 @@ namespace WpfScheduledApp20250729.Auditing.Services
             _timer = null;
             
             Logger.LogInfo("AuditService stopped", nameof(StopAsync), nameof(AuditService));
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         public void AddRule(IAuditRule rule)

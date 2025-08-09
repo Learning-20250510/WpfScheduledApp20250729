@@ -165,7 +165,7 @@ namespace WpfScheduledApp20250729.Auditing.Examples
                 // MiddleTask の重複チェック (Descriptionプロパティを使用)
                 var middleTaskDuplicates = await dbContext.MiddleTasks
                     .Where(t => !t.Archived && !string.IsNullOrWhiteSpace(t.Description))
-                    .GroupBy(t => t.Description.ToLower())
+                    .GroupBy(t => t.Description!.ToLower())
                     .Where(g => g.Count() > 1)
                     .ToListAsync();
 

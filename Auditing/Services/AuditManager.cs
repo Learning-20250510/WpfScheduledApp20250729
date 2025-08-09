@@ -26,7 +26,7 @@ namespace WpfScheduledApp20250729.Auditing.Services
             _auditService.AuditCompleted += OnAuditCompleted;
         }
 
-        public async Task InitializeAsync()
+        public Task InitializeAsync()
         {
             try
             {
@@ -44,6 +44,7 @@ namespace WpfScheduledApp20250729.Auditing.Services
                 _auditService.SetInterval(TimeSpan.FromMinutes(30));
 
                 Logger.LogInfo("AuditManager初期化完了", nameof(InitializeAsync), nameof(AuditManager));
+                return Task.CompletedTask;
             }
             catch (Exception ex)
             {

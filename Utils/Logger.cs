@@ -72,7 +72,7 @@ namespace WpfScheduledApp20250729.Utils
 
         public static void Log(string message, LogLevel level = LogLevel.Info, string methodName = "", string className = "")
         {
-            Task.Run(() => WriteLogAsync(message, level, methodName, className));
+            Task.Run(() => WriteLog(message, level, methodName, className));
         }
 
         public static void LogInfo(string message, string methodName = "", string className = "")
@@ -101,36 +101,33 @@ namespace WpfScheduledApp20250729.Utils
             Log(message, LogLevel.Debug, methodName, className);
         }
 
-        private static async Task WriteLogAsync(string message, LogLevel level, string methodName, string className)
+        private static void WriteLog(string message, LogLevel level, string methodName, string className)
         {
-            await Task.Run(() =>
+            lock (_lockObject)
             {
-                lock (_lockObject)
+                try
                 {
-                    try
+                    var timestamp = DateTime.Now;
+                    var dateString = timestamp.ToString("yyyyMMdd");
+                    var logFileName = $"{_projectName}_{dateString}.log";
+                    var logFilePath = Path.Combine(_logDirectory, logFileName);
+
+                    var logEntry = FormatLogEntry(timestamp, level, message, methodName, className);
+
+                    // デバッグ: ファイル名を確認
+                    if (level == LogLevel.Debug)
                     {
-                        var timestamp = DateTime.Now;
-                        var dateString = timestamp.ToString("yyyyMMdd");
-                        var logFileName = $"{_projectName}_{dateString}.log";
-                        var logFilePath = Path.Combine(_logDirectory, logFileName);
-
-                        var logEntry = FormatLogEntry(timestamp, level, message, methodName, className);
-
-                        // デバッグ: ファイル名を確認
-                        if (level == LogLevel.Debug)
-                        {
-                            Console.WriteLine($"Logger Debug: File={logFileName}, Path={logFilePath}");
-                        }
-
-                        File.AppendAllText(logFilePath, logEntry + Environment.NewLine);
+                        Console.WriteLine($"Logger Debug: File={logFileName}, Path={logFilePath}");
                     }
-                    catch (Exception ex)
-                    {
-                        // ログ出力でエラーが発生した場合は、イベントログまたはコンソールに出力
-                        Console.WriteLine($"Logger Error: {ex.Message}");
-                    }
+
+                    File.AppendAllText(logFilePath, logEntry + Environment.NewLine);
                 }
-            });
+                catch (Exception ex)
+                {
+                    // ログ出力でエラーが発生した場合は、イベントログまたはコンソールに出力
+                    Console.WriteLine($"Logger Error: {ex.Message}");
+                }
+            }
         }
 
         private static string FormatLogEntry(DateTime timestamp, LogLevel level, string message, string methodName, string className)
