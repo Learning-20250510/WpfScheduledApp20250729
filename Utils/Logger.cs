@@ -116,6 +116,12 @@ namespace WpfScheduledApp20250729.Utils
 
                         var logEntry = FormatLogEntry(timestamp, level, message, methodName, className);
 
+                        // デバッグ: ファイル名を確認
+                        if (level == LogLevel.Debug)
+                        {
+                            Console.WriteLine($"Logger Debug: File={logFileName}, Path={logFilePath}");
+                        }
+
                         File.AppendAllText(logFilePath, logEntry + Environment.NewLine);
                     }
                     catch (Exception ex)
