@@ -43,5 +43,48 @@ namespace WpfScheduledApp20250729.Models.Context
                 optionsBuilder.UseNpgsql(connectionString);
             }
         }
+
+        public override int SaveChanges()
+        {
+            UpdateTimestamps();
+            return base.SaveChanges();
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            UpdateTimestamps();
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void UpdateTimestamps()
+        {
+            var entries = ChangeTracker.Entries<BaseEntity>();
+            var now = DateTime.UtcNow;
+
+            foreach (var entry in entries)
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedAt = now;
+                        entry.Entity.UpdatedAt = now;
+                        entry.Entity.TouchedAt = now;
+                        if (string.IsNullOrEmpty(entry.Entity.LastUpdMethodName))
+                        {
+                            entry.Entity.LastUpdMethodName = "Insert";
+                        }
+                        break;
+
+                    case EntityState.Modified:
+                        entry.Entity.UpdatedAt = now;
+                        entry.Entity.TouchedAt = now;
+                        if (string.IsNullOrEmpty(entry.Entity.LastUpdMethodName))
+                        {
+                            entry.Entity.LastUpdMethodName = "Update";
+                        }
+                        break;
+                }
+            }
+        }
     }
 }
