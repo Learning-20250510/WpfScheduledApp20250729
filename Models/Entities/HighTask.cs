@@ -15,6 +15,7 @@ namespace WpfScheduledApp20250729.Models.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
         public int Id { get; set; }
+        
         [Column("architecture_id")]
         [ForeignKey(nameof(Architecture))]
         public int ArchitectureId { get; set; }

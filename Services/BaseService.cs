@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WpfScheduledApp20250729.Models.Context;
 using WpfScheduledApp20250729.Models.Entities;
+using WpfScheduledApp20250729.Utils;
 
 namespace WpfScheduledApp20250729.Services
 {
@@ -18,16 +19,28 @@ namespace WpfScheduledApp20250729.Services
         // Common CRUD operations
         public virtual async Task<T> AddAsync(T entity)
         {
-            entity.LastUpdMethodName = "Add";
-            
-            _dbSet.Add(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            try
+            {
+                Logger.LogWithContext($"Adding entity of type {typeof(T).Name}", Logger.LogLevel.Info);
+                entity.LastUpdMethodName = "Add";
+                
+                _dbSet.Add(entity);
+                await _context.SaveChangesAsync();
+                
+                var entityId = _context.Entry(entity).Property("Id").CurrentValue;
+                Logger.LogWithContext($"Successfully added entity with ID: {entityId}", Logger.LogLevel.Info);
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex);
+                throw;
+            }
         }
 
         public virtual async Task<T?> GetByIdAsync(int id)
         {
-            return await _dbSet.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
+            return await _dbSet.FindAsync(id);
         }
 
         public virtual async Task<T?> GetByIdAndTouchAsync(int id)
@@ -50,7 +63,7 @@ namespace WpfScheduledApp20250729.Services
             var entities = await _dbSet.ToListAsync();
             if (entities.Any())
             {
-                var ids = entities.Select(e => EF.Property<int>(e, "Id")).ToList();
+                var ids = entities.Select(e => _context.Entry(e).Property("Id").CurrentValue).Cast<int>().ToList();
                 await TouchMultipleAsync(ids);
             }
             return entities;
@@ -58,18 +71,32 @@ namespace WpfScheduledApp20250729.Services
 
         public virtual async Task<T?> UpdateAsync(int id, T updatedEntity)
         {
-            var existingEntity = await _dbSet.FindAsync(id);
-            if (existingEntity == null) return null;
+            try
+            {
+                Logger.LogWithContext($"Updating entity of type {typeof(T).Name} with ID: {id}", Logger.LogLevel.Info);
+                var existingEntity = await _dbSet.FindAsync(id);
+                if (existingEntity == null) 
+                {
+                    Logger.LogWithContext($"Entity with ID {id} not found for update", Logger.LogLevel.Warning);
+                    return null;
+                }
 
-            // Update common BaseEntity properties
-            existingEntity.LastUpdMethodName = "Update";
-            existingEntity.ErrorMessage = updatedEntity.ErrorMessage;
+                // Update common BaseEntity properties
+                existingEntity.LastUpdMethodName = "Update";
+                existingEntity.ErrorMessage = updatedEntity.ErrorMessage;
 
-            // Call virtual method to update specific properties
-            UpdateEntityProperties(existingEntity, updatedEntity);
+                // Call virtual method to update specific properties
+                UpdateEntityProperties(existingEntity, updatedEntity);
 
-            await _context.SaveChangesAsync();
-            return existingEntity;
+                await _context.SaveChangesAsync();
+                Logger.LogWithContext($"Successfully updated entity with ID: {id}", Logger.LogLevel.Info);
+                return existingEntity;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex);
+                throw;
+            }
         }
 
         public virtual async Task<bool> DeleteAsync(int id)
@@ -84,7 +111,7 @@ namespace WpfScheduledApp20250729.Services
 
         public virtual async Task<bool> ExistsAsync(int id)
         {
-            return await _dbSet.AnyAsync(e => EF.Property<int>(e, "Id") == id);
+            return await _dbSet.FindAsync(id) != null;
         }
 
         // Archive/Disable operations (soft delete alternatives)
@@ -116,7 +143,7 @@ namespace WpfScheduledApp20250729.Services
         public virtual async Task<List<T>> GetActiveAsync()
         {
             return await _dbSet
-                .Where(e => !EF.Property<bool>(e, "Archived") && !EF.Property<bool>(e, "Disabled"))
+                .Where(e => !e.Archived && !e.Disabled)
                 .ToListAsync();
         }
 
@@ -152,6 +179,8 @@ namespace WpfScheduledApp20250729.Services
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
+                Logger.LogWithContext($"Adding multiple entities of type {typeof(T).Name}, count: {entities.Count}", Logger.LogLevel.Info);
+                
                 foreach (var entity in entities)
                 {
                     entity.LastUpdMethodName = "AddMultiple";
@@ -160,11 +189,15 @@ namespace WpfScheduledApp20250729.Services
 
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
+                
+                Logger.LogWithContext($"Successfully added {entities.Count} entities", Logger.LogLevel.Info);
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.LogError(ex);
                 await transaction.RollbackAsync();
+                Logger.LogWithContext("Transaction rolled back due to error", Logger.LogLevel.Warning);
                 return false;
             }
         }

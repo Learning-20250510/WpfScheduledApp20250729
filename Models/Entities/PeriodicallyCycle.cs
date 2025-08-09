@@ -9,7 +9,7 @@ namespace WpfScheduledApp20250729.Models.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         [Column("cycle")]
         [Required]

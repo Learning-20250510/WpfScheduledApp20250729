@@ -5,6 +5,7 @@ using WpfScheduledApp20250729.Services;
 using WpfScheduledApp20250729.ViewModels;
 using WpfScheduledApp20250729.Views;
 using WpfScheduledApp20250729.Models.Context;
+using WpfScheduledApp20250729.Utils;
 
 namespace WpfScheduledApp20250729
 {
@@ -19,6 +20,8 @@ namespace WpfScheduledApp20250729
 
             try
             {
+                Logger.LogWithContext("アプリケーション開始", Logger.LogLevel.Info);
+                
                 // WindowServiceを作成
                 var windowService = new WindowService();
                 
@@ -41,11 +44,13 @@ namespace WpfScheduledApp20250729
                 // データベース接続確認と初期データ作成
                 if (await dataSeeder.CanConnectToDatabaseAsync())
                 {
+                    Logger.LogWithContext("データベース接続成功", Logger.LogLevel.Info);
                     await dataSeeder.SeedInitialDataAsync();
-                    System.Diagnostics.Debug.WriteLine("初期データ作成完了");
+                    Logger.LogWithContext("初期データ作成完了", Logger.LogLevel.Info);
                 }
                 else
                 {
+                    Logger.LogWithContext("データベース接続失敗", Logger.LogLevel.Error);
                     System.Windows.MessageBox.Show(
                         "データベースに接続できません。接続設定を確認してください。", 
                         "データベースエラー", 
@@ -65,6 +70,7 @@ namespace WpfScheduledApp20250729
             }
             catch (Exception ex)
             {
+                Logger.LogError(ex, "OnStartup", "App");
                 System.Windows.MessageBox.Show(
                     $"アプリケーション初期化エラー:\n{ex.Message}", 
                     "起動エラー", 
