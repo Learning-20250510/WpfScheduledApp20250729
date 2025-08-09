@@ -85,3 +85,4 @@ Thumbs.db
 # Any other machine-specific or temporary files you encounter
 # If you find other files that are specific to your local machine
 # or are generated during the build process, add them here.
+*.odt#
