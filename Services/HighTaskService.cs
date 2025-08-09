@@ -6,7 +6,7 @@ namespace WpfScheduledApp20250729.Services
 {
     internal class HighTaskService : BaseService<HighTask>
     {
-        public HighTaskService(DevelopmentContext context) : base(context)
+        public HighTaskService(BaseDbContext context) : base(context)
         {
         }
 

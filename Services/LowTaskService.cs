@@ -6,9 +6,9 @@ namespace WpfScheduledApp20250729.Services
 {
     internal class LowTaskService
     {
-        private readonly DevelopmentContext _context;
+        private readonly BaseDbContext _context;
 
-        public LowTaskService(DevelopmentContext context)
+        public LowTaskService(BaseDbContext context)
         {
             _context = context;
         }

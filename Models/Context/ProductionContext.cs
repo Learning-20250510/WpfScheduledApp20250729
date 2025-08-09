@@ -10,20 +10,10 @@ using WpfScheduledApp20250729.Models.Entities;
 
 namespace WpfScheduledApp20250729.Models.Context
 {
-    internal class ProductionContext : DbContext
+    internal class ProductionContext : BaseDbContext
     {
         public ProductionContext(DbContextOptions<ProductionContext> options) : base(options) { }
-        public ProductionContext() { }
-
-        public DbSet<HighTask> HighTasks { get; set; }
-        public DbSet<Architecture> Architectures { get; set; }
-        public DbSet<HowToLearn> HowToLearns { get; set; }
-        public DbSet<PeriodicallyCycle> PeriodicallyCycles { get; set; }
-        public DbSet<Project> Projects { get; set; }
-        public DbSet<MiddleTask> MiddleTasks { get; set; }
-        public DbSet<LowTask> LowTasks { get; set; }
-        public DbSet<Webpage> Webpages { get; set; }
-        public DbSet<RelationExtensionApp> RelationExtensionApps { get; set; }
+        public ProductionContext() : base() { }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

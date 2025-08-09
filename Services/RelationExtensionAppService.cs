@@ -6,7 +6,7 @@ namespace WpfScheduledApp20250729.Services
 {
     internal class RelationExtensionAppService : BaseService<RelationExtensionApp>
     {
-        public RelationExtensionAppService(DevelopmentContext context) : base(context)
+        public RelationExtensionAppService(BaseDbContext context) : base(context)
         {
         }
 

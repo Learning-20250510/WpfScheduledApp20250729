@@ -5,14 +5,14 @@ namespace WpfScheduledApp20250729.Services
 {
     internal class DataSeederService
     {
-        private readonly DevelopmentContext _context;
+        private readonly BaseDbContext _context;
         private readonly ArchitectureService _architectureService;
         private readonly ProjectService _projectService;
         private readonly HowToLearnService _howToLearnService;
         private readonly PeriodicallyCycleService _periodicallyCycleService;
 
         public DataSeederService(
-            DevelopmentContext context,
+            BaseDbContext context,
             ArchitectureService architectureService,
             ProjectService projectService,
             HowToLearnService howToLearnService,
@@ -107,11 +107,7 @@ namespace WpfScheduledApp20250729.Services
         {
             var defaultArchitectures = new[]
             {
-                "Default Architecture",
-                "MVC Architecture", 
-                "MVVM Architecture",
-                "Clean Architecture",
-                "Layered Architecture"
+                "Action",
             };
 
             foreach (var name in defaultArchitectures)
@@ -137,11 +133,7 @@ namespace WpfScheduledApp20250729.Services
         {
             var defaultProjects = new[]
             {
-                "Default Project",
-                "Learning Project", 
-                "Practice Project",
-                "Work Project",
-                "Personal Project"
+                "Unclassified",
             };
 
             foreach (var name in defaultProjects)

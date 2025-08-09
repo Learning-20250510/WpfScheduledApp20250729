@@ -6,7 +6,7 @@ namespace WpfScheduledApp20250729.Services
 {
     internal class WebpageService : BaseService<Webpage>
     {
-        public WebpageService(DevelopmentContext context) : base(context)
+        public WebpageService(BaseDbContext context) : base(context)
         {
         }
 

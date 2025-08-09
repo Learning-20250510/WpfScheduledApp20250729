@@ -6,7 +6,7 @@ namespace WpfScheduledApp20250729.Services
 {
     internal class ArchitectureService : BaseService<Architecture>
     {
-        public ArchitectureService(DevelopmentContext context) : base(context)
+        public ArchitectureService(BaseDbContext context) : base(context)
         {
         }
 

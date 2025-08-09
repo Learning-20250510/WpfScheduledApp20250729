@@ -6,7 +6,7 @@ namespace WpfScheduledApp20250729.Services
 {
     internal class ProjectService : BaseService<Project>
     {
-        public ProjectService(DevelopmentContext context) : base(context)
+        public ProjectService(BaseDbContext context) : base(context)
         {
         }
 

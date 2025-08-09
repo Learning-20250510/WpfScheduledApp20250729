@@ -6,10 +6,10 @@ namespace WpfScheduledApp20250729.Services
 {
     internal abstract class BaseService<T> where T : BaseEntity
     {
-        protected readonly DevelopmentContext _context;
+        protected readonly BaseDbContext _context;
         protected readonly DbSet<T> _dbSet;
 
-        protected BaseService(DevelopmentContext context)
+        protected BaseService(BaseDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();

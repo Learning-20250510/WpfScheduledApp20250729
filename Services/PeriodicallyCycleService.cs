@@ -6,7 +6,7 @@ namespace WpfScheduledApp20250729.Services
 {
     internal class PeriodicallyCycleService : BaseService<PeriodicallyCycle>
     {
-        public PeriodicallyCycleService(DevelopmentContext context) : base(context)
+        public PeriodicallyCycleService(BaseDbContext context) : base(context)
         {
         }
 

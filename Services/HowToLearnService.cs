@@ -6,7 +6,7 @@ namespace WpfScheduledApp20250729.Services
 {
     internal class HowToLearnService : BaseService<HowToLearn>
     {
-        public HowToLearnService(DevelopmentContext context) : base(context)
+        public HowToLearnService(BaseDbContext context) : base(context)
         {
         }
 

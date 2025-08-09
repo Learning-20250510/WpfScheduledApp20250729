@@ -22,7 +22,7 @@ namespace WpfScheduledApp20250729
                 // WindowServiceを作成
                 var windowService = new WindowService();
                 
-                // DbContextとServicesを作成
+                // DbContextとServicesを作成(ここのＤＢを切り替えるだけで本番と開発環境を切り替え可能)
                 var dbContext = new DevelopmentContext();
                 var architectureService = new ArchitectureService(dbContext);
                 var projectService = new ProjectService(dbContext);

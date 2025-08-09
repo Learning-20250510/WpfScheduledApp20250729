@@ -6,7 +6,7 @@ namespace WpfScheduledApp20250729.Services
 {
     internal class MiddleTaskService : BaseService<MiddleTask>
     {
-        public MiddleTaskService(DevelopmentContext context) : base(context)
+        public MiddleTaskService(BaseDbContext context) : base(context)
         {
         }
 
