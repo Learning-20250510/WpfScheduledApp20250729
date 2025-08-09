@@ -6,6 +6,7 @@ using WpfScheduledApp20250729.ViewModels;
 using WpfScheduledApp20250729.Views;
 using WpfScheduledApp20250729.Models.Context;
 using WpfScheduledApp20250729.Utils;
+using WpfScheduledApp20250729.Auditing.Services;
 using Npgsql;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace WpfScheduledApp20250729
     /// </summary>
     public partial class App : Application
     {
+        private AuditManager? _auditManager;
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -76,6 +78,9 @@ namespace WpfScheduledApp20250729
                 mainWindow.DataContext = mainViewModel;
                 mainWindow.Show();
                 MainWindow = mainWindow;
+
+                // 監査システムを初期化して開始
+                await InitializeAuditSystemAsync(dbContext);
             }
             catch (Exception ex)
             {
@@ -220,6 +225,51 @@ namespace WpfScheduledApp20250729
             {
                 Logger.LogError(ex, "EnsureTablesExistAsync", "App");
                 throw;
+            }
+        }
+
+        private async Task InitializeAuditSystemAsync(BaseDbContext dbContext)
+        {
+            try
+            {
+                Logger.LogWithContext("データ不整合監査システム初期化開始", Logger.LogLevel.Info);
+                
+                _auditManager = new AuditManager(dbContext);
+                await _auditManager.InitializeAsync();
+                await _auditManager.StartAsync();
+
+                Logger.LogWithContext("データ不整合監査システム初期化完了", Logger.LogLevel.Info);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "InitializeAuditSystemAsync", "App");
+                Logger.LogWithContext("監査システムの初期化に失敗しましたが、アプリケーションは続行されます", Logger.LogLevel.Warning);
+            }
+        }
+
+        protected override async void OnExit(ExitEventArgs e)
+        {
+            try
+            {
+                Logger.LogWithContext("アプリケーション終了処理開始", Logger.LogLevel.Info);
+                
+                if (_auditManager != null)
+                {
+                    await _auditManager.StopAsync();
+                    _auditManager.Dispose();
+                    _auditManager = null;
+                    Logger.LogWithContext("監査システム終了完了", Logger.LogLevel.Info);
+                }
+
+                Logger.LogWithContext("アプリケーション終了", Logger.LogLevel.Info);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "OnExit", "App");
+            }
+            finally
+            {
+                base.OnExit(e);
             }
         }
 

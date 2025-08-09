@@ -55,13 +55,13 @@ namespace WpfScheduledApp20250729.Services
 
         public async Task<Architecture> GetOrCreateDefaultArchitectureAsync()
         {
-            var defaultArchitecture = await GetArchitectureByNameAsync("Default Architecture");
+            var defaultArchitecture = await GetArchitectureByNameAsync("Action");
             
             if (defaultArchitecture == null)
             {
                 defaultArchitecture = new Architecture
                 {
-                    ArchitectureName = "Default Architecture",
+                    ArchitectureName = "Action",
                     TouchedAt = DateTime.UtcNow,
                     LastUpdMethodName = "GetOrCreateDefault"
                 };

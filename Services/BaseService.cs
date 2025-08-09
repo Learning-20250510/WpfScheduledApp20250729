@@ -5,7 +5,7 @@ using WpfScheduledApp20250729.Utils;
 
 namespace WpfScheduledApp20250729.Services
 {
-    internal abstract class BaseService<T> where T : BaseEntity
+    public abstract class BaseService<T> where T : BaseEntity
     {
         protected readonly BaseDbContext _context;
         protected readonly DbSet<T> _dbSet;
