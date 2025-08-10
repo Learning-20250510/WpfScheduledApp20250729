@@ -138,9 +138,6 @@ namespace WpfScheduledApp20250729.Services
                     var newArchitecture = new Models.Entities.Architecture
                     {
                         ArchitectureName = name,
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow,
-                        TouchedAt = DateTime.UtcNow,
                         LastUpdMethodName = "SeedArchitectures"
                     };
                     await _architectureService.AddArchitectureAsync(newArchitecture);
@@ -166,9 +163,6 @@ namespace WpfScheduledApp20250729.Services
                     var newProject = new Models.Entities.Project
                     {
                         ProjectName = name,
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow,
-                        TouchedAt = DateTime.UtcNow,
                         LastUpdMethodName = "SeedProjects"
                     };
                     await _projectService.AddAsync(newProject);
@@ -193,9 +187,6 @@ namespace WpfScheduledApp20250729.Services
                     var newHowToLearn = new Models.Entities.HowToLearn
                     {
                         Htl = name,
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow,
-                        TouchedAt = DateTime.UtcNow,
                         LastUpdMethodName = "SeedHowToLearns"
                     };
                     await _howToLearnService.AddAsync(newHowToLearn);
@@ -256,9 +247,6 @@ namespace WpfScheduledApp20250729.Services
                     var newCycle = new Models.Entities.PeriodicallyCycle
                     {
                         Cycle = name,
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow,
-                        TouchedAt = DateTime.UtcNow,
                         LastUpdMethodName = "SeedPeriodicallyCycles"
                     };
                     await _periodicallyCycleService.AddAsync(newCycle);
@@ -332,9 +320,6 @@ namespace WpfScheduledApp20250729.Services
                     {
                         Extension = extension,
                         Application = application,
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow,
-                        TouchedAt = DateTime.UtcNow,
                         LastUpdMethodName = "SeedRelationExtensionApps"
                     };
                     await _relationExtensionAppService.AddAsync(newRelation);

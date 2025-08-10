@@ -46,15 +46,15 @@ ALTER COLUMN specified_scroll_amount_as_url SET DEFAULT 0;
 
 -- 1-11. created_at のデフォルト値設定
 ALTER TABLE public.middle_task 
-ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP;
+ALTER COLUMN created_at SET DEFAULT NOW();
 
 -- 1-12. updated_at のデフォルト値設定
 ALTER TABLE public.middle_task 
-ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP;
+ALTER COLUMN updated_at SET DEFAULT NOW();
 
 -- 1-13. touched_at のデフォルト値設定
 ALTER TABLE public.middle_task 
-ALTER COLUMN touched_at SET DEFAULT CURRENT_TIMESTAMP;
+ALTER COLUMN touched_at SET DEFAULT NOW();
 
 -- 1-14. last_touched_method_name のデフォルト値設定
 ALTER TABLE public.middle_task 
@@ -76,8 +76,8 @@ ALTER COLUMN disabled SET DEFAULT false;
 CREATE OR REPLACE FUNCTION update_middle_task_timestamps()
 RETURNS TRIGGER AS '
 BEGIN
-    NEW.updated_at = CURRENT_TIMESTAMP;
-    NEW.touched_at = CURRENT_TIMESTAMP;
+    NEW.updated_at = NOW();
+    NEW.touched_at = NOW();
     RETURN NEW;
 END;
 ' LANGUAGE plpgsql;
@@ -165,17 +165,17 @@ CHECK (url IS NULL OR char_length(trim(url)) > 0);
 -- 6-1. created_at 未来日付禁止制約
 ALTER TABLE public.middle_task 
 ADD CONSTRAINT check_created_at_not_future 
-CHECK (created_at <= CURRENT_TIMESTAMP);
+CHECK (created_at <= NOW());
 
 -- 6-2. updated_at 未来日付禁止制約
 ALTER TABLE public.middle_task 
 ADD CONSTRAINT check_updated_at_not_future 
-CHECK (updated_at <= CURRENT_TIMESTAMP);
+CHECK (updated_at <= NOW());
 
 -- 6-3. touched_at 未来日付禁止制約
 ALTER TABLE public.middle_task 
 ADD CONSTRAINT check_touched_at_not_future 
-CHECK (touched_at <= CURRENT_TIMESTAMP);
+CHECK (touched_at <= NOW());
 
 -- 6-4. updated_at が created_at より前でない制約
 ALTER TABLE public.middle_task 

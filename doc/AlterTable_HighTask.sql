@@ -5,15 +5,15 @@
 
 -- 1-1. created_at のデフォルト値設定
 ALTER TABLE public.high_task 
-ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP;
+ALTER COLUMN created_at SET DEFAULT NOW();
 
 -- 1-2. updated_at のデフォルト値設定
 ALTER TABLE public.high_task 
-ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP;
+ALTER COLUMN updated_at SET DEFAULT NOW();
 
 -- 1-3. touched_at のデフォルト値設定
 ALTER TABLE public.high_task 
-ALTER COLUMN touched_at SET DEFAULT CURRENT_TIMESTAMP;
+ALTER COLUMN touched_at SET DEFAULT NOW();
 
 -- 1-4. last_touched_method_name のデフォルト値設定
 ALTER TABLE public.high_task 
@@ -47,8 +47,8 @@ ALTER COLUMN clear_times_outoftime SET DEFAULT 0;
 CREATE OR REPLACE FUNCTION update_high_task_timestamps()
 RETURNS TRIGGER AS '
 BEGIN
-    NEW.updated_at = CURRENT_TIMESTAMP;
-    NEW.touched_at = CURRENT_TIMESTAMP;
+    NEW.updated_at = NOW();
+    NEW.touched_at = NOW();
     RETURN NEW;
 END;
 ' LANGUAGE plpgsql;
@@ -100,17 +100,17 @@ WHERE architecture_id != 1;
 -- 6-1. created_at 未来日付禁止制約
 ALTER TABLE public.high_task 
 ADD CONSTRAINT check_created_at_not_future 
-CHECK (created_at <= CURRENT_TIMESTAMP);
+CHECK (created_at <= NOW());
 
 -- 6-2. updated_at 未来日付禁止制約
 ALTER TABLE public.high_task 
 ADD CONSTRAINT check_updated_at_not_future 
-CHECK (updated_at <= CURRENT_TIMESTAMP);
+CHECK (updated_at <= NOW());
 
 -- 6-3. touched_at 未来日付禁止制約
 ALTER TABLE public.high_task 
 ADD CONSTRAINT check_touched_at_not_future 
-CHECK (touched_at <= CURRENT_TIMESTAMP);
+CHECK (touched_at <= NOW());
 
 -- 6-4. updated_at が created_at より前でない制約
 ALTER TABLE public.high_task 

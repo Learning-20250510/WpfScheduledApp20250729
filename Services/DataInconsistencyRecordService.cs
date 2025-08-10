@@ -243,7 +243,7 @@ namespace WpfScheduledApp20250729.Services
         {
             try
             {
-                var cutoffDate = DateTime.Now.AddDays(-daysOld);
+                var cutoffDate = DateTime.UtcNow.AddDays(-daysOld);
                 var oldRecords = await _context.Set<DataInconsistencyRecord>()
                     .Where(r => r.IsResolved && r.ResolvedAt < cutoffDate)
                     .ToListAsync();
