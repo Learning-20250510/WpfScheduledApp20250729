@@ -1,0 +1,458 @@
+﻿<Window
+    x:Class="SimplyTaskSystem.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SimplyTaskSystem.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <DockPanel>
+                <CheckBox Content="全選択" IsChecked="{Binding AllCheckBoxCommand, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGrid
+                    x:Name="DataGrid1"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    CanUserDeleteRows="False"
+                    CanUserResizeRows="False"
+                    ItemsSource="{Binding TasksCollection}"
+                    SelectedItem="{Binding CurrentRowItem}"
+                    SelectionChanged="DataGrid1_SelectionChanged"
+                    SelectionUnit="CellOrRowHeader"
+                    VirtualizingPanel.ScrollUnit="Pixel">
+                    <DataGrid.ItemContainerStyle>
+                        <Style TargetType="DataGridRow">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PR1}" Value="True">
+                                    <Setter Property="Background" Value="DeepPink" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding PR2}" Value="True">
+                                    <Setter Property="Background" Value="Gold" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding PR3}" Value="True">
+                                    <Setter Property="Background" Value="BlueViolet" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.ItemContainerStyle>
+
+                    <DataGrid.Columns>
+
+                        <DataGridTemplateColumn Header="実行">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        Click="ActButton_Click"
+                                        CommandParameter="{Binding Path=ID}"
+                                        Content="実行" />
+
+                                </DataTemplate>
+
+
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="編集">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        Click="UpdateButton_Click"
+                                        CommandParameter="{Binding Path=ID}"
+                                        Content="編集" />
+
+                                </DataTemplate>
+
+
+                            </DataGridTemplateColumn.CellTemplate>
+
+
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="選択" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        IsChecked="{Binding Path=CheckedBox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+
+                        <DataGridTextColumn
+                            Width="200"
+                            Binding="{Binding KMN}"
+                            Header="KMN" />
+                        <DataGridTextColumn Binding="{Binding ID}" Header="ID" />
+                        <DataGridTextColumn Binding="{Binding KMT}" Header="KMT" />
+                        <DataGridTextColumn Binding="{Binding HTL}" Header="HTL" />
+                        <DataGridTextColumn Binding="{Binding ParentProjectName}" Header="ParentProject" />
+                        <DataGridTextColumn Binding="{Binding ChildProjectName}" Header="ChildProject" />
+                        <DataGridTextColumn Binding="{Binding Description}" Header="Description" />
+                        <DataGridTextColumn Binding="{Binding EstimatedTime}" Header="EstimatedTime" />
+                        <DataGridTextColumn Binding="{Binding DueDate}" Header="DueDate" />
+                        <DataGridTextColumn Binding="{Binding DueTime}" Header="DueTime" />
+                        <DataGridTextColumn Binding="{Binding Priority}" Header="Priority" />
+                        <DataGridTextColumn Binding="{Binding RepeatTimesPerDayColumn}" Header="RepeatTimesPerDay" />
+                        <DataGridTextColumn Binding="{Binding PeriodicallyCycles}" Header="PeriodicallyCycles" />
+
+                        <DataGridHyperlinkColumn Header="sample" />
+
+
+                    </DataGrid.Columns>
+
+
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="Foreground" Value="Silver" />
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                </DataGrid>
+
+            </DockPanel>
+
+
+            <StackPanel Grid.Column="1">
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button
+                        Width="100"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Command="{Binding SearchBtnCommand}"
+                        Content="検索" />
+                    <CheckBox
+                        x:Name="AutoActMode_CheckBox"
+                        Content="自動実行モード"
+                        IsChecked="{Binding AutoActMode_CheckBox}" />
+
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Orientation="Vertical">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Text="PresetList" />
+                    <WrapPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="Select" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button
+                                    Margin="10"
+                                    Command="{Binding CheckAllBtnCommand}"
+                                    Content="CheckAll" />
+                                <Button
+                                    Margin="10"
+                                    Command="{Binding TodayBtnCommand}"
+                                    Content="Today" />
+                                <Button
+                                    Margin="10"
+                                    Command="{Binding TodayTimeIsNotNullBtnCommand}"
+                                    Content="Today(TimeIsNotNUll)" />
+                                <Button
+                                    Margin="10"
+                                    Command="{Binding UnscheduledBtnCommand}"
+                                    Content="Unscheduled" />
+                                <Button
+                                    Margin="10"
+                                    Command="{Binding OverdueBtnCommand}"
+                                    Content="Overdue" />
+
+                                <Button
+                                    Margin="10"
+                                    Command="{Binding RTPDOTBtnCommand}"
+                                    Content="RepeatTimesPerDayOfToday" />
+                            </StackPanel>
+
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="Update" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button
+                                    Margin="10"
+                                    Command="{Binding UpdateAllCheckedBoxRecordsBtnCommand}"
+                                    Content="UpdateAllCheckedBoxRecords" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Button
+                                    Margin="10"
+                                    Command="{Binding UpdateFromKMTIsUnclassifiedToMyBrainAndResearchBtnCommand}"
+                                    Content="UpdateFromKMTIsUnclassifiedToMyBrainAndResearch" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Button
+                                    Margin="10"
+                                    Command="{Binding InsertFromDummyTasksTableBtnCommand}"
+                                    Content="InsertFromDummyTasksTable" />
+                            </StackPanel>
+
+
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="Insert" />
+
+
+                                <Button Command="{Binding OpenInsertPCPWindowBtnCommand}" Content="InsertPCP" />
+                            </StackPanel>
+                        </StackPanel>
+
+
+                    </WrapPanel>
+                </StackPanel>
+
+
+
+                <StackPanel Orientation="Vertical">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="Update + Insert" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            Margin="10"
+                            Command="{Binding UpdateAllCheckedBoxRecordsToTheWorldMyBrainResearchBtnCommand}"
+                            Content="TheWorld+MyBrain+Research" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            Margin="10"
+                            Command="{Binding UpdateAllCheckedBoxRecordsToMyBrainResearchBtnCommand}"
+                            Content="MyBrain+Research" />
+                    </StackPanel>
+
+
+
+                </StackPanel>
+
+                <WrapPanel
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Orientation="Vertical">
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="ID: " />
+                        <TextBox Text="{Binding ID_TextBox, UpdateSourceTrigger=LostFocus}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="KMN: " />
+                        <TextBox Text="{Binding KMN_Text_Box}" />
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="KMT" />
+                        <CheckBox Content="Unclassified" IsChecked="{Binding KMT_Unclassified_CheckBox}" />
+                        <CheckBox Content="TheWorld" IsChecked="{Binding KMT_TheWorld_CheckBox}" />
+                        <CheckBox Content="MyBrain" IsChecked="{Binding KMT_MyBrain_ChecBox}" />
+                        <CheckBox Content="WebPage" IsChecked="{Binding KMT_WebPage_CheckBox}" />
+                        <CheckBox Content="FreePlane" IsChecked="{Binding KMT_FreePlane_CheckBox}" />
+                        <CheckBox Content="PDF" IsChecked="{Binding KMT_PDF_CheckBox}" />
+                        <CheckBox Content="Research" IsChecked="{Binding KMT_Research_CheckBox}" />
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="HTL" />
+                        <CheckBox Content="Unclassified" IsChecked="{Binding HTL_Unclassified_CheckBox}" />
+                        <CheckBox Content="FocusContextBetWeen10SecondsOfMovie" IsChecked="{Binding HTL_FCBW10OM_CheckBox}" />
+                        <CheckBox Content="FocusContextInStillImageOfMovie" IsChecked="{Binding HTL_FCISIOM_CheckBox}" />
+                        <CheckBox Content="FocusContextInSpecificPageOfPDF" IsChecked="{Binding HTL_FCISPOPDF_CheckBox}" />
+                        <CheckBox Content="FocusDesignInSpecificPageOfPDF" IsChecked="{Binding HTL_FDISPOPDF_CheckBox}" />
+                        <CheckBox Content="AnywayOfTheWorld" IsChecked="{Binding HTL_AnywayOfTheWorld_CheckBox}" />
+                        <CheckBox Content="FocusContextInScrollValueOfWebPage" IsChecked="{Binding HTL_FCISVOWP_CheckBox}" />
+                        <CheckBox Content="FocusDesignInScrollValueOfWebPage" IsChecked="{Binding HTL_FDISVOWP_CheckBox}" />
+                        <CheckBox Content="CreateMMFileDirectlyFromBrowserByAutoMMFileGenerationOfWebPage" IsChecked="{Binding HTL_CMMFDFBBAMMFGOWP_CheckBox}" />
+                        <CheckBox Content="CreateMMFileAutomaticallyScrapingByAutoMMFileGenerationOfWebPage" IsChecked="{Binding HTL_CMMFASBAMMFGOW_CheckBox}" />
+                        <CheckBox Content="CreateMMFileFromContextWithOCRByAutoMMFileGenerationOfPDF" IsChecked="{Binding HTL_CMMFFCWOCRBAMMFGOPDF_CheckBox}" />
+                        <CheckBox Content="FocusTheKMNWithHavingAnIdeaMyBrain" IsChecked="{Binding HTL_FocusTheKMNWithHavingAnIdeaMyBrain_CheckBox}" />
+                        <CheckBox Content="FindKMFromSomeURLAutomaticallyOfResearch" IsChecked="{Binding HTL_FindKMFromSomeURLAutomaticallyOfResearch_CheckBox}" />
+                        <CheckBox Content="FocusContextBetWeen10SecondsOfSound" IsChecked="{Binding HTL_FocusContextBetWeen10SecondsOfSound_CheckBox}" />
+                        <CheckBox Content="FocusTheMMFileWithHavingAnFreedomIdeaSpeedlyOfFreePlane" IsChecked="{Binding HTL_FocusTheMMFileWithHavingAnFreedomIdeaSpeedlyOfFreePlane_CheckBox}" />
+                        <CheckBox Content="FocusContextOfTheMMFileWithHavingAnFreedomIdeaOfFreePlane" IsChecked="{Binding HTL_FocusContextOfTheMMFileWithHavingAnFreedomIdeaOfFreePlane_CheckBox}" />
+                        <CheckBox Content="FindTasksNTimesFromTheMMFileOfFreePlane" IsChecked="{Binding HTL_FindTasksNTimesFromTheMMFileOfFreePlane_CheckBox}" />
+                        <CheckBox Content="ReadyForVariablesListLearningOfTheWorld" IsChecked="{Binding HTL_ReadyForVariablesListLearningOfTheWorld_CheckBox}" />
+                        <CheckBox Content="ReviewOfTheWorldOfMyBrain" IsChecked="{Binding HTL_ReviewOfTheWorldOfMyBrain_CheckBox}" />
+
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="kmn_kmt_htl_id: " />
+                        <TextBox Text="{Binding KMN_KMT_HTL_ID_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Priority" />
+                        <CheckBox Content="Unclassified" IsChecked="{Binding PR_Unclassified_CheckBox}" />
+                        <CheckBox Content="Today" IsChecked="{Binding PR_Today_CheckBox}" />
+                        <CheckBox Content="InAFewDays" IsChecked="{Binding PR_InAFewDays_CheckBox}" />
+                        <CheckBox Content="Want1st" IsChecked="{Binding PR_Want1st_CheckBox}" />
+                        <CheckBox Content="Want2nd" IsChecked="{Binding PR_Want2nd_CheckBox}" />
+                        <CheckBox Content="JustNow" IsChecked="{Binding PR_JustNow_CheckBox}" />
+                        <CheckBox Content="WithinAWeek" IsChecked="{Binding PR_WithinAWeek_CheckBox}" />
+                        <CheckBox Content="WithinTwoWeeks" IsChecked="{Binding PR_WithinTwoWeeks_CheckBox}" />
+                        <CheckBox Content="WithinAMonth" IsChecked="{Binding PR_WithinAMonth_CheckBox}" />
+                        <CheckBox Content="WithinThreeMonthes" IsChecked="{Binding PR_WithinThreeMonthes_CheckBox}" />
+                        <CheckBox Content="WithinHalfAYear" IsChecked="{Binding PR_WithinHalfAYear_CheckBox}" />
+                        <CheckBox Content="WithinAYear" IsChecked="{Binding PR_WithinAYear_CheckBox}" />
+                        <CheckBox Content="Exercise" IsChecked="{Binding PR_Exercise_CheckBox}" />
+                    </StackPanel>
+
+
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="EstimatedTime: " />
+                        <TextBox Text="{Binding EstimatedTime_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="DueDate: " />
+                        <TextBox Text="{Binding DueDate_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="DueTime: " />
+                        <TextBox Text="{Binding DueTime_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text=": RTPD" />
+                        <TextBox Text="{Binding RTPD_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="RTPDD: " />
+                        <TextBox Text="{Binding RTPDD_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Created_at: " />
+                        <TextBox Text="{Binding CreatedAt_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="LastCleared_at: " />
+                        <TextBox Text="{Binding LastClearedAt_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Archived: " />
+                        <TextBox Text="{Binding Archived_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Postpone: " />
+                        <TextBox Text="{Binding Postpone_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="RepeatDuration: " />
+                        <TextBox Text="{Binding RepeatDuration_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="PC: " />
+                        <CheckBox Content="Nothing" IsChecked="{Binding PC_Nothing_CheckBox}" />
+                        <CheckBox Content="Everyday" IsChecked="{Binding PC_Everyday_CheckBox}" />
+                        <CheckBox Content="EveryMonday" IsChecked="{Binding PC_EveryMonday}" />
+                        <CheckBox Content="EveryTuesday" IsChecked="{Binding PC_EveryTuesday_CheckBox}" />
+                        <CheckBox Content="EveryWednesday" IsChecked="{Binding PC_EveryWednesday_CheckBox}" />
+                        <CheckBox Content="EveryThursday" IsChecked="{Binding PC_EveryThursday_CheckBox}" />
+                        <CheckBox Content="EveryFriday" IsChecked="{Binding PC_EveryFriday_CheckBox}" />
+                        <CheckBox Content="EverySaturday" IsChecked="{Binding PC_EverySaturday_CheckBox}" />
+                        <CheckBox Content="EverySunday" IsChecked="{Binding PC_EverySunday_CheckBox}" />
+                        <CheckBox Content="EveryTwoWeeksOnAMonday" IsChecked="{Binding PC_EveryTwoWeeksOnAMonday_CheckBox}" />
+                        <CheckBox Content="EveryTwoWeeksOnATuesday" IsChecked="{Binding PC_EveryTwoWeeksOnATuesday_CheckBox}" />
+                        <CheckBox Content="EveryTwoWeeksOnAWednesday" IsChecked="{Binding PC_EveryTwoWeeksOnAWednesday_CheckBox}" />
+                        <CheckBox Content="EveryTwoWeeksOnAThursday" IsChecked="{Binding PC_EveryTwoWeeksOnAThursday_CheckBox}" />
+                        <CheckBox Content="EveryTwoWeeksOnAFriday" IsChecked="{Binding PC_EveryTwoWeeksOnAFriday_CheckBox}" />
+                        <CheckBox Content="EveryTwoWeeksOnASaturday" IsChecked="{Binding PC_EveryTwoWeeksOnASaturday_CheckBox}" />
+                        <CheckBox Content="EveryTwoWeeksOnASunday" IsChecked="{Binding PC_EveryTwoWeeksOnASunday_CheckBox}" />
+                        <CheckBox Content="Weekday" IsChecked="{Binding PC_Weekday_CheckBox}" />
+                        <CheckBox Content="Weekend" IsChecked="{Binding PC_Weekend_CheckBox}" />
+                        <CheckBox Content="EveryMonthOnRandomDay" IsChecked="{Binding PC_EveryMonthOnRandomDay_CheckBox}" />
+                        <CheckBox Content="EveryYearOnRandomDay" IsChecked="{Binding PC_EveryYearOnRandomDay_CheckBox}" />
+                        <CheckBox Content="EveryMonthOnSpecifiedDay" IsChecked="{Binding PC_EveryMonthOnSpecifiedDay_CheckBox}" />
+                        <CheckBox Content="EveryYearOnSpecifiedDay" IsChecked="{Binding PC_EveryYearOnSpecifiedDay_CheckBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Specified_day: " />
+                        <TextBox Text="{Binding SpecifiedDay_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Specific_page_as_PDF: " />
+                        <TextBox Text="{Binding SpecificPageAsPDF_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="specific_scrollvalue_as_webpage: " />
+                        <TextBox Text="{Binding SSAW_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text=" ten_seconds_increment_as_sounds_and_movie: " />
+                        <TextBox Text="{Binding TSIASAM_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text=" two_seconds_increment_as_movie: " />
+                        <TextBox Text="{Binding TSIAM_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text=" | relational_file_1: " />
+                        <TextBox Text="{Binding RF1_TextBox}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="| relational_file_2: " />
+                        <TextBox Text="{Binding RF2_TextBox}" />
+                    </StackPanel>
+
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="| Limit句: " />
+                        <TextBox Text="{Binding LimitNumber_TextBox}" />
+                    </StackPanel>
+
+                </WrapPanel>
+
+            </StackPanel>
+
+        </Grid>
+
+    </ScrollViewer>
+</Window>
