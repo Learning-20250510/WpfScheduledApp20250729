@@ -1,0 +1,236 @@
+﻿<Window x:Class="WpfScheduledApp20250729.Views.GamingResultWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="🎮 MISSION COMPLETE STATUS 🎮" Height="600" Width="900"
+        Background="#0D1117" WindowStyle="None" AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <!-- ゲーミングリソース -->
+        <LinearGradientBrush x:Key="GamingGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF00D4AA" Offset="0"/>
+            <GradientStop Color="#FF0080FF" Offset="0.5"/>
+            <GradientStop Color="#FFFF0080" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <LinearGradientBrush x:Key="NeonBlue" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF00FFFF" Offset="0"/>
+            <GradientStop Color="#FF0080FF" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <LinearGradientBrush x:Key="DarkGradient" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FF1A1A2E" Offset="0"/>
+            <GradientStop Color="#FF0F0F23" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <!-- ゲーミングボタンスタイル -->
+        <Style x:Key="GamingButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource NeonBlue}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="BorderBrush" Value="#FF00FFFF"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#FF00FFFF" BlurRadius="15" ShadowDepth="0"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="25" Duration="0:0:0.3"/>
+                                            <ColorAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Color)"
+                                                          To="#FFFF0080" Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="15" Duration="0:0:0.3"/>
+                                            <ColorAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Color)"
+                                                          To="#FF00FFFF" Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- 結果テキストスタイル -->
+        <Style x:Key="ResultTextStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="72"/>
+            <Setter Property="FontWeight" Value="ExtraBold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#FFFF0080" BlurRadius="20" ShadowDepth="0"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- パルシングアニメーション -->
+        <Storyboard x:Key="PulseAnimation" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="20"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="35"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="20"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Opacity)">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.8"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="1.0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.8"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+    
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard Storyboard="{StaticResource PulseAnimation}"/>
+        </EventTrigger>
+    </Window.Triggers>
+    
+    <Border Background="{StaticResource DarkGradient}" CornerRadius="15">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" BlurRadius="30" ShadowDepth="0"/>
+        </Border.Effect>
+        
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <!-- 結果表示 -->
+            <Border Grid.Row="0" Background="#FF1A1A2E" CornerRadius="10"
+                   BorderBrush="{StaticResource GamingGradient}" BorderThickness="3" 
+                   Margin="0,0,0,30">
+                <Border.Effect>
+                    <DropShadowEffect Color="#FFFF0080" BlurRadius="20" ShadowDepth="0" Opacity="0.7"/>
+                </Border.Effect>
+                <StackPanel Margin="40,30">
+                    <TextBlock Text="{Binding ResultText}" 
+                              Style="{StaticResource ResultTextStyle}"
+                              Foreground="{StaticResource GamingGradient}"/>
+                    
+                    <TextBlock Text="{Binding TaskName, StringFormat='TARGET: {0}'}" 
+                              Foreground="#FF00FFFF" FontSize="24" FontWeight="Bold"
+                              FontFamily="Consolas" HorizontalAlignment="Center" Margin="0,10"/>
+                    
+                    <TextBlock Text="{Binding DurationText}" 
+                              Foreground="White" FontSize="18" FontWeight="Bold"
+                              FontFamily="Consolas" HorizontalAlignment="Center" Margin="0,5"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- 次のアクション選択 -->
+            <Border Grid.Row="1" Background="#FF0A0A1A" CornerRadius="10"
+                   BorderBrush="{StaticResource NeonBlue}" BorderThickness="2" 
+                   Margin="0,0,0,20">
+                <Border.Effect>
+                    <DropShadowEffect Color="#FF00FFFF" BlurRadius="15" ShadowDepth="0" Opacity="0.4"/>
+                </Border.Effect>
+                <StackPanel Margin="30">
+                    <TextBlock Text="🎯 NEXT ACTION PROTOCOL" 
+                              Foreground="{StaticResource NeonBlue}" 
+                              FontSize="28" FontWeight="Bold" FontFamily="Consolas"
+                              HorizontalAlignment="Center" Margin="0,0,0,30"/>
+                    
+                    <UniformGrid Columns="2" Rows="2" Margin="20">
+                        <Button Content="✅ MISSION CLEARED!" 
+                               Command="{Binding ClearCommand}" 
+                               Style="{StaticResource GamingButtonStyle}"
+                               Padding="20,15" Margin="10"/>
+                        
+                        <Button Content="🔄 REPEAT MISSION" 
+                               Command="{Binding AgainCommand}" 
+                               Style="{StaticResource GamingButtonStyle}"
+                               Padding="20,15" Margin="10"/>
+                        
+                        <Button Content="⏰ SCHEDULE LATER" 
+                               Command="{Binding AgainLaterCommand}" 
+                               Style="{StaticResource GamingButtonStyle}"
+                               Padding="20,15" Margin="10"/>
+                        
+                        <Button Content="⚙️ MODIFY PARAMS" 
+                               Command="{Binding ShowUpdateFieldsCommand}" 
+                               Style="{StaticResource GamingButtonStyle}"
+                               Padding="20,15" Margin="10"/>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+            
+            <!-- パラメータ更新エリア -->
+            <Border Grid.Row="2" Background="#FF1A1A2E" CornerRadius="8"
+                   BorderBrush="#FFFF8800" BorderThickness="2" 
+                   Margin="0,0,0,20"
+                   Visibility="{Binding ShowUpdateFields, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Border.Effect>
+                    <DropShadowEffect Color="#FFFF8800" BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
+                </Border.Effect>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="30,20">
+                    <StackPanel Margin="20,0">
+                        <TextBlock Text="⏱️ ESTIMATED TIME" Foreground="#FFFF8800" 
+                                  FontSize="14" FontWeight="Bold" FontFamily="Consolas" 
+                                  HorizontalAlignment="Center"/>
+                        <TextBox Text="{Binding EstimatedTimeTextBox}" 
+                                Background="#FF0A0A1A" Foreground="White" 
+                                BorderBrush="#FFFF8800" BorderThickness="2"
+                                FontFamily="Consolas" FontSize="16" 
+                                Width="100" Padding="10,5" HorizontalContentAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <StackPanel Margin="20,0">
+                        <TextBlock Text="🎯 PRIORITY LEVEL" Foreground="#FFFF8800" 
+                                  FontSize="14" FontWeight="Bold" FontFamily="Consolas" 
+                                  HorizontalAlignment="Center"/>
+                        <TextBox Text="{Binding PriorityTextBox}" 
+                                Background="#FF0A0A1A" Foreground="White" 
+                                BorderBrush="#FFFF8800" BorderThickness="2"
+                                FontFamily="Consolas" FontSize="16" 
+                                Width="100" Padding="10,5" HorizontalContentAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <Button Content="💾 UPDATE DATA" 
+                           Command="{Binding UpdateTaskColumnCommand}" 
+                           Style="{StaticResource GamingButtonStyle}"
+                           Padding="15,10" Margin="20,15,0,0"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- フッター -->
+            <Border Grid.Row="3" Background="#FF1A1A2E" CornerRadius="8"
+                   BorderBrush="{StaticResource GamingGradient}" BorderThickness="2">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="20,15">
+                    <TextBlock Text="🎮 GAMING TASK SYSTEM v2.0 - MISSION CONTROL INTERFACE" 
+                              Foreground="{StaticResource GamingGradient}" 
+                              FontSize="14" FontWeight="Bold" FontFamily="Consolas"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

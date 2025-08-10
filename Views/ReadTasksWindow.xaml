@@ -6,7 +6,114 @@
         xmlns:local="clr-namespace:WpfScheduledApp20250729.Views"
         xmlns:controls="clr-namespace:WpfScheduledApp20250729.Controls"
         mc:Ignorable="d"
-        Title="ReadTasksWindow" Height="450" Width="800">
+        Title="🎮 Gaming Task Manager" Height="600" Width="1000"
+        Background="#0D1117" WindowStyle="None" AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <!-- ゲーミング風グラデーション -->
+        <LinearGradientBrush x:Key="GamingGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF00D4AA" Offset="0"/>
+            <GradientStop Color="#FF0080FF" Offset="0.5"/>
+            <GradientStop Color="#FFFF0080" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <!-- ネオンエフェクト -->
+        <LinearGradientBrush x:Key="NeonBlue" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF00FFFF" Offset="0"/>
+            <GradientStop Color="#FF0080FF" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <!-- ダークグラデーション -->
+        <LinearGradientBrush x:Key="DarkGradient" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FF1A1A2E" Offset="0"/>
+            <GradientStop Color="#FF0F0F23" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <!-- ゲーミングボタンスタイル -->
+        <Style x:Key="GamingButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource NeonBlue}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="#FF00FFFF"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#FF00FFFF" BlurRadius="10" ShadowDepth="0"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                          To="#FFFF0080" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="15" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                          To="#FF00FFFF" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="10" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- ゲーミングテキストボックススタイル -->
+        <Style x:Key="GamingTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#FF1A1A2E"/>
+            <Setter Property="Foreground" Value="#FF00FFFF"/>
+            <Setter Property="BorderBrush" Value="#FF00FFFF"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#FF00FFFF" BlurRadius="5" ShadowDepth="0"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+    </Window.Resources>
+    
+    <Border Background="{StaticResource DarkGradient}" CornerRadius="10">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="0"/>
+        </Border.Effect>
+        
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -14,179 +121,218 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- 上部ナビゲーションメニュー -->
-        <Grid Grid.Row="0" Background="DarkBlue" Height="35">
+        <!-- 上部ゲーミングヘッダー -->
+        <Grid Grid.Row="0" Height="60">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#FF1A1A2E" Offset="0"/>
+                    <GradientStop Color="#FF2D2D5A" Offset="0.5"/>
+                    <GradientStop Color="#FF1A1A2E" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.Effect>
+                <DropShadowEffect Color="#FF00FFFF" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+            </Grid.Effect>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             
-            <Menu Grid.Column="0" 
-                  Background="Transparent" 
-                  Foreground="White">
-                <Menu.Resources>
-                    <Style TargetType="MenuItem">
-                        <Setter Property="Foreground" Value="White"/>
-                        <Setter Property="FontWeight" Value="Normal"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="MenuItem">
-                                    <Border Name="Border" Background="Transparent" BorderThickness="0" Padding="8,6">
-                                        <Grid>
-                                            <ContentPresenter Name="HeaderHost" ContentSource="Header" RecognizesAccessKey="True"/>
-                                            <Popup Name="Popup" 
-                                                   Placement="Bottom" 
-                                                   IsOpen="{TemplateBinding IsSubmenuOpen}" 
-                                                   AllowsTransparency="True" 
-                                                   Focusable="False">
-                                                <Border Name="SubmenuBorder" 
-                                                        SnapsToDevicePixels="True" 
-                                                        Background="White" 
-                                                        BorderBrush="Gray" 
-                                                        BorderThickness="1"
-                                                        CornerRadius="2">
-                                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
-                                                </Border>
-                                            </Popup>
-                                        </Grid>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsHighlighted" Value="True">
-                                            <Setter TargetName="Border" Property="Background" Value="LightBlue"/>
-                                        </Trigger>
-                                        <Trigger Property="IsSubmenuOpen" Value="True">
-                                            <Setter TargetName="Border" Property="Background" Value="LightBlue"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="Role" Value="SubmenuItem">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="MenuItem">
-                                            <Border Name="Border" Background="Transparent" BorderThickness="0" Padding="8,4">
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <ContentPresenter Grid.Column="0" Name="Icon" Content="{TemplateBinding Icon}" Margin="0,0,8,0"/>
-                                                    <ContentPresenter Grid.Column="1" Name="HeaderHost" ContentSource="Header" RecognizesAccessKey="True"/>
-                                                </Grid>
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsHighlighted" Value="True">
-                                                    <Setter TargetName="Border" Property="Background" Value="LightBlue"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="Foreground" Value="Black"/>
-                                <Setter Property="FontWeight" Value="Normal"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Menu.Resources>
-                <MenuItem Header="タスク管理">
-                    <MenuItem Header="新しいタスクを追加" 
-                             Command="{Binding AddTaskCommand}"
-                             Icon="➕"/>
-                    <MenuItem Header="アクションタスク" 
-                             Command="{Binding ActionTaskCommand}"
-                             Icon="⚡"/>
-                </MenuItem>
-                <MenuItem Header="テーブル">
-                    <MenuItem Header="High Task" 
-                             Command="{Binding HighTaskCommand}"
-                             Icon="🔴"/>
-                    <MenuItem Header="Middle Task" 
-                             Command="{Binding MiddleTaskCommand}"
-                             Icon="🟡"/>
-                    <MenuItem Header="Low Task" 
-                             Command="{Binding LowTaskCommand}"
-                             Icon="🟢"/>
-                </MenuItem>
-                <MenuItem Header="設定">
-                    <MenuItem Header="アプリ設定" 
-                             Command="{Binding AppSettingsCommand}"
-                             Icon="⚙️"/>
-                    <MenuItem Header="データベース設定" 
-                             Command="{Binding DatabaseSettingsCommand}"
-                             Icon="🗄️"/>
-                </MenuItem>
-            </Menu>
+            <!-- ゲーミング風メニューバー -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0">
+                <!-- タイトル -->
+                <TextBlock Text="⚡ TASK COMMANDER ⚡" 
+                          Foreground="{StaticResource NeonBlue}" 
+                          FontSize="18" 
+                          FontWeight="Bold" 
+                          FontFamily="Consolas"
+                          VerticalAlignment="Center"
+                          Margin="0,0,30,0">
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="#FF00FFFF" BlurRadius="8" ShadowDepth="0"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+                
+                <!-- ゲーミングボタンメニュー -->
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="🎮 NEW TASK" 
+                           Style="{StaticResource GamingButtonStyle}"
+                           Command="{Binding AddTaskCommand}"
+                           Margin="0,0,10,0"
+                           Padding="15,8"
+                           FontSize="12"/>
+                    
+                    <Button Content="⚡ ACTION" 
+                           Style="{StaticResource GamingButtonStyle}"
+                           Command="{Binding ActionTaskCommand}"
+                           Margin="0,0,10,0"
+                           Padding="15,8"
+                           FontSize="12"/>
+                    
+                    <ComboBox Width="120" Height="35" 
+                             Background="#FF1A1A2E"
+                             Foreground="#FF00FFFF"
+                             BorderBrush="#FF00FFFF"
+                             FontFamily="Consolas"
+                             FontWeight="Bold">
+                        <ComboBox.Effect>
+                            <DropShadowEffect Color="#FF00FFFF" BlurRadius="5" ShadowDepth="0"/>
+                        </ComboBox.Effect>
+                        <ComboBoxItem Content="🔴 HIGH" Foreground="#FFFF4444"/>
+                        <ComboBoxItem Content="🟡 MIDDLE" Foreground="#FFFF8800"/>
+                        <ComboBoxItem Content="🟢 LOW" Foreground="#FF44FF44"/>
+                    </ComboBox>
+                </StackPanel>
+            </StackPanel>
             
-            <!-- 右側のStartセクション -->
+            <!-- ゲーミング風スタートセクション -->
             <StackPanel Grid.Column="1" 
                        Orientation="Horizontal" 
                        VerticalAlignment="Center" 
-                       Margin="10,0">
-                <TextBlock Text="Start:" 
-                          Foreground="White" 
-                          VerticalAlignment="Center" 
-                          Margin="0,0,5,0"/>
-                <CheckBox IsChecked="{Binding LetsStartCheckBox}" 
-                         VerticalAlignment="Center">
-                    <CheckBox.Style>
-                        <Style TargetType="CheckBox">
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="CheckBox">
-                                        <Grid>
-                                            <Border Name="Border" 
-                                                    Background="White" 
-                                                    BorderBrush="White" 
-                                                    BorderThickness="1" 
-                                                    CornerRadius="2" 
-                                                    Width="16" 
-                                                    Height="16">
-                                                <Path Name="CheckMark" 
-                                                      Data="M2,6 L6,10 L14,2" 
-                                                      Stroke="Green" 
-                                                      StrokeThickness="2" 
-                                                      Visibility="Collapsed"/>
-                                            </Border>
-                                        </Grid>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsChecked" Value="True">
-                                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
-                                            </Trigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="Border" Property="Background" Value="LightGray"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </CheckBox.Style>
-                </CheckBox>
+                       Margin="20,0">
+                <Border Background="#FF0F0F23" 
+                       BorderBrush="{StaticResource GamingGradient}" 
+                       BorderThickness="2" 
+                       CornerRadius="15" 
+                       Padding="15,8">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#FFFF0080" BlurRadius="10" ShadowDepth="0" Opacity="0.7"/>
+                    </Border.Effect>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="⚡ POWER MODE" 
+                                  Foreground="#FFFF0080" 
+                                  FontFamily="Consolas"
+                                  FontWeight="Bold"
+                                  VerticalAlignment="Center" 
+                                  Margin="0,0,10,0"/>
+                        <ToggleButton IsChecked="{Binding LetsStartCheckBox}" 
+                                     Width="50" Height="25"
+                                     Background="#FF1A1A2E"
+                                     BorderBrush="#FFFF0080"
+                                     BorderThickness="2">
+                            <ToggleButton.Style>
+                                <Style TargetType="ToggleButton">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Border Name="Border" 
+                                                       Background="{TemplateBinding Background}"
+                                                       BorderBrush="{TemplateBinding BorderBrush}"
+                                                       BorderThickness="{TemplateBinding BorderThickness}"
+                                                       CornerRadius="12">
+                                                    <Ellipse Name="Thumb" 
+                                                            Width="17" Height="17" 
+                                                            Fill="#FFFF0080"
+                                                            HorizontalAlignment="Left"
+                                                            Margin="2,0,0,0">
+                                                        <Ellipse.Effect>
+                                                            <DropShadowEffect Color="#FFFF0080" BlurRadius="5" ShadowDepth="0"/>
+                                                        </Ellipse.Effect>
+                                                    </Ellipse>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="Thumb" Property="HorizontalAlignment" Value="Right"/>
+                                                        <Setter TargetName="Thumb" Property="Margin" Value="0,0,2,0"/>
+                                                        <Setter TargetName="Thumb" Property="Fill" Value="#FF00FF00"/>
+                                                        <Setter TargetName="Border" Property="Background" Value="#FF2A2A4A"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ToggleButton.Style>
+                        </ToggleButton>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </Grid>
 
-        <!-- 検索エリア -->
-        <StackPanel Grid.Row="1" 
-                   Orientation="Horizontal" 
-                   HorizontalAlignment="Center"
-                   Margin="10">
-            <TextBox Text="検索ボックスクエリ" 
-                    Width="300"
-                    Height="25"
-                    VerticalContentAlignment="Center"/>
-            <Button Content="Search"
-                   Command="{Binding SearchCommand}"
-                   Margin="10,0,0,0"
-                   Padding="10,5"/>
-        </StackPanel>
+        <!-- ゲーミング風検索エリア -->
+        <Border Grid.Row="1" 
+               Background="#FF0F0F23" 
+               Margin="20,10"
+               CornerRadius="8"
+               BorderBrush="{StaticResource NeonBlue}"
+               BorderThickness="2">
+            <Border.Effect>
+                <DropShadowEffect Color="#FF00FFFF" BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
+            </Border.Effect>
+            <StackPanel Orientation="Horizontal" 
+                       HorizontalAlignment="Center"
+                       Margin="20,15">
+                <TextBlock Text="🔍 SEARCH PROTOCOL:" 
+                          Foreground="{StaticResource NeonBlue}"
+                          FontFamily="Consolas"
+                          FontWeight="Bold"
+                          VerticalAlignment="Center"
+                          Margin="0,0,15,0"/>
+                
+                <TextBox Text="Enter search query..." 
+                        Style="{StaticResource GamingTextBoxStyle}"
+                        Width="400"
+                        Height="35"
+                        VerticalContentAlignment="Center"
+                        Padding="10,0"/>
+                
+                <Button Content="🚀 SCAN" 
+                       Style="{StaticResource GamingButtonStyle}"
+                       Command="{Binding SearchCommand}"
+                       Margin="15,0,0,0"
+                       Padding="20,8"
+                       FontSize="14"/>
+            </StackPanel>
+        </Border>
 
-        <!-- メインコンテンツ -->
-        <ContentControl Grid.Row="2" 
-                       Content="{Binding CurrentView}" 
-                       Margin="10"/>
-    </Grid>    
-
+        <!-- ゲーミング風メインコンテンツエリア -->
+        <Border Grid.Row="2" 
+               Background="#FF0A0A1A" 
+               Margin="20,10,20,20"
+               CornerRadius="10"
+               BorderBrush="{StaticResource GamingGradient}"
+               BorderThickness="2">
+            <Border.Effect>
+                <DropShadowEffect Color="#FFFF0080" BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
+            </Border.Effect>
+            
+            <!-- パルシングアニメーション -->
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard RepeatBehavior="Forever">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Opacity)">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.3"/>
+                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.7"/>
+                                <EasingDoubleKeyFrame KeyTime="0:0:4" Value="0.3"/>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Border.Triggers>
+            
+            <Grid>
+                <!-- バックグラウンドパターン -->
+                <Canvas>
+                    <Path Stroke="#FF00FFFF" 
+                          StrokeThickness="1" 
+                          Opacity="0.1"
+                          Data="M0,0 L100,100 M100,0 L0,100 M50,0 L50,100 M0,50 L100,50"/>
+                    <Path Stroke="#FFFF0080" 
+                          StrokeThickness="1" 
+                          Opacity="0.1"
+                          Data="M200,0 L300,100 M300,0 L200,100 M250,0 L250,100 M200,50 L300,50"/>
+                </Canvas>
+                
+                <ContentControl Content="{Binding CurrentView}" 
+                               Margin="20">
+                    <!-- コンテンツにもゲーミング効果 -->
+                    <ContentControl.Effect>
+                        <DropShadowEffect Color="#FF00FFFF" BlurRadius="5" ShadowDepth="0" Opacity="0.2"/>
+                    </ContentControl.Effect>
+                </ContentControl>
+            </Grid>
+        </Border>
+    </Grid>
+    </Border>
 </Window>
