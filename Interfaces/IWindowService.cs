@@ -23,6 +23,7 @@ namespace WpfScheduledApp20250729.Interfaces
 
         // 特定用途メソッド（オプション）
         void ShowAddTaskWindow();
+        void ShowActionTaskWindow();
         void ShowUpdateTaskWindow(int taskId);
         void ShowUpdateTaskWindow(object taskEntity);
         bool? ShowAddTaskDialog();

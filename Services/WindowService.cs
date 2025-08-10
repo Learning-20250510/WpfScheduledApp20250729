@@ -66,6 +66,11 @@ namespace WpfScheduledApp20250729.Services
             ShowWindow<AddTaskWindow, AddTaskViewModel>();
         }
 
+        public void ShowActionTaskWindow()
+        {
+            ShowWindow<ActionTaskWindow, ActionTaskViewModel>();
+        }
+
         public void ShowUpdateTaskWindow(int taskId)
         {
             var window = new UpdateTaskWindow();

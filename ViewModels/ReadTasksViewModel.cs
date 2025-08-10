@@ -1,11 +1,13 @@
 using WpfScheduledApp20250729.Controls;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using WpfScheduledApp20250729;
 using WpfScheduledApp20250729.Interfaces;
 using WpfScheduledApp20250729.Services;
+using WpfScheduledApp20250729.Models;
 
 namespace WpfScheduledApp20250729.ViewModels
 {
@@ -32,12 +34,21 @@ namespace WpfScheduledApp20250729.ViewModels
             set => SetProperty(ref _currentView, value);
         }
 
-        private bool _letsStartCheckBox;
+        private bool _letsStartCheckBox = false;
         public bool LetsStartCheckBox
         {
             get => _letsStartCheckBox;
             set => SetProperty(ref _letsStartCheckBox, value);
         }
+
+        public DelegateCommand SearchCommand { get; }
+        public DelegateCommand HighTaskCommand { get; }
+        public DelegateCommand MiddleTaskCommand { get; }
+        public DelegateCommand LowTaskCommand { get; }
+        public DelegateCommand AddTaskCommand { get; }
+        public DelegateCommand ActionTaskCommand { get; }
+        public DelegateCommand AppSettingsCommand { get; }
+        public DelegateCommand DatabaseSettingsCommand { get; }
 
         public ReadTasksViewModel(IWindowService windowService, HighTaskService highTaskService, MiddleTaskService middleTaskService, LowTaskService lowTaskService, ArchitectureService architectureService, ProjectService projectService)
         {
@@ -47,120 +58,64 @@ namespace WpfScheduledApp20250729.ViewModels
             _lowTaskService = lowTaskService;
             _architectureService = architectureService;
             _projectService = projectService;
+
+            // コマンドの初期化
+            SearchCommand = new DelegateCommand(_ => ExecuteSearch(), _ => true);
+            HighTaskCommand = new DelegateCommand(_ => ShowHighTasks(), _ => true);
+            MiddleTaskCommand = new DelegateCommand(_ => ShowMiddleTasks(), _ => true);
+            LowTaskCommand = new DelegateCommand(_ => ShowLowTasks(), _ => true);
+            AddTaskCommand = new DelegateCommand(_ => _windowService.ShowAddTaskWindow(), _ => true);
+            ActionTaskCommand = new DelegateCommand(_ => _windowService.ShowActionTaskWindow(), _ => true);
+            AppSettingsCommand = new DelegateCommand(_ => ShowAppSettings(), _ => true);
+            DatabaseSettingsCommand = new DelegateCommand(_ => ShowDatabaseSettings(), _ => true);
         }
 
-        private DelegateCommand? _highTaskCommand;
-        public DelegateCommand HighTaskCommand
+        private void ExecuteSearch()
         {
-            get
-            {
-                return _highTaskCommand ?? (_highTaskCommand = new DelegateCommand(
-                async _ =>
-                {
-                    try
-                    {
-                        var highTasks = await _highTaskService.GetAllAsync();
-                        Tasks.Clear();
-                        foreach (var task in highTasks)
-                        {
-                            Tasks.Add(task);
-                        }
-                        CurrentView = new HighTaskControl();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"HighTask取得エラー: {ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                },
-                _ => true));
-            }
+            // 検索処理の実装
         }
 
-        private DelegateCommand? _middleTaskCommand;
-        public DelegateCommand MiddleTaskCommand
+        private void ShowAppSettings()
         {
-            get
-            {
-                return _middleTaskCommand ?? (_middleTaskCommand = new DelegateCommand(
-                async _ =>
-                {
-                    try
-                    {
-                        var middleTasks = await _middleTaskService.GetAllAsync();
-                        Tasks.Clear();
-                        foreach (var task in middleTasks)
-                        {
-                            Tasks.Add(task);
-                        }
-                        CurrentView = new ReadTaskControl();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"MiddleTask取得エラー: {ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                },
-                _ => true));
-            }
+            // アプリ設定画面を表示
         }
 
-        private DelegateCommand? _lowTaskCommand;
-        public DelegateCommand LowTaskCommand
+        private void ShowDatabaseSettings()
         {
-            get
-            {
-                return _lowTaskCommand ?? (_lowTaskCommand = new DelegateCommand(
-                async _ =>
-                {
-                    try
-                    {
-                        var lowTasks = await _lowTaskService.GetAllAsync();
-                        Tasks.Clear();
-                        foreach (var task in lowTasks)
-                        {
-                            Tasks.Add(task);
-                        }
-                        CurrentView = new LowTaskControl();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"LowTask取得エラー: {ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                },
-                _ => true));
-            }
+            // データベース設定画面を表示
         }
 
-        private DelegateCommand? _searchCommand;
-        public DelegateCommand SearchCommand
+        private async void ShowHighTasks()
         {
-            get
+            var highTasks = await _highTaskService.GetAllAsync();
+            Tasks.Clear();
+            foreach (var task in highTasks)
             {
-                return _searchCommand ?? (_searchCommand = new DelegateCommand(
-                _ =>
-                {
-                    MessageBox.Show("検索機能は実装中です。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
-                },
-                _ => true));
+                Tasks.Add(task);
             }
+            CurrentView = new HighTaskControl();
         }
 
-        private DelegateCommand? _showDetailCommand;
-        public DelegateCommand ShowDetailCommand
+        private async void ShowMiddleTasks()
         {
-            get
+            var middleTasks = await _middleTaskService.GetAllAsync();
+            Tasks.Clear();
+            foreach (var task in middleTasks)
             {
-                return _showDetailCommand ?? (_showDetailCommand = new DelegateCommand(
-                param =>
-                {
-                    if (param != null)
-                    {
-                        // 編集ウィンドウを開く
-                        _windowService.ShowUpdateTaskWindow(param);
-                    }
-                },
-                param => param != null));
+                Tasks.Add(task);
             }
+            CurrentView = new ReadTaskControl();
         }
 
+        private async void ShowLowTasks()
+        {
+            var lowTasks = await _lowTaskService.GetAllAsync();
+            Tasks.Clear();
+            foreach (var task in lowTasks)
+            {
+                Tasks.Add(task);
+            }
+            CurrentView = new LowTaskControl();
+        }
     }
 }

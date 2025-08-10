@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfScheduledApp20250729.Views"
+        xmlns:controls="clr-namespace:WpfScheduledApp20250729.Controls"
         mc:Ignorable="d"
         Title="ReadTasksWindow" Height="450" Width="800">
     <Grid>
@@ -13,42 +14,179 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
+        <!-- 上部ナビゲーションメニュー -->
+        <Grid Grid.Row="0" Background="DarkBlue" Height="35">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <Menu Grid.Column="0" 
+                  Background="Transparent" 
+                  Foreground="White">
+                <Menu.Resources>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontWeight" Value="Normal"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="MenuItem">
+                                    <Border Name="Border" Background="Transparent" BorderThickness="0" Padding="8,6">
+                                        <Grid>
+                                            <ContentPresenter Name="HeaderHost" ContentSource="Header" RecognizesAccessKey="True"/>
+                                            <Popup Name="Popup" 
+                                                   Placement="Bottom" 
+                                                   IsOpen="{TemplateBinding IsSubmenuOpen}" 
+                                                   AllowsTransparency="True" 
+                                                   Focusable="False">
+                                                <Border Name="SubmenuBorder" 
+                                                        SnapsToDevicePixels="True" 
+                                                        Background="White" 
+                                                        BorderBrush="Gray" 
+                                                        BorderThickness="1"
+                                                        CornerRadius="2">
+                                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                                                </Border>
+                                            </Popup>
+                                        </Grid>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsHighlighted" Value="True">
+                                            <Setter TargetName="Border" Property="Background" Value="LightBlue"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSubmenuOpen" Value="True">
+                                            <Setter TargetName="Border" Property="Background" Value="LightBlue"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="Role" Value="SubmenuItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="MenuItem">
+                                            <Border Name="Border" Background="Transparent" BorderThickness="0" Padding="8,4">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <ContentPresenter Grid.Column="0" Name="Icon" Content="{TemplateBinding Icon}" Margin="0,0,8,0"/>
+                                                    <ContentPresenter Grid.Column="1" Name="HeaderHost" ContentSource="Header" RecognizesAccessKey="True"/>
+                                                </Grid>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsHighlighted" Value="True">
+                                                    <Setter TargetName="Border" Property="Background" Value="LightBlue"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="FontWeight" Value="Normal"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Menu.Resources>
+                <MenuItem Header="タスク管理">
+                    <MenuItem Header="新しいタスクを追加" 
+                             Command="{Binding AddTaskCommand}"
+                             Icon="➕"/>
+                    <MenuItem Header="アクションタスク" 
+                             Command="{Binding ActionTaskCommand}"
+                             Icon="⚡"/>
+                </MenuItem>
+                <MenuItem Header="テーブル">
+                    <MenuItem Header="High Task" 
+                             Command="{Binding HighTaskCommand}"
+                             Icon="🔴"/>
+                    <MenuItem Header="Middle Task" 
+                             Command="{Binding MiddleTaskCommand}"
+                             Icon="🟡"/>
+                    <MenuItem Header="Low Task" 
+                             Command="{Binding LowTaskCommand}"
+                             Icon="🟢"/>
+                </MenuItem>
+                <MenuItem Header="設定">
+                    <MenuItem Header="アプリ設定" 
+                             Command="{Binding AppSettingsCommand}"
+                             Icon="⚙️"/>
+                    <MenuItem Header="データベース設定" 
+                             Command="{Binding DatabaseSettingsCommand}"
+                             Icon="🗄️"/>
+                </MenuItem>
+            </Menu>
+            
+            <!-- 右側のStartセクション -->
+            <StackPanel Grid.Column="1" 
+                       Orientation="Horizontal" 
+                       VerticalAlignment="Center" 
+                       Margin="10,0">
+                <TextBlock Text="Start:" 
+                          Foreground="White" 
+                          VerticalAlignment="Center" 
+                          Margin="0,0,5,0"/>
+                <CheckBox IsChecked="{Binding LetsStartCheckBox}" 
+                         VerticalAlignment="Center">
+                    <CheckBox.Style>
+                        <Style TargetType="CheckBox">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="CheckBox">
+                                        <Grid>
+                                            <Border Name="Border" 
+                                                    Background="White" 
+                                                    BorderBrush="White" 
+                                                    BorderThickness="1" 
+                                                    CornerRadius="2" 
+                                                    Width="16" 
+                                                    Height="16">
+                                                <Path Name="CheckMark" 
+                                                      Data="M2,6 L6,10 L14,2" 
+                                                      Stroke="Green" 
+                                                      StrokeThickness="2" 
+                                                      Visibility="Collapsed"/>
+                                            </Border>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Border" Property="Background" Value="LightGray"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </CheckBox.Style>
+                </CheckBox>
+            </StackPanel>
+        </Grid>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBox Grid.Row="0" Text="検索ボックスクエリ" Width="300"/>
-            <Button
-               Content="Search"
-               Command="{Binding SearchCommand}"
-               Margin="10" />
+        <!-- 検索エリア -->
+        <StackPanel Grid.Row="1" 
+                   Orientation="Horizontal" 
+                   HorizontalAlignment="Center"
+                   Margin="10">
+            <TextBox Text="検索ボックスクエリ" 
+                    Width="300"
+                    Height="25"
+                    VerticalContentAlignment="Center"/>
+            <Button Content="Search"
+                   Command="{Binding SearchCommand}"
+                   Margin="10,0,0,0"
+                   Padding="10,5"/>
         </StackPanel>
 
-        <CheckBox
-                Grid.Row="0"
-                Grid.Column="1"
-                Content="Start."
-                IsChecked="{Binding LetsStartCheckBox}" 
-                VerticalAlignment="Center"/>
-
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button
-                Content="HighTask"
-                Command="{Binding HighTaskCommand}"
-                Margin="10" />
-            <Button
-                Content="MiddleTask"
-                Command="{Binding MiddleTaskCommand}"
-                Margin="10" />
-            <Button
-                Content="LowTask"
-                Command="{Binding LowTaskCommand}"
-                Margin="10" />
-        </StackPanel>
-
-        <ContentControl Grid.Row="2" Content="{Binding CurrentView}" />
+        <!-- メインコンテンツ -->
+        <ContentControl Grid.Row="2" 
+                       Content="{Binding CurrentView}" 
+                       Margin="10"/>
     </Grid>    
 
 </Window>

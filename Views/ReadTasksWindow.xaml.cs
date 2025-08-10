@@ -10,6 +10,8 @@ namespace WpfScheduledApp20250729.Views
         public ReadTasksWindow()
         {
             InitializeComponent();
+            // ウィンドウを最大化
+            WindowState = WindowState.Maximized;
         }
     }
 }
