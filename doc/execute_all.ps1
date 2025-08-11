@@ -6,7 +6,9 @@ $files = @(
     "AlterTable_periodically_cycle.sql",
     "AlterTable_project.sql",
     "AlterTable_relation_extension_app.sql",
-    "AlterTable_webpage.sql"
+    "AlterTable_webpage.sql",
+    "CreateTable_motivation.sql",
+    "Insert_motivation_data.sql"
 )
 
 Write-Host "PostgreSQL一括実行開始..." -ForegroundColor Green

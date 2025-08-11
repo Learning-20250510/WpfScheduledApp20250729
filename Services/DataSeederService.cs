@@ -12,6 +12,7 @@ namespace WpfScheduledApp20250729.Services
         private readonly PeriodicallyCycleService _periodicallyCycleService;
         private readonly RelationExtensionAppService _relationExtensionAppService;
         private readonly HighTaskService _highTaskService;
+        private readonly MotivationService _motivationService;
 
         public DataSeederService(
             BaseDbContext context,
@@ -20,7 +21,8 @@ namespace WpfScheduledApp20250729.Services
             HowToLearnService howToLearnService,
             PeriodicallyCycleService periodicallyCycleService,
             RelationExtensionAppService relationExtensionAppService,
-            HighTaskService highTaskService)
+            HighTaskService highTaskService,
+            MotivationService motivationService)
         {
             _context = context;
             _architectureService = architectureService;
@@ -29,6 +31,7 @@ namespace WpfScheduledApp20250729.Services
             _periodicallyCycleService = periodicallyCycleService;
             _relationExtensionAppService = relationExtensionAppService;
             _highTaskService = highTaskService;
+            _motivationService = motivationService;
         }
 
         /// <summary>
@@ -106,6 +109,20 @@ namespace WpfScheduledApp20250729.Services
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine($"=== RelationExtensionApp作成エラー ===");
+                    System.Diagnostics.Debug.WriteLine($"Message: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
+                    throw;
+                }
+
+                // 6. Motivation初期データ
+                try
+                {
+                    await SeedMotivationsAsync();
+                    System.Diagnostics.Debug.WriteLine("Motivation初期データ作成完了");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"=== Motivation作成エラー ===");
                     System.Diagnostics.Debug.WriteLine($"Message: {ex.Message}");
                     System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
                     throw;
@@ -327,6 +344,38 @@ namespace WpfScheduledApp20250729.Services
                     };
                     await _relationExtensionAppService.AddAsync(newRelation);
                     System.Diagnostics.Debug.WriteLine($"RelationExtensionApp作成: {extension} -> {application}");
+                }
+            }
+        }
+
+        private async Task SeedMotivationsAsync()
+        {
+            var defaultMotivations = new[]
+            {
+                new { Name = "exciting", Description = "興奮・やる気満々の状態", Message = "🎮 EXCITEMENT MODE! エネルギー全開でタスクに突撃だ！", Icon = "🚀", Color = "#FF00FF00", Order = 1 },
+                new { Name = "lazy", Description = "やる気が出ない、だらけたい状態", Message = "😴 今日は少しペースダウン...でも少しずつ進もう", Icon = "😴", Color = "#FFFF8000", Order = 2 },
+                new { Name = "postpone", Description = "先延ばししたい、後回しにしたい気分", Message = "⏰ 「後でやろう」って思ってる？今やっちゃおう！", Icon = "⏰", Color = "#FFFFFF00", Order = 3 },
+                new { Name = "lazy-solved", Description = "だらけた状態を克服した", Message = "✨ だらけモードから復活！小さな一歩が大きな変化の始まりだ！", Icon = "✨", Color = "#FF00FFAA", Order = 4 },
+                new { Name = "postpone-solved", Description = "先延ばし癖を克服した", Message = "🎯 先延ばし撃破！行動力が戻ってきた！", Icon = "🎯", Color = "#FF00AAFF", Order = 5 }
+            };
+
+            foreach (var motivation in defaultMotivations)
+            {
+                var existing = await _motivationService.GetMotivationByNameAsync(motivation.Name);
+                if (existing == null)
+                {
+                    var newMotivation = new Models.Entities.Motivation
+                    {
+                        MotivationName = motivation.Name,
+                        Description = motivation.Description,
+                        Message = motivation.Message,
+                        Icon = motivation.Icon,
+                        Color = motivation.Color,
+                        DisplayOrder = motivation.Order,
+                        LastUpdMethodName = "SeedMotivations"
+                    };
+                    await _motivationService.AddMotivationAsync(newMotivation);
+                    System.Diagnostics.Debug.WriteLine($"Motivation作成: {motivation.Name}");
                 }
             }
         }

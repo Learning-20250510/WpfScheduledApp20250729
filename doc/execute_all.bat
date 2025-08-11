@@ -10,6 +10,8 @@ psql -h localhost -U postgres -d ScheduleApp20250729_Development -f "AlterTable_
 psql -h localhost -U postgres -d ScheduleApp20250729_Development -f "AlterTable_project.sql"
 psql -h localhost -U postgres -d ScheduleApp20250729_Development -f "AlterTable_relation_extension_app.sql"
 psql -h localhost -U postgres -d ScheduleApp20250729_Development -f "AlterTable_webpage.sql"
+psql -h localhost -U postgres -d ScheduleApp20250729_Development -f "CreateTable_motivation.sql"
+psql -h localhost -U postgres -d ScheduleApp20250729_Development -f "Insert_motivation_data.sql"
 
 echo 実行完了
 pause

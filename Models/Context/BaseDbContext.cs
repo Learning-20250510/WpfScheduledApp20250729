@@ -15,6 +15,7 @@ namespace WpfScheduledApp20250729.Models.Context
         public DbSet<Webpage> Webpages { get; set; }
         public DbSet<RelationExtensionApp> RelationExtensionApps { get; set; }
         public DbSet<DataInconsistencyRecord> DataInconsistencyRecords { get; set; }
+        public DbSet<Motivation> Motivations { get; set; }
 
         protected BaseDbContext() { }
         protected BaseDbContext(DbContextOptions options) : base(options) { }
