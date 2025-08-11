@@ -6,10 +6,48 @@
         xmlns:local="clr-namespace:WpfScheduledApp20250729.Views"
         xmlns:controls="clr-namespace:WpfScheduledApp20250729.Controls"
         mc:Ignorable="d"
-        Title="Gaming Task Manager" Height="600" Width="1000"
-        Background="#0D1117" WindowStyle="None" AllowsTransparency="True"
+        Height="600" Width="1000"
+        WindowStyle="None" AllowsTransparency="True"
         WindowStartupLocation="CenterScreen">
     
+    <!-- テーマ別スタイル定義 -->
+    <Window.Style>
+        <Style TargetType="Window">
+            <!-- デフォルト（Gaming）テーマ -->
+            <Setter Property="Background" Value="#0D1117"/>
+            <Setter Property="Title" Value="Gaming Task Manager"/>
+            <Style.Triggers>
+                <!-- 和風テーマ -->
+                <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#F5F5DC" Offset="0"/>
+                                <GradientStop Color="#E6E6DA" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Title" Value="和風タスク管理"/>
+                </DataTrigger>
+                <!-- ライブラリテーマ -->
+                <DataTrigger Binding="{Binding IsLibraryTheme}" Value="True">
+                    <Setter Property="Background" Value="#2C1810"/>
+                    <Setter Property="Title" Value="Library Task Manager"/>
+                </DataTrigger>
+                <!-- ターミネーターテーマ -->
+                <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                    <Setter Property="Background" Value="#1A1A1A"/>
+                    <Setter Property="Title" Value="Terminator Task Manager"/>
+                </DataTrigger>
+                <!-- モノクロテーマ -->
+                <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                    <Setter Property="Background" Value="#F0F0F0"/>
+                    <Setter Property="Title" Value="Monochrome Task Manager"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -26,16 +64,87 @@
         </Grid.RowDefinitions>
         
         <!-- ヘッダー -->
-        <Border Grid.Row="0" Background="{StaticResource GamingGradient}" Height="60">
+        <Border Grid.Row="0" Height="60">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="{StaticResource GamingGradient}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#8B4513" Offset="0"/>
+                                        <GradientStop Color="#A0522D" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsLibraryTheme}" Value="True">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#654321" Offset="0"/>
+                                        <GradientStop Color="#8B4513" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#1A1A1A" Offset="0"/>
+                                        <GradientStop Color="#333333" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#CCCCCC" Offset="0"/>
+                                        <GradientStop Color="#EEEEEE" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <Grid Margin="20,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
-                <TextBlock Grid.Column="0" Text="TASK COMMANDER" 
-                          Foreground="White" FontSize="24" FontWeight="Bold" 
-                          VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" FontSize="24" FontWeight="Bold" VerticalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="TASK COMMANDER"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                    <Setter Property="Text" Value="タスク司令官"/>
+                                    <Setter Property="Foreground" Value="#F5F5DC"/>
+                                    <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsLibraryTheme}" Value="True">
+                                    <Setter Property="Text" Value="LIBRARY MANAGER"/>
+                                    <Setter Property="Foreground" Value="#F5DEB3"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                    <Setter Property="Text" Value="TASK TERMINATOR"/>
+                                    <Setter Property="Foreground" Value="#FF0000"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                    <Setter Property="Text" Value="SIMPLE TASKS"/>
+                                    <Setter Property="Foreground" Value="#333333"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
                 
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <Button Content="NEW TASK" Style="{StaticResource SimpleButtonStyle}" 
@@ -56,11 +165,55 @@
                 
                 <!-- 検索とフィルター -->
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                    <TextBlock Text="SEARCH:" VerticalAlignment="Center" Foreground="White" Margin="0,0,5,0"/>
+                    <TextBlock Text="SEARCH:" VerticalAlignment="Center" Margin="0,0,5,0">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                        <Setter Property="Foreground" Value="#8B4513"/>
+                                        <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                        <Setter Property="Text" Value="検索:"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsLibraryTheme}" Value="True">
+                                        <Setter Property="Foreground" Value="#D2B48C"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                        <Setter Property="Foreground" Value="#FF0000"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                        <Setter Property="Foreground" Value="#333333"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                     <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
                              Width="200" Style="{StaticResource SimpleTextBoxStyle}"/>
                     
-                    <TextBlock Text="FILTER:" VerticalAlignment="Center" Foreground="White" Margin="20,0,5,0"/>
+                    <TextBlock Text="FILTER:" VerticalAlignment="Center" Margin="20,0,5,0">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                        <Setter Property="Foreground" Value="#8B4513"/>
+                                        <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                        <Setter Property="Text" Value="フィルター:"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsLibraryTheme}" Value="True">
+                                        <Setter Property="Foreground" Value="#D2B48C"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                        <Setter Property="Foreground" Value="#FF0000"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                        <Setter Property="Foreground" Value="#333333"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                     <ComboBox SelectedValue="{Binding SelectedTaskType}" Width="120" Margin="5">
                         <ComboBoxItem Content="ALL"/>
                         <ComboBoxItem Content="HIGH" Foreground="#FFFF4444"/>
@@ -69,54 +222,305 @@
                     </ComboBox>
                 </StackPanel>
                 
-                <!-- タスクリスト -->
-                <TabControl Grid.Row="1" Background="Transparent">
-                    <TabItem Header="HIGH TASKS">
-                        <ListView ItemsSource="{Binding HighTasks}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Description" Width="300" DisplayMemberBinding="{Binding Description}"/>
-                                    <GridViewColumn Header="Time" Width="100" DisplayMemberBinding="{Binding EstimatedTime}"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </TabItem>
-                    <TabItem Header="MIDDLE TASKS">
-                        <ItemsControl ItemsSource="{Binding MiddleTasks}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Background="#FF333333" Margin="5" Padding="10" CornerRadius="5">
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding Description}" Foreground="White" FontWeight="Bold"/>
-                                            <TextBlock Text="{Binding EstimatedTime, StringFormat='{}Time: {0} min'}" 
-                                                      Foreground="Orange" FontSize="12"/>
-                                        </StackPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </TabItem>
-                    <TabItem Header="LOW TASKS">
-                        <ListView ItemsSource="{Binding LowTasks}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Description" Width="300" DisplayMemberBinding="{Binding Description}"/>
-                                    <GridViewColumn Header="Time" Width="100" DisplayMemberBinding="{Binding EstimatedTime}"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </TabItem>
-                </TabControl>
+                <!-- 図書館風本棚デザイン -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <!-- 本棚背景 -->
+                    <Border CornerRadius="10" Padding="20">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1A1A1A" Offset="0"/>
+                                <GradientStop Color="#2A2A2A" Offset="0.5"/>
+                                <GradientStop Color="#1A1A1A" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <StackPanel>
+                            <!-- 高優先度の本棚 -->
+                            <Border Background="#2A1810" CornerRadius="8" Margin="0,0,0,20" Padding="15">
+                                <StackPanel>
+                                    <TextBlock FontSize="18" FontWeight="Bold" Margin="0,0,0,15">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="📕 URGENT COLLECTION"/>
+                                                <Setter Property="Foreground" Value="#CD853F"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                                        <Setter Property="Text" Value="📕 緊急書籍"/>
+                                                        <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <ItemsControl ItemsSource="{Binding HighTasks}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Width="180" Height="240" Margin="10,5" CornerRadius="5" 
+                                                        Background="#8B0000" BorderBrush="#CD853F" BorderThickness="2">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="3"/>
+                                                    </Border.Effect>
+                                                    <Grid>
+                                                        <Rectangle Fill="#B22222" Opacity="0.3"/>
+                                                        <StackPanel Margin="15" VerticalAlignment="Top">
+                                                            <TextBlock Text="{Binding Description}" 
+                                                                      Foreground="White" FontWeight="Bold" 
+                                                                      TextWrapping="Wrap" FontSize="14" 
+                                                                      Height="140"/>
+                                                            <Rectangle Height="2" Fill="#CD853F" Margin="0,10"/>
+                                                            <TextBlock Text="{Binding EstimatedTime, StringFormat='⏱ {0} min'}" 
+                                                                      Foreground="#FFD700" FontSize="12" 
+                                                                      HorizontalAlignment="Center"/>
+                                                        </StackPanel>
+                                                        <Border VerticalAlignment="Bottom" Background="#654321" 
+                                                                Height="25" CornerRadius="0,0,3,3">
+                                                            <TextBlock Text="HIGH PRIORITY" Foreground="White" 
+                                                                      FontSize="10" HorizontalAlignment="Center" 
+                                                                      VerticalAlignment="Center" FontWeight="Bold"/>
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- 中優先度の本棚 -->
+                            <Border Background="#2A2010" CornerRadius="8" Margin="0,0,0,20" Padding="15">
+                                <StackPanel>
+                                    <TextBlock FontSize="18" FontWeight="Bold" Margin="0,0,0,15">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="📙 REFERENCE SECTION"/>
+                                                <Setter Property="Foreground" Value="#DAA520"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                                        <Setter Property="Text" Value="📙 参考書籍"/>
+                                                        <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <ItemsControl ItemsSource="{Binding MiddleTasks}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Width="180" Height="240" Margin="10,5" CornerRadius="5" 
+                                                        Background="#FF8C00" BorderBrush="#DAA520" BorderThickness="2">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="3"/>
+                                                    </Border.Effect>
+                                                    <Grid>
+                                                        <Rectangle Fill="#FFB347" Opacity="0.3"/>
+                                                        <StackPanel Margin="15" VerticalAlignment="Top">
+                                                            <TextBlock Text="{Binding Description}" 
+                                                                      Foreground="White" FontWeight="Bold" 
+                                                                      TextWrapping="Wrap" FontSize="14" 
+                                                                      Height="140"/>
+                                                            <Rectangle Height="2" Fill="#DAA520" Margin="0,10"/>
+                                                            <TextBlock Text="{Binding EstimatedTime, StringFormat='⏱ {0} min'}" 
+                                                                      Foreground="#FFF8DC" FontSize="12" 
+                                                                      HorizontalAlignment="Center"/>
+                                                        </StackPanel>
+                                                        <Border VerticalAlignment="Bottom" Background="#B8860B" 
+                                                                Height="25" CornerRadius="0,0,3,3">
+                                                            <TextBlock Text="MEDIUM PRIORITY" Foreground="White" 
+                                                                      FontSize="10" HorizontalAlignment="Center" 
+                                                                      VerticalAlignment="Center" FontWeight="Bold"/>
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- 低優先度の本棚 -->
+                            <Border Background="#1A2A1A" CornerRadius="8" Padding="15">
+                                <StackPanel>
+                                    <TextBlock FontSize="18" FontWeight="Bold" Margin="0,0,0,15">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="📗 LEISURE READING"/>
+                                                <Setter Property="Foreground" Value="#90EE90"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                                        <Setter Property="Text" Value="📗 趣味書籍"/>
+                                                        <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <ItemsControl ItemsSource="{Binding LowTasks}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Width="180" Height="240" Margin="10,5" CornerRadius="5" 
+                                                        Background="#228B22" BorderBrush="#90EE90" BorderThickness="2">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="3"/>
+                                                    </Border.Effect>
+                                                    <Grid>
+                                                        <Rectangle Fill="#32CD32" Opacity="0.3"/>
+                                                        <StackPanel Margin="15" VerticalAlignment="Top">
+                                                            <TextBlock Text="{Binding Description}" 
+                                                                      Foreground="White" FontWeight="Bold" 
+                                                                      TextWrapping="Wrap" FontSize="14" 
+                                                                      Height="140"/>
+                                                            <Rectangle Height="2" Fill="#90EE90" Margin="0,10"/>
+                                                            <TextBlock Text="{Binding EstimatedTime, StringFormat='⏱ {0} min'}" 
+                                                                      Foreground="#F0FFF0" FontSize="12" 
+                                                                      HorizontalAlignment="Center"/>
+                                                        </StackPanel>
+                                                        <Border VerticalAlignment="Bottom" Background="#006400" 
+                                                                Height="25" CornerRadius="0,0,3,3">
+                                                            <TextBlock Text="LOW PRIORITY" Foreground="White" 
+                                                                      FontSize="10" HorizontalAlignment="Center" 
+                                                                      VerticalAlignment="Center" FontWeight="Bold"/>
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </ScrollViewer>
             </Grid>
         </ScrollViewer>
         
         <!-- フッター -->
-        <Border Grid.Row="2" Background="#FF1A1A1A" Height="40">
+        <Border Grid.Row="2" Height="40">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="#FF1A1A1A"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                            <Setter Property="Background" Value="#8B4513"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsLibraryTheme}" Value="True">
+                            <Setter Property="Background" Value="#654321"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                            <Setter Property="Background" Value="#2B2B2B"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                            <Setter Property="Background" Value="#DDDDDD"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="Total Tasks: " Foreground="Gray"/>
-                <TextBlock Text="{Binding TotalTaskCount}" Foreground="White" FontWeight="Bold"/>
-                <TextBlock Text=" | Completed: " Foreground="Gray" Margin="20,0,0,0"/>
-                <TextBlock Text="{Binding CompletedTaskCount}" Foreground="Green" FontWeight="Bold"/>
+                <TextBlock Foreground="Gray" FontWeight="Bold">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="Total Tasks: "/>
+                            <Setter Property="Foreground" Value="Gray"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                    <Setter Property="Text" Value="総タスク数: "/>
+                                    <Setter Property="Foreground" Value="#F5F5DC"/>
+                                    <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsLibraryTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#D2B48C"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#808080"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#333333"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock Text="{Binding TotalTaskCount}" FontWeight="Bold">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#F5F5DC"/>
+                                    <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsLibraryTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#F5DEB3"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#FFFFFF"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#000000"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock Margin="20,0,0,0" FontWeight="Bold">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value=" | Completed: "/>
+                            <Setter Property="Foreground" Value="Gray"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                    <Setter Property="Text" Value=" | 完了済み: "/>
+                                    <Setter Property="Foreground" Value="#F5F5DC"/>
+                                    <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsLibraryTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#D2B48C"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#808080"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#333333"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock Text="{Binding CompletedTaskCount}" FontWeight="Bold">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="Green"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#228B22"/>
+                                    <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsLibraryTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#006400"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#00FF00"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                    <Setter Property="Foreground" Value="#666666"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
             </StackPanel>
         </Border>
     </Grid>
