@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Threading;
+using System.Windows.Input;
 using WpfScheduledApp20250729.Interfaces;
 using WpfScheduledApp20250729.Models;
+using WpfScheduledApp20250729.Services;
 
 namespace WpfScheduledApp20250729.ViewModels
 {
@@ -12,6 +14,12 @@ namespace WpfScheduledApp20250729.ViewModels
         private readonly DispatcherTimer _timer;
         private TaskActionModel _task;
         private bool _disposed = false;
+        
+        // タイピングゲーム関連
+        private TypingGameSettings _typingSettings;
+        private int _currentTypingCount;
+        private int _maxTypingCount = 1000;
+        private int _typingDecrementValue = 5;
 
         public TaskActionViewModel(ITaskActionService taskActionService)
         {
@@ -21,6 +29,10 @@ namespace WpfScheduledApp20250729.ViewModels
                 Interval = TimeSpan.FromSeconds(1)
             };
             _timer.Tick += Timer_Tick;
+            
+            // タイピングゲーム初期化
+            InitializeTypingGame();
+            GlobalHotKeyService.KeyPressed += OnKeyPressed;
         }
 
         public TaskActionViewModel(ITaskActionService taskActionService, int taskId) : this(taskActionService)
@@ -296,9 +308,161 @@ namespace WpfScheduledApp20250729.ViewModels
             {
                 _timer?.Stop();
                 _timer?.Tick -= Timer_Tick;
+                GlobalHotKeyService.KeyPressed -= OnKeyPressed;
                 _disposed = true;
             }
         }
+
+        #endregion
+
+        #region タイピングゲーム機能
+
+        private void InitializeTypingGame()
+        {
+            _typingSettings = new TypingGameSettings();
+            _currentTypingCount = _maxTypingCount;
+        }
+
+        private void OnKeyPressed(object sender, KeyPressedEventArgs e)
+        {
+            // 任意のキー入力でプログレスバーを減少
+            if (_currentTypingCount > 0)
+            {
+                _currentTypingCount = Math.Max(0, _currentTypingCount - _typingDecrementValue);
+                OnPropertyChanged(nameof(CurrentTypingCount));
+                OnPropertyChanged(nameof(TypingProgressWidth));
+                OnPropertyChanged(nameof(TypingProgressText));
+            }
+        }
+
+        public void LoadTypingSettings(int? architectureId, int? howToLearnId)
+        {
+            // Architecture/HowToLearnに基づく設定
+            _typingSettings = new TypingGameSettings
+            {
+                ArchitectureId = architectureId,
+                HowToLearnId = howToLearnId,
+                MaxProgressValue = GetMaxValueByType(architectureId, howToLearnId),
+                DecrementPerKey = GetDecrementByType(architectureId, howToLearnId),
+                ProgressBarColor = GetColorByType(architectureId, howToLearnId)
+            };
+
+            _maxTypingCount = _typingSettings.MaxProgressValue;
+            _typingDecrementValue = _typingSettings.DecrementPerKey;
+            _currentTypingCount = _maxTypingCount;
+
+            OnPropertyChanged(nameof(MaxTypingCount));
+            OnPropertyChanged(nameof(TypingDecrementValue));
+            OnPropertyChanged(nameof(CurrentTypingCount));
+            OnPropertyChanged(nameof(TypingProgressWidth));
+            OnPropertyChanged(nameof(TypingProgressText));
+        }
+
+        private int GetMaxValueByType(int? architectureId, int? howToLearnId)
+        {
+            // HowToLearnに基づく最大値設定
+            if (howToLearnId.HasValue)
+            {
+                return howToLearnId.Value switch
+                {
+                    1 => 500,  // FreePlane
+                    2 => 1500, // PDF
+                    3 => 800,  // Movie
+                    4 => 1200, // WebPage
+                    _ => 1000
+                };
+            }
+            // Architectureに基づく設定
+            return architectureId switch
+            {
+                1 => 600,  // 学習系
+                2 => 1000, // 作業系
+                3 => 1500, // プロジェクト系
+                _ => 1000
+            };
+        }
+
+        private int GetDecrementByType(int? architectureId, int? howToLearnId)
+        {
+            // HowToLearnに基づく減少値設定
+            if (howToLearnId.HasValue)
+            {
+                return howToLearnId.Value switch
+                {
+                    1 => 3,  // FreePlane - 軽い
+                    2 => 8,  // PDF - 重い
+                    3 => 5,  // Movie - 中程度
+                    4 => 6,  // WebPage - 中程度
+                    _ => 5
+                };
+            }
+            // Architectureに基づく設定
+            return architectureId switch
+            {
+                1 => 4,  // 学習系 - 軽い
+                2 => 6,  // 作業系 - 中程度
+                3 => 8,  // プロジェクト系 - 重い
+                _ => 5
+            };
+        }
+
+        private string GetColorByType(int? architectureId, int? howToLearnId)
+        {
+            // HowToLearnに基づく色設定
+            if (howToLearnId.HasValue)
+            {
+                return howToLearnId.Value switch
+                {
+                    1 => "#FF00FF00", // FreePlane - 緑
+                    2 => "#FFFF8000", // PDF - オレンジ
+                    3 => "#FFFF0080", // Movie - マゼンタ
+                    4 => "#FF0080FF", // WebPage - 青
+                    _ => "#FF00FFFF"
+                };
+            }
+            return "#FF00FFFF"; // デフォルト：シアン
+        }
+
+        // タイピングゲーム用プロパティ
+        public int CurrentTypingCount
+        {
+            get => _currentTypingCount;
+            set => SetProperty(ref _currentTypingCount, value);
+        }
+
+        public int MaxTypingCount => _maxTypingCount;
+
+        public int TypingDecrementValue => _typingDecrementValue;
+
+        public double TypingProgressWidth
+        {
+            get
+            {
+                if (_maxTypingCount <= 0) return 0;
+                return ((double)_currentTypingCount / _maxTypingCount) * 200; // 200はProgressBarの幅
+            }
+        }
+
+        public string TypingProgressText
+        {
+            get
+            {
+                var percentage = _maxTypingCount > 0 ? (_currentTypingCount * 100) / _maxTypingCount : 0;
+                return $"{percentage}% POWER REMAINING";
+            }
+        }
+
+        public ICommand GenerateMMFileCommand => new DelegateCommand(() =>
+        {
+            // MMファイル生成処理
+            // TODO: 実装
+        });
+
+        public ICommand CompleteTaskCommand => new DelegateCommand(() =>
+        {
+            // タスク完了処理
+            // TODO: 実装
+        });
 
         #endregion
     }

@@ -246,6 +246,46 @@
                                       HorizontalAlignment="Center"/>
                         </StackPanel>
                         
+                        <!-- タイピング プログレスバー -->
+                        <StackPanel Margin="0,20">
+                            <TextBlock Text="⚡ TYPING POWER" Foreground="#FF00FFFF" 
+                                      FontSize="14" FontFamily="Consolas" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding TypingProgressText}" Foreground="#FFAAAAAA" 
+                                      FontSize="10" FontFamily="Consolas" HorizontalAlignment="Center" Margin="0,2"/>
+                            <Border Background="#FF2A2A2A" Height="30" CornerRadius="15" Margin="0,5">
+                                <Border Background="{StaticResource NeonBlue}" 
+                                       Width="{Binding TypingProgressWidth}" 
+                                       HorizontalAlignment="Left"
+                                       CornerRadius="15">
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#FF00FFFF" BlurRadius="15" ShadowDepth="0"/>
+                                    </Border.Effect>
+                                    <!-- アニメーション効果 -->
+                                    <Border.RenderTransform>
+                                        <ScaleTransform ScaleY="1.0"/>
+                                    </Border.RenderTransform>
+                                    <Border.Triggers>
+                                        <EventTrigger RoutedEvent="Border.Loaded">
+                                            <BeginStoryboard>
+                                                <Storyboard RepeatBehavior="Forever">
+                                                    <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(ScaleTransform.ScaleY)"
+                                                                   From="1.0" To="1.1" Duration="0:0:0.8" AutoReverse="True"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Border.Triggers>
+                                </Border>
+                            </Border>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+                                <TextBlock Text="{Binding CurrentTypingCount, StringFormat='KEYS: {0}'}" 
+                                          Foreground="#FF00FFFF" FontSize="12" FontFamily="Consolas" Margin="5,0"/>
+                                <TextBlock Text="{Binding MaxTypingCount, StringFormat='/ {0}'}" 
+                                          Foreground="#FFAAAAAA" FontSize="12" FontFamily="Consolas" Margin="0,0,5,0"/>
+                                <TextBlock Text="{Binding TypingDecrementValue, StringFormat='(-{0}/key)'}" 
+                                          Foreground="#FFFF8800" FontSize="10" FontFamily="Consolas" Margin="5,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                        
                         <!-- スコアボード -->
                         <Border Background="#FF1A1A2E" CornerRadius="5" Padding="15" Margin="0,20">
                             <StackPanel>

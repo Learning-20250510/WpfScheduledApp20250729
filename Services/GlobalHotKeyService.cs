@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
+using System.Diagnostics;
 using WpfScheduledApp20250729.Interfaces;
 
 namespace WpfScheduledApp20250729.Services
@@ -9,6 +10,8 @@ namespace WpfScheduledApp20250729.Services
     public class GlobalHotKeyService : IGlobalHotKeyService
     {
         private const int WM_HOTKEY = 0x0312;
+        private const int WH_KEYBOARD_LL = 13;
+        private const int HC_ACTION = 0;
         
         // ホットキーID定義
         private const int HOTKEY_ACTIVATE_WINDOW = 0x0001;
@@ -25,6 +28,11 @@ namespace WpfScheduledApp20250729.Services
         private const int HOTKEY_MOTIVATION_0 = 0x0014;
 
         private readonly Dictionary<int, string> _hotKeyNames;
+        private LowLevelKeyboardProc _proc = HookCallback;
+        private IntPtr _hookID = IntPtr.Zero;
+        private static bool _keyboardHookEnabled = false;
+
+        public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll")]
         private static extern int RegisterHotKey(IntPtr hWnd, int id, int modKey, int vKey);
@@ -32,7 +40,21 @@ namespace WpfScheduledApp20250729.Services
         [DllImport("user32.dll")]
         private static extern int UnregisterHotKey(IntPtr hWnd, int id);
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool UnhookWindowsHookEx(IntPtr hhk);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern IntPtr GetModuleHandle(string lpModuleName);
+
         public event EventHandler<HotKeyPressedEventArgs> HotKeyPressed;
+        public static event EventHandler<KeyPressedEventArgs> KeyPressed;
 
         public GlobalHotKeyService()
         {
@@ -51,6 +73,44 @@ namespace WpfScheduledApp20250729.Services
                 { HOTKEY_MOTIVATION_9, "Motivation9" },
                 { HOTKEY_MOTIVATION_0, "Motivation0" }
             };
+        }
+
+        private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            if (nCode >= 0 && _keyboardHookEnabled)
+            {
+                int vkCode = Marshal.ReadInt32(lParam);
+                
+                // キー押下イベントを発火
+                KeyPressed?.Invoke(null, new KeyPressedEventArgs(vkCode));
+            }
+
+            return CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
+        }
+
+        public void StartKeyboardHook()
+        {
+            _keyboardHookEnabled = true;
+            _hookID = SetHook(_proc);
+        }
+
+        public void StopKeyboardHook()
+        {
+            _keyboardHookEnabled = false;
+            if (_hookID != IntPtr.Zero)
+            {
+                UnhookWindowsHookEx(_hookID);
+                _hookID = IntPtr.Zero;
+            }
+        }
+
+        private IntPtr SetHook(LowLevelKeyboardProc proc)
+        {
+            using (var curProcess = Process.GetCurrentProcess())
+            using (var curModule = curProcess.MainModule)
+            {
+                return SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(curModule.ModuleName), 0);
+            }
         }
 
         public bool RegisterHotKey(IntPtr windowHandle, int hotkeyId, ModifierKeys modifiers, Key key)
@@ -97,10 +157,21 @@ namespace WpfScheduledApp20250729.Services
 
         public void Cleanup(IntPtr windowHandle)
         {
+            StopKeyboardHook();
             foreach (var hotkeyId in _hotKeyNames.Keys)
             {
                 UnregisterHotKey(windowHandle, hotkeyId);
             }
+        }
+    }
+
+    public class KeyPressedEventArgs : EventArgs
+    {
+        public int VirtualKeyCode { get; }
+        
+        public KeyPressedEventArgs(int virtualKeyCode)
+        {
+            VirtualKeyCode = virtualKeyCode;
         }
     }
 }
