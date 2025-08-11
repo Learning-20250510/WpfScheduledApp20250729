@@ -112,6 +112,139 @@ namespace WpfScheduledApp20250729.Services
             return true;
         }
 
+        // MM File Auto Insert Methods
+        public async Task<int> AutoInsertMMFilesAsync()
+        {
+            try
+            {
+                // Get project root directory (debug/release agnostic)
+                var projectRoot = GetProjectRootDirectory();
+                var mmfFolderPath = Path.Combine(projectRoot, "MMF");
+
+                // Create MMF folder if it doesn't exist
+                if (!Directory.Exists(mmfFolderPath))
+                {
+                    Directory.CreateDirectory(mmfFolderPath);
+                    return 0; // No files to process in newly created folder
+                }
+
+                // Get all .mm files recursively
+                var mmFiles = GetMMFilesRecursively(mmfFolderPath);
+
+                // Get or create "Freeplane" architecture
+                var freeplaneArchitecture = await GetOrCreateFreeplaneArchitectureAsync();
+
+                int insertedCount = 0;
+
+                foreach (var mmFile in mmFiles)
+                {
+                    var fileName = Path.GetFileName(mmFile);
+                    
+                    // Check if HighTask with this name already exists
+                    var existingTask = await GetHighTaskByTaskNameAsync(fileName);
+                    
+                    if (existingTask == null)
+                    {
+                        // Create new HighTask
+                        var highTask = new HighTask
+                        {
+                            ArchitectureId = freeplaneArchitecture.Id,
+                            TaskName = fileName,
+                            Description = $"Auto-generated from MM file: {mmFile}",
+                            ProjectId = 1, // Default project ID - you may want to make this configurable
+                            TouchedAt = DateTime.UtcNow,
+                            LastUpdMethodName = "AutoInsertMMFiles"
+                        };
+
+                        await AddAsync(highTask);
+                        insertedCount++;
+                    }
+                }
+
+                return insertedCount;
+            }
+            catch (Exception ex)
+            {
+                // Log error or handle appropriately
+                throw new InvalidOperationException($"Error during MM file auto-insert: {ex.Message}", ex);
+            }
+        }
+
+        private string GetProjectRootDirectory()
+        {
+            // Get current executing directory
+            var currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            
+            // Navigate up to find project root (look for .sln or .csproj file)
+            var directory = new DirectoryInfo(currentDirectory);
+            
+            while (directory != null)
+            {
+                // Check for solution file or project file
+                if (directory.GetFiles("*.sln").Any() || directory.GetFiles("*.csproj").Any())
+                {
+                    return directory.FullName;
+                }
+                directory = directory.Parent;
+            }
+            
+            // Fallback to current directory if project root not found
+            return currentDirectory;
+        }
+
+        private List<string> GetMMFilesRecursively(string folderPath)
+        {
+            var mmFiles = new List<string>();
+            
+            try
+            {
+                // Get all .mm files in current directory
+                mmFiles.AddRange(Directory.GetFiles(folderPath, "*.mm"));
+                
+                // Recursively search subdirectories
+                var subdirectories = Directory.GetDirectories(folderPath);
+                foreach (var subdirectory in subdirectories)
+                {
+                    mmFiles.AddRange(GetMMFilesRecursively(subdirectory));
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // Skip directories we don't have access to
+            }
+            catch (DirectoryNotFoundException)
+            {
+                // Skip directories that don't exist
+            }
+            
+            return mmFiles;
+        }
+
+        private async Task<Architecture> GetOrCreateFreeplaneArchitectureAsync()
+        {
+            var architectureService = new ArchitectureService(_context);
+            var freeplaneArch = await architectureService.GetArchitectureByNameAsync("Freeplane");
+            
+            if (freeplaneArch == null)
+            {
+                freeplaneArch = new Architecture
+                {
+                    ArchitectureName = "Freeplane",
+                    TouchedAt = DateTime.UtcNow,
+                    LastUpdMethodName = "AutoInsertMMFiles"
+                };
+                freeplaneArch = await architectureService.AddAsync(freeplaneArch);
+            }
+            
+            return freeplaneArch;
+        }
+
+        private async Task<HighTask?> GetHighTaskByTaskNameAsync(string taskName)
+        {
+            return await _dbSet
+                .FirstOrDefaultAsync(ht => ht.TaskName == taskName);
+        }
+
         // Transaction methods using BaseService functionality
         public async Task<bool> AddMultipleHighTasksWithTransactionAsync(List<HighTask> tasks)
         {

@@ -7,6 +7,29 @@
         mc:Ignorable="d"
         Title="AddTaskWindow" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         
+        <!-- MM自動insert用ボタン -->
+        <Border Grid.Row="0" Background="#FF2A2A2A" Padding="15" Margin="10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="🗂️ MMファイル自動作成" 
+                        Command="{Binding AutoInsertMMFilesCommand}"
+                        Background="#FF4CAF50" 
+                        Foreground="White" 
+                        FontWeight="Bold"
+                        Padding="20,10" 
+                        FontSize="14"
+                        Margin="5"
+                        ToolTip="プロジェクト直下のMMFフォルダからMindMapファイルを検索してHighTaskを自動作成します"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- その他のコンテンツ用 -->
+        <ScrollViewer Grid.Row="1">
+            <!-- 将来的にタスク追加フォームを追加予定 -->
+        </ScrollViewer>
     </Grid>
 </Window>

@@ -11,6 +11,7 @@ namespace WpfScheduledApp20250729.Services
         private readonly HowToLearnService _howToLearnService;
         private readonly PeriodicallyCycleService _periodicallyCycleService;
         private readonly RelationExtensionAppService _relationExtensionAppService;
+        private readonly HighTaskService _highTaskService;
 
         public DataSeederService(
             BaseDbContext context,
@@ -18,7 +19,8 @@ namespace WpfScheduledApp20250729.Services
             ProjectService projectService,
             HowToLearnService howToLearnService,
             PeriodicallyCycleService periodicallyCycleService,
-            RelationExtensionAppService relationExtensionAppService)
+            RelationExtensionAppService relationExtensionAppService,
+            HighTaskService highTaskService)
         {
             _context = context;
             _architectureService = architectureService;
@@ -26,6 +28,7 @@ namespace WpfScheduledApp20250729.Services
             _howToLearnService = howToLearnService;
             _periodicallyCycleService = periodicallyCycleService;
             _relationExtensionAppService = relationExtensionAppService;
+            _highTaskService = highTaskService;
         }
 
         /// <summary>
@@ -342,6 +345,32 @@ namespace WpfScheduledApp20250729.Services
             {
                 System.Diagnostics.Debug.WriteLine($"DB接続エラー: {ex.Message}");
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// MMファイルからHighTaskを自動生成する機能
+        /// </summary>
+        public async Task<int> AutoInsertMMFilesAsync()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("=== MMファイル自動insert開始 ===");
+                
+                var insertedCount = await _highTaskService.AutoInsertMMFilesAsync();
+                
+                System.Diagnostics.Debug.WriteLine($"MMファイルから{insertedCount}個のHighTaskを作成しました");
+                System.Diagnostics.Debug.WriteLine("=== MMファイル自動insert完了 ===");
+                
+                return insertedCount;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"=== MMファイル自動insertエラー ===");
+                System.Diagnostics.Debug.WriteLine($"Message: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+                throw;
             }
         }
     }
