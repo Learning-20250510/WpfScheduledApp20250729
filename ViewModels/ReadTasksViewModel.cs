@@ -59,7 +59,9 @@ namespace WpfScheduledApp20250729.ViewModels
         {
             Gaming = 0,
             Library = 1,
-            Terminator = 2
+            Terminator = 2,
+            Japanese = 3,
+            Monochrome = 4
         }
 
         private DesignTheme _currentTheme = DesignTheme.Gaming;
@@ -73,6 +75,8 @@ namespace WpfScheduledApp20250729.ViewModels
         public bool IsGamingTheme => CurrentTheme == DesignTheme.Gaming;
         public bool IsLibraryTheme => CurrentTheme == DesignTheme.Library;
         public bool IsTerminatorTheme => CurrentTheme == DesignTheme.Terminator;
+        public bool IsJapaneseTheme => CurrentTheme == DesignTheme.Japanese;
+        public bool IsMonochromeTheme => CurrentTheme == DesignTheme.Monochrome;
 
         private ObservableCollection<HTLSectionViewModel> _htlSections = new();
         public ObservableCollection<HTLSectionViewModel> HTLSections
@@ -323,13 +327,15 @@ namespace WpfScheduledApp20250729.ViewModels
 
         private void SwitchTheme()
         {
-            // テーマを順番に切り替え: Gaming → Library → Terminator → Gaming...
-            CurrentTheme = (DesignTheme)(((int)CurrentTheme + 1) % 3);
+            // テーマを順番に切り替え: Gaming → Library → Terminator → Japanese → Monochrome → Gaming...
+            CurrentTheme = (DesignTheme)(((int)CurrentTheme + 1) % 5);
             
             // プロパティ変更通知
             OnPropertyChanged(nameof(IsGamingTheme));
             OnPropertyChanged(nameof(IsLibraryTheme));
             OnPropertyChanged(nameof(IsTerminatorTheme));
+            OnPropertyChanged(nameof(IsJapaneseTheme));
+            OnPropertyChanged(nameof(IsMonochromeTheme));
             
             // テーマに応じたメッセージ表示
             string themeMessage = CurrentTheme switch
@@ -337,6 +343,8 @@ namespace WpfScheduledApp20250729.ViewModels
                 DesignTheme.Gaming => "🎮 GAMING MODE ACTIVATED!",
                 DesignTheme.Library => "📚 LIBRARY MODE ACTIVATED!",
                 DesignTheme.Terminator => "🤖 TERMINATOR MODE ACTIVATED! TARGET ACQUIRED.",
+                DesignTheme.Japanese => "🌸 和風モード起動！雅な世界へようこそ。",
+                DesignTheme.Monochrome => "⚫ MONOCHROME MODE ACTIVATED! SIMPLICITY IS BEAUTY.",
                 _ => "UNKNOWN THEME"
             };
             

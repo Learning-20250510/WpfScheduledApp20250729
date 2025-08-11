@@ -54,6 +54,48 @@
             <GradientStop Color="#FF000000" Offset="1"/>
         </LinearGradientBrush>
         
+        <!-- 和風カラーパレット -->
+        <SolidColorBrush x:Key="WaRed" Color="#FFCC4444"/>
+        <SolidColorBrush x:Key="WaGold" Color="#FFDDAA33"/>
+        <SolidColorBrush x:Key="WaBeige" Color="#FFF5F5DC"/>
+        <SolidColorBrush x:Key="WaDarkRed" Color="#FF992222"/>
+        <SolidColorBrush x:Key="WaBlack" Color="#FF333333"/>
+        <SolidColorBrush x:Key="WaWhite" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="WaBrown" Color="#FF8B4513"/>
+        
+        <!-- 和風グラデーション -->
+        <LinearGradientBrush x:Key="WaGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FFF5F5DC" Offset="0"/>
+            <GradientStop Color="#FFDDAA33" Offset="0.5"/>
+            <GradientStop Color="#FFCC4444" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <!-- 和風背景グラデーション -->
+        <LinearGradientBrush x:Key="WaBackgroundGradient" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FFF8F6F0" Offset="0"/>
+            <GradientStop Color="#FFE8E0D0" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <!-- モノクロカラーパレット -->
+        <SolidColorBrush x:Key="MonoWhite" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="MonoLightGray" Color="#FFCCCCCC"/>
+        <SolidColorBrush x:Key="MonoMediumGray" Color="#FF888888"/>
+        <SolidColorBrush x:Key="MonoDarkGray" Color="#FF444444"/>
+        <SolidColorBrush x:Key="MonoBlack" Color="#FF000000"/>
+        
+        <!-- モノクログラデーション -->
+        <LinearGradientBrush x:Key="MonoGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FFFFFFFF" Offset="0"/>
+            <GradientStop Color="#FFCCCCCC" Offset="0.5"/>
+            <GradientStop Color="#FF888888" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <!-- モノクロ背景グラデーション -->
+        <LinearGradientBrush x:Key="MonoBackgroundGradient" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FFF8F8F8" Offset="0"/>
+            <GradientStop Color="#FFE0E0E0" Offset="1"/>
+        </LinearGradientBrush>
+        
         <!-- ゲーミングボタンスタイル -->
         <Style x:Key="GamingButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="{StaticResource NeonBlue}"/>
@@ -213,6 +255,170 @@
             </Setter>
         </Style>
         
+        <!-- 和風ボタンスタイル -->
+        <Style x:Key="WaButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource WaBeige}"/>
+            <Setter Property="Foreground" Value="{StaticResource WaDarkRed}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="{StaticResource WaRed}"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#FFDDAA33" BlurRadius="6" ShadowDepth="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                          To="#FFDDAA33" Duration="0:0:0.3"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="10" Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                          To="#FFF5F5DC" Duration="0:0:0.3"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="6" Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource WaDarkRed}"/>
+                                <Setter Property="Foreground" Value="{StaticResource WaBeige}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- 和風テキストボックススタイル -->
+        <Style x:Key="WaTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource WaBeige}"/>
+            <Setter Property="Foreground" Value="{StaticResource WaBlack}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource WaRed}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#FFDDAA33" BlurRadius="4" ShadowDepth="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- モノクロボタンスタイル -->
+        <Style x:Key="MonoButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource MonoLightGray}"/>
+            <Setter Property="Foreground" Value="{StaticResource MonoBlack}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="{StaticResource MonoDarkGray}"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#FF888888" BlurRadius="4" ShadowDepth="2"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                          To="#FFAAAAAA" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="6" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                          To="#FFCCCCCC" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="4" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource MonoDarkGray}"/>
+                                <Setter Property="Foreground" Value="{StaticResource MonoWhite}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- モノクロテキストボックススタイル -->
+        <Style x:Key="MonoTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource MonoWhite}"/>
+            <Setter Property="Foreground" Value="{StaticResource MonoBlack}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource MonoDarkGray}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#FF888888" BlurRadius="2" ShadowDepth="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
     </Window.Resources>
     
     <Border CornerRadius="10">
@@ -230,6 +436,22 @@
                         <Setter Property="Effect">
                             <Setter.Value>
                                 <DropShadowEffect Color="#FFFF0000" BlurRadius="25" ShadowDepth="3"/>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                        <Setter Property="Background" Value="{StaticResource WaBackgroundGradient}"/>
+                        <Setter Property="Effect">
+                            <Setter.Value>
+                                <DropShadowEffect Color="#FFDDAA33" BlurRadius="20" ShadowDepth="2"/>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                        <Setter Property="Background" Value="{StaticResource MonoBackgroundGradient}"/>
+                        <Setter Property="Effect">
+                            <Setter.Value>
+                                <DropShadowEffect Color="#FF888888" BlurRadius="15" ShadowDepth="2"/>
                             </Setter.Value>
                         </Setter>
                     </DataTrigger>
@@ -279,6 +501,38 @@
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#FFF5F5DC" Offset="0"/>
+                                        <GradientStop Color="#FFDDAA33" Offset="0.5"/>
+                                        <GradientStop Color="#FFF5F5DC" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="#FFDDAA33" BlurRadius="18" ShadowDepth="1" Opacity="0.6"/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#FFFFFFFF" Offset="0"/>
+                                        <GradientStop Color="#FFCCCCCC" Offset="0.5"/>
+                                        <GradientStop Color="#FFFFFFFF" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="#FF888888" BlurRadius="12" ShadowDepth="2" Opacity="0.5"/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
@@ -315,6 +569,26 @@
                                         </Setter.Value>
                                     </Setter>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                    <Setter Property="Text" Value="🌸 雅なタスク管理 🌸"/>
+                                    <Setter Property="Foreground" Value="{StaticResource WaDarkRed}"/>
+                                    <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                    <Setter Property="Effect">
+                                        <Setter.Value>
+                                            <DropShadowEffect Color="#FFDDAA33" BlurRadius="8" ShadowDepth="1"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                    <Setter Property="Text" Value="⚫ MINIMAL TASK MANAGER ⚪"/>
+                                    <Setter Property="Foreground" Value="{StaticResource MonoBlack}"/>
+                                    <Setter Property="FontFamily" Value="Segoe UI"/>
+                                    <Setter Property="Effect">
+                                        <Setter.Value>
+                                            <DropShadowEffect Color="#FF888888" BlurRadius="6" ShadowDepth="1"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </TextBlock.Style>
@@ -348,6 +622,12 @@
                                     <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
                                         <Setter Property="Style" Value="{StaticResource TerminatorButtonStyle}"/>
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                        <Setter Property="Style" Value="{StaticResource WaButtonStyle}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                        <Setter Property="Style" Value="{StaticResource MonoButtonStyle}"/>
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
@@ -377,6 +657,12 @@
                                                 <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
                                                     <Setter Property="Text" Value="🤖"/>
                                                 </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                                    <Setter Property="Text" Value="🌸"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                                    <Setter Property="Text" Value="⚫"/>
+                                                </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </TextBlock.Style>
@@ -388,6 +674,12 @@
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
                                         <Setter Property="Style" Value="{StaticResource TerminatorButtonStyle}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                        <Setter Property="Style" Value="{StaticResource WaButtonStyle}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                        <Setter Property="Style" Value="{StaticResource MonoButtonStyle}"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -501,6 +793,24 @@
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource WaBeige}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource WaRed}"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="#FFDDAA33" BlurRadius="10" ShadowDepth="1" Opacity="0.5"/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource MonoWhite}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource MonoDarkGray}"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="#FF888888" BlurRadius="8" ShadowDepth="2" Opacity="0.4"/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Border.Style>
@@ -521,6 +831,16 @@
                                     <Setter Property="Foreground" Value="{StaticResource TerminatorRed}"/>
                                     <Setter Property="FontFamily" Value="Courier New"/>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                    <Setter Property="Text" Value="🔍 検索機能:"/>
+                                    <Setter Property="Foreground" Value="{StaticResource WaDarkRed}"/>
+                                    <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                    <Setter Property="Text" Value="⚫ SEARCH:"/>
+                                    <Setter Property="Foreground" Value="{StaticResource MonoBlack}"/>
+                                    <Setter Property="FontFamily" Value="Segoe UI"/>
+                                </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </TextBlock.Style>
@@ -536,6 +856,12 @@
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
                                     <Setter Property="Style" Value="{StaticResource TerminatorTextBoxStyle}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                    <Setter Property="Style" Value="{StaticResource WaTextBoxStyle}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                    <Setter Property="Style" Value="{StaticResource MonoTextBoxStyle}"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -555,6 +881,12 @@
                                         <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
                                             <Setter Property="Text" Value="🎯 ACQUIRE"/>
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                            <Setter Property="Text" Value="🔍 検索"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                            <Setter Property="Text" Value="⚫ SEARCH"/>
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
@@ -565,6 +897,12 @@
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
                                     <Setter Property="Style" Value="{StaticResource TerminatorButtonStyle}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                                    <Setter Property="Style" Value="{StaticResource WaButtonStyle}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                                    <Setter Property="Style" Value="{StaticResource MonoButtonStyle}"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -594,6 +932,24 @@
                             <Setter Property="Effect">
                                 <Setter.Value>
                                     <DropShadowEffect Color="#FFFF0000" BlurRadius="25" ShadowDepth="3" Opacity="0.6"/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsJapaneseTheme}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource WaBeige}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource WaRed}"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="#FFDDAA33" BlurRadius="20" ShadowDepth="2" Opacity="0.4"/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsMonochromeTheme}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource MonoWhite}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource MonoDarkGray}"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="#FF888888" BlurRadius="15" ShadowDepth="3" Opacity="0.3"/>
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
