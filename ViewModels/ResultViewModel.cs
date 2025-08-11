@@ -22,6 +22,8 @@ namespace WpfScheduledApp20250729.ViewModels
         private int _remainingTasks;
         private int _totalEstimatedTime;
         private int _remainingEstimatedTime;
+        private int _clearTimesinTIme;
+        private int _clearTImesoutoftIme;
         
         // EXPシステム
         private int _currentExp;
@@ -108,6 +110,18 @@ namespace WpfScheduledApp20250729.ViewModels
             set => SetProperty(ref _expProgressWidth, value);
         }
 
+        public int ClearTimesinTIme
+        {
+            get => _clearTimesinTIme;
+            set => SetProperty(ref _clearTimesinTIme, value);
+        }
+
+        public int ClearTImesoutoftIme
+        {
+            get => _clearTImesoutoftIme;
+            set => SetProperty(ref _clearTImesoutoftIme, value);
+        }
+
         #endregion
 
         #region Commands
@@ -148,6 +162,9 @@ namespace WpfScheduledApp20250729.ViewModels
                     t.ExecutionTime != TimeOnly.MinValue && 
                     t.LastClearedAt.Date != DateTime.Today);
                 RemainingEstimatedTime = remainingTasks.Sum(t => t.EstimatedTime);
+
+                // ClearTimesinTIme と ClearTImesoutoftIme を計算
+                CalculateClearTimes(allTodayTasks, today);
 
                 // EXP計算（完了タスクベース）
                 CalculateExp();
@@ -205,6 +222,30 @@ namespace WpfScheduledApp20250729.ViewModels
                     HowToLearnName = "Sample HTL 3",
                     ProjectName = "Sample Project 3"
                 }
+            });
+        }
+
+        private void CalculateClearTimes(List<LowTask> allTodayTasks, DateOnly today)
+        {
+            // 今日完了したタスクのみを対象とする
+            var completedTodayTasks = allTodayTasks.Where(t => 
+                t.ExecutionTime != TimeOnly.MinValue && 
+                t.LastClearedAt.Date == DateTime.Today).ToList();
+
+            // 時間内クリア回数：実行予定時間以内にクリアされたタスク
+            ClearTimesinTIme = completedTodayTasks.Count(t => 
+            {
+                var scheduledDateTime = today.ToDateTime(t.ExecutionTime);
+                var estimatedEndTime = scheduledDateTime.AddMinutes(t.EstimatedTime);
+                return t.LastClearedAt <= estimatedEndTime;
+            });
+
+            // 時間外クリア回数：実行予定時間を過ぎてクリアされたタスク
+            ClearTImesoutoftIme = completedTodayTasks.Count(t => 
+            {
+                var scheduledDateTime = today.ToDateTime(t.ExecutionTime);
+                var estimatedEndTime = scheduledDateTime.AddMinutes(t.EstimatedTime);
+                return t.LastClearedAt > estimatedEndTime;
             });
         }
 

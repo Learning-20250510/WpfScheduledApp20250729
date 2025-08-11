@@ -173,6 +173,28 @@
                                           FontWeight="Bold" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Border>
+                        
+                        <!-- 時間内クリア回数 -->
+                        <Border Background="#FF1A1A2E" CornerRadius="8" Padding="20" Margin="0,10">
+                            <StackPanel>
+                                <TextBlock Text="⏰ CLEAR IN TIME" Foreground="#FF00FFAA" 
+                                          FontSize="16" FontFamily="Consolas" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding ClearTimesinTIme}" 
+                                          Foreground="#FF00FFAA" FontSize="28" FontFamily="Consolas" 
+                                          FontWeight="Bold" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- 時間外クリア回数 -->
+                        <Border Background="#FF1A1A2E" CornerRadius="8" Padding="20" Margin="0,10">
+                            <StackPanel>
+                                <TextBlock Text="⏰ CLEAR OUT OF TIME" Foreground="#FFAA8000" 
+                                          FontSize="16" FontFamily="Consolas" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding ClearTImesoutoftIme}" 
+                                          Foreground="#FFAA8000" FontSize="28" FontFamily="Consolas" 
+                                          FontWeight="Bold" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </Border>
                 

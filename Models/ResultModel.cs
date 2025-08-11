@@ -14,6 +14,8 @@ namespace WpfScheduledApp20250729.Models
         public int Priority { get; set; }
         public bool IsCompleted { get; set; }
         public ResultAction SelectedAction { get; set; }
+        public int ClearTimesinTIme { get; set; }
+        public int ClearTImesoutoftIme { get; set; }
     }
 
     public enum ResultAction
