@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using WpfScheduledApp20250729.Auditing.Interfaces;
 using WpfScheduledApp20250729.Auditing.Models;
+using WpfScheduledApp20250729.Auditing.Rules;
+using WpfScheduledApp20250729.Services;
 using WpfScheduledApp20250729.Utils;
 
 namespace WpfScheduledApp20250729.Auditing.Services
@@ -12,15 +14,17 @@ namespace WpfScheduledApp20250729.Auditing.Services
     {
         private readonly IAuditService _auditService;
         private readonly IAuditRuleFactory _ruleFactory;
+        private readonly DataSeederService? _dataSeederService;
         private bool _disposed = false;
 
-        public AuditManager(DbContext dbContext)
+        public AuditManager(DbContext dbContext, DataSeederService? dataSeederService = null)
         {
             if (dbContext == null)
                 throw new ArgumentNullException(nameof(dbContext));
 
             _auditService = new AuditService(dbContext);
             _ruleFactory = new AuditRuleFactory();
+            _dataSeederService = dataSeederService;
 
             // イベントハンドラーを設定
             _auditService.AuditCompleted += OnAuditCompleted;
@@ -38,6 +42,14 @@ namespace WpfScheduledApp20250729.Auditing.Services
                 {
                     _auditService.AddRule(rule);
                     Logger.LogInfo($"監査ルールを追加: {rule.Name}", nameof(InitializeAsync), nameof(AuditManager));
+                }
+
+                // MMファイル同期ルールを追加（DataSeederServiceが利用可能な場合）
+                if (_dataSeederService != null)
+                {
+                    var mmSyncRule = new MMFileSynchronizationRule(_dataSeederService);
+                    _auditService.AddRule(mmSyncRule);
+                    Logger.LogInfo($"MMファイル同期ルールを追加: {mmSyncRule.Name}", nameof(InitializeAsync), nameof(AuditManager));
                 }
 
                 // 監査間隔を設定（デフォルト30分）

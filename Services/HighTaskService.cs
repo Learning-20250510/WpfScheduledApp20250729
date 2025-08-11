@@ -170,6 +170,77 @@ namespace WpfScheduledApp20250729.Services
             }
         }
 
+        // MM File Synchronization Methods
+        public async Task<(int inserted, int deleted)> SynchronizeMMFilesAsync()
+        {
+            try
+            {
+                // Get project root directory (debug/release agnostic)
+                var projectRoot = GetProjectRootDirectory();
+                var mmfFolderPath = Path.Combine(projectRoot, "MMF");
+
+                // Create MMF folder if it doesn't exist
+                if (!Directory.Exists(mmfFolderPath))
+                {
+                    Directory.CreateDirectory(mmfFolderPath);
+                }
+
+                // Get all .mm files recursively
+                var mmFiles = GetMMFilesRecursively(mmfFolderPath);
+                var mmFileNames = mmFiles.Select(Path.GetFileName).ToHashSet();
+
+                // Get or create "Freeplane" architecture
+                var freeplaneArchitecture = await GetOrCreateFreeplaneArchitectureAsync();
+
+                // Get all existing Freeplane HighTasks
+                var existingFreeplaneHighTasks = await GetHighTasksByArchitectureIdAsync(freeplaneArchitecture.Id);
+
+                int insertedCount = 0;
+                int deletedCount = 0;
+
+                // Insert missing tasks (files exist but not in DB)
+                foreach (var mmFile in mmFiles)
+                {
+                    var fileName = Path.GetFileName(mmFile);
+                    var existingTask = existingFreeplaneHighTasks.FirstOrDefault(t => t.TaskName == fileName);
+                    
+                    if (existingTask == null)
+                    {
+                        // Create new HighTask
+                        var highTask = new HighTask
+                        {
+                            ArchitectureId = freeplaneArchitecture.Id,
+                            TaskName = fileName,
+                            Description = $"Auto-generated from MM file: {mmFile}",
+                            ProjectId = 1, // Default project ID
+                            TouchedAt = DateTime.UtcNow,
+                            LastUpdMethodName = "SynchronizeMMFiles"
+                        };
+
+                        await AddAsync(highTask);
+                        insertedCount++;
+                    }
+                }
+
+                // Delete orphaned tasks (exist in DB but file missing)
+                foreach (var existingTask in existingFreeplaneHighTasks)
+                {
+                    if (!mmFileNames.Contains(existingTask.TaskName))
+                    {
+                        await DeleteAsync(existingTask.Id);
+                        deletedCount++;
+                    }
+                }
+
+                return (insertedCount, deletedCount);
+            }
+            catch (Exception ex)
+            {
+                // Log error or handle appropriately
+                throw new InvalidOperationException($"Error during MM file synchronization: {ex.Message}", ex);
+            }
+        }
+
         private string GetProjectRootDirectory()
         {
             // Get current executing directory

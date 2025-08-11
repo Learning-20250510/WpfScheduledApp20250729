@@ -373,5 +373,31 @@ namespace WpfScheduledApp20250729.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// MMファイルとHighTaskの同期機能（insert + delete）
+        /// </summary>
+        public async Task<(int inserted, int deleted)> SynchronizeMMFilesAsync()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("=== MMファイル同期開始 ===");
+                
+                var (insertedCount, deletedCount) = await _highTaskService.SynchronizeMMFilesAsync();
+                
+                System.Diagnostics.Debug.WriteLine($"MMファイル同期結果: {insertedCount}個追加, {deletedCount}個削除");
+                System.Diagnostics.Debug.WriteLine("=== MMファイル同期完了 ===");
+                
+                return (insertedCount, deletedCount);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"=== MMファイル同期エラー ===");
+                System.Diagnostics.Debug.WriteLine($"Message: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+                throw;
+            }
+        }
     }
 }

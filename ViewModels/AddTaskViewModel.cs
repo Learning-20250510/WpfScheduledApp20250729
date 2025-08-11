@@ -20,6 +20,7 @@ namespace WpfScheduledApp20250729.ViewModels
         }
 
         public ICommand AutoInsertMMFilesCommand => new DelegateCommand(async () => await AutoInsertMMFilesAsync());
+        public ICommand SynchronizeMMFilesCommand => new DelegateCommand(async () => await SynchronizeMMFilesAsync());
 
         private async Task AutoInsertMMFilesAsync()
         {
@@ -33,6 +34,24 @@ namespace WpfScheduledApp20250729.ViewModels
             catch (Exception ex)
             {
                 MessageBox.Show($"MM自動作成エラー: {ex.Message}",
+                    "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async Task SynchronizeMMFilesAsync()
+        {
+            try
+            {
+                var (insertedCount, deletedCount) = await _dataSeederService.SynchronizeMMFilesAsync();
+                
+                MessageBox.Show($"MMファイル同期完了:\n" +
+                    $"• 追加されたタスク: {insertedCount} 個\n" +
+                    $"• 削除されたタスク: {deletedCount} 個",
+                    "MM同期完了", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"MM同期エラー: {ex.Message}",
                     "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
