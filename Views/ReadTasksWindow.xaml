@@ -33,6 +33,27 @@
             <GradientStop Color="#FF0F0F23" Offset="1"/>
         </LinearGradientBrush>
         
+        <!-- ターミネーター風カラーパレット -->
+        <SolidColorBrush x:Key="TerminatorRed" Color="#FFFF0000"/>
+        <SolidColorBrush x:Key="TerminatorDarkRed" Color="#FF990000"/>
+        <SolidColorBrush x:Key="TerminatorBlack" Color="#FF000000"/>
+        <SolidColorBrush x:Key="TerminatorGray" Color="#FF333333"/>
+        <SolidColorBrush x:Key="TerminatorLightGray" Color="#FF666666"/>
+        <SolidColorBrush x:Key="TerminatorWhite" Color="#FFFFFFFF"/>
+        
+        <!-- ターミネーター風グラデーション -->
+        <LinearGradientBrush x:Key="TerminatorGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF000000" Offset="0"/>
+            <GradientStop Color="#FF330000" Offset="0.5"/>
+            <GradientStop Color="#FF000000" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <!-- ターミネーター風背景グラデーション -->
+        <LinearGradientBrush x:Key="TerminatorBackgroundGradient" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FF111111" Offset="0"/>
+            <GradientStop Color="#FF000000" Offset="1"/>
+        </LinearGradientBrush>
+        
         <!-- ゲーミングボタンスタイル -->
         <Style x:Key="GamingButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="{StaticResource NeonBlue}"/>
@@ -110,12 +131,111 @@
             </Setter>
         </Style>
         
+        <!-- ターミネーター風ボタンスタイル -->
+        <Style x:Key="TerminatorButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource TerminatorGray}"/>
+            <Setter Property="Foreground" Value="{StaticResource TerminatorRed}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Courier New"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TerminatorRed}"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#FFFF0000" BlurRadius="8" ShadowDepth="2"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                          To="#FF550000" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="12" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                          To="#FF333333" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)"
+                                                           To="8" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource TerminatorDarkRed}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- ターミネーター風テキストボックススタイル -->
+        <Style x:Key="TerminatorTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource TerminatorBlack}"/>
+            <Setter Property="Foreground" Value="{StaticResource TerminatorRed}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TerminatorRed}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="FontFamily" Value="Courier New"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#FFFF0000" BlurRadius="3" ShadowDepth="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="0">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
     </Window.Resources>
     
-    <Border Background="{StaticResource DarkGradient}" CornerRadius="10">
-        <Border.Effect>
-            <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="0"/>
-        </Border.Effect>
+    <Border CornerRadius="10">
+        <Border.Style>
+            <Style TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource DarkGradient}"/>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="0"/>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                        <Setter Property="Background" Value="{StaticResource TerminatorBackgroundGradient}"/>
+                        <Setter Property="Effect">
+                            <Setter.Value>
+                                <DropShadowEffect Color="#FFFF0000" BlurRadius="25" ShadowDepth="3"/>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
         
     <Grid>
         <Grid.RowDefinitions>
@@ -126,16 +246,42 @@
 
         <!-- 上部ゲーミングヘッダー -->
         <Grid Grid.Row="0" Height="60">
-            <Grid.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="#FF1A1A2E" Offset="0"/>
-                    <GradientStop Color="#FF2D2D5A" Offset="0.5"/>
-                    <GradientStop Color="#FF1A1A2E" Offset="1"/>
-                </LinearGradientBrush>
-            </Grid.Background>
-            <Grid.Effect>
-                <DropShadowEffect Color="#FF00FFFF" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
-            </Grid.Effect>
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#FF1A1A2E" Offset="0"/>
+                                <GradientStop Color="#FF2D2D5A" Offset="0.5"/>
+                                <GradientStop Color="#FF1A1A2E" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="#FF00FFFF" BlurRadius="15" ShadowDepth="0" Opacity="0.3"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#FF000000" Offset="0"/>
+                                        <GradientStop Color="#FF330000" Offset="0.5"/>
+                                        <GradientStop Color="#FF000000" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="#FFFF0000" BlurRadius="20" ShadowDepth="2" Opacity="0.8"/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -144,16 +290,34 @@
             <!-- ゲーミング風メニューバー -->
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0">
                 <!-- タイトル -->
-                <TextBlock Text="⚡ TASK COMMANDER ⚡" 
-                          Foreground="{StaticResource NeonBlue}" 
-                          FontSize="18" 
+                <TextBlock FontSize="18" 
                           FontWeight="Bold" 
                           FontFamily="Consolas"
                           VerticalAlignment="Center"
                           Margin="0,0,30,0">
-                    <TextBlock.Effect>
-                        <DropShadowEffect Color="#FF00FFFF" BlurRadius="8" ShadowDepth="0"/>
-                    </TextBlock.Effect>
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="⚡ TASK COMMANDER ⚡"/>
+                            <Setter Property="Foreground" Value="{StaticResource NeonBlue}"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="#FF00FFFF" BlurRadius="8" ShadowDepth="0"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                    <Setter Property="Text" Value="🤖 TARGET SYSTEM 🤖"/>
+                                    <Setter Property="Foreground" Value="{StaticResource TerminatorRed}"/>
+                                    <Setter Property="FontFamily" Value="Courier New"/>
+                                    <Setter Property="Effect">
+                                        <Setter.Value>
+                                            <DropShadowEffect Color="#FFFF0000" BlurRadius="10" ShadowDepth="2"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
                 </TextBlock>
                 
                 <!-- ゲーミングボタンメニュー -->
@@ -174,13 +338,62 @@
                            
                     <!-- 表示切り替えボタン -->
                     <Button Content="{Binding IsLibraryView, Converter={StaticResource BoolToViewButtonTextConverter}}" 
-                           Style="{StaticResource GamingButtonStyle}"
                            Command="{Binding ToggleViewCommand}"
                            Margin="0,0,10,0"
                            Padding="15,8"
                            FontSize="12">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource GamingButtonStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                        <Setter Property="Style" Value="{StaticResource TerminatorButtonStyle}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                         <Button.ToolTip>
                             <TextBlock Text="Switch between Table and Library view" Foreground="White"/>
+                        </Button.ToolTip>
+                    </Button>
+                    
+                    <!-- テーマ切り替えボタン -->
+                    <Button Command="{Binding SwitchThemeCommand}"
+                           Margin="0,0,10,0"
+                           Padding="15,8"
+                           FontSize="12">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🎨 THEME" VerticalAlignment="Center"/>
+                                <TextBlock VerticalAlignment="Center" Margin="5,0,0,0">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsGamingTheme}" Value="True">
+                                                    <Setter Property="Text" Value="🎮"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsLibraryTheme}" Value="True">
+                                                    <Setter Property="Text" Value="📚"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                                    <Setter Property="Text" Value="🤖"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </Button.Content>
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource GamingButtonStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                        <Setter Property="Style" Value="{StaticResource TerminatorButtonStyle}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Button.ToolTip>
+                            <TextBlock Text="Switch between Gaming, Library and Terminator themes" Foreground="White"/>
                         </Button.ToolTip>
                     </Button>
                     
@@ -266,50 +479,127 @@
 
         <!-- ゲーミング風検索エリア -->
         <Border Grid.Row="1" 
-               Background="#FF0F0F23" 
                Margin="20,10"
                CornerRadius="8"
-               BorderBrush="{StaticResource NeonBlue}"
                BorderThickness="2">
-            <Border.Effect>
-                <DropShadowEffect Color="#FF00FFFF" BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
-            </Border.Effect>
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="#FF0F0F23"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource NeonBlue}"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="#FF00FFFF" BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource TerminatorBlack}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource TerminatorRed}"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="#FFFF0000" BlurRadius="12" ShadowDepth="2" Opacity="0.7"/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <StackPanel Orientation="Horizontal" 
                        HorizontalAlignment="Center"
                        Margin="20,15">
-                <TextBlock Text="🔍 SEARCH PROTOCOL:" 
-                          Foreground="{StaticResource NeonBlue}"
-                          FontFamily="Consolas"
-                          FontWeight="Bold"
+                <TextBlock FontWeight="Bold"
                           VerticalAlignment="Center"
-                          Margin="0,0,15,0"/>
+                          Margin="0,0,15,0">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="🔍 SEARCH PROTOCOL:"/>
+                            <Setter Property="Foreground" Value="{StaticResource NeonBlue}"/>
+                            <Setter Property="FontFamily" Value="Consolas"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                    <Setter Property="Text" Value="🎯 TARGET SCAN:"/>
+                                    <Setter Property="Foreground" Value="{StaticResource TerminatorRed}"/>
+                                    <Setter Property="FontFamily" Value="Courier New"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
                 
                 <TextBox Text="Enter search query..." 
-                        Style="{StaticResource GamingTextBoxStyle}"
                         Width="400"
                         Height="35"
                         VerticalContentAlignment="Center"
-                        Padding="10,0"/>
+                        Padding="10,0">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource GamingTextBoxStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                    <Setter Property="Style" Value="{StaticResource TerminatorTextBoxStyle}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
                 
-                <Button Content="🚀 SCAN" 
-                       Style="{StaticResource GamingButtonStyle}"
-                       Command="{Binding SearchCommand}"
+                <Button Command="{Binding SearchCommand}"
                        Margin="15,0,0,0"
                        Padding="20,8"
-                       FontSize="14"/>
+                       FontSize="14">
+                    <Button.Content>
+                        <TextBlock>
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="🚀 SCAN"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                            <Setter Property="Text" Value="🎯 ACQUIRE"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Button.Content>
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource GamingButtonStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                                    <Setter Property="Style" Value="{StaticResource TerminatorButtonStyle}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
             </StackPanel>
         </Border>
 
         <!-- ゲーミング風メインコンテンツエリア -->
         <Border Grid.Row="2" 
-               Background="#FF0A0A1A" 
                Margin="20,10,20,20"
                CornerRadius="10"
-               BorderBrush="{StaticResource GamingGradient}"
                BorderThickness="2">
-            <Border.Effect>
-                <DropShadowEffect Color="#FFFF0080" BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
-            </Border.Effect>
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="#FF0A0A1A"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource GamingGradient}"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="#FFFF0080" BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsTerminatorTheme}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource TerminatorBlack}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource TerminatorRed}"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="#FFFF0000" BlurRadius="25" ShadowDepth="3" Opacity="0.6"/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             
             <!-- パルシングアニメーション -->
             <Border.Triggers>

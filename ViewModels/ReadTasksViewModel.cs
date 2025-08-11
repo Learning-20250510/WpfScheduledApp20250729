@@ -54,6 +54,26 @@ namespace WpfScheduledApp20250729.ViewModels
             set => SetProperty(ref _isLibraryView, value);
         }
 
+        // デザインテーマ管理
+        public enum DesignTheme
+        {
+            Gaming = 0,
+            Library = 1,
+            Terminator = 2
+        }
+
+        private DesignTheme _currentTheme = DesignTheme.Gaming;
+        public DesignTheme CurrentTheme
+        {
+            get => _currentTheme;
+            set => SetProperty(ref _currentTheme, value);
+        }
+
+        // テーマ切り替え用プロパティ
+        public bool IsGamingTheme => CurrentTheme == DesignTheme.Gaming;
+        public bool IsLibraryTheme => CurrentTheme == DesignTheme.Library;
+        public bool IsTerminatorTheme => CurrentTheme == DesignTheme.Terminator;
+
         private ObservableCollection<HTLSectionViewModel> _htlSections = new();
         public ObservableCollection<HTLSectionViewModel> HTLSections
         {
@@ -70,6 +90,7 @@ namespace WpfScheduledApp20250729.ViewModels
         public DelegateCommand AppSettingsCommand { get; }
         public DelegateCommand DatabaseSettingsCommand { get; }
         public DelegateCommand ToggleViewCommand { get; }
+        public DelegateCommand SwitchThemeCommand { get; }
 
         public ReadTasksViewModel(IWindowService windowService, IGlobalHotKeyService globalHotKeyService, ITaskActionService taskActionService, IResultService resultService, HighTaskService highTaskService, MiddleTaskService middleTaskService, LowTaskService lowTaskService, ArchitectureService architectureService, ProjectService projectService)
         {
@@ -96,6 +117,7 @@ namespace WpfScheduledApp20250729.ViewModels
             AppSettingsCommand = new DelegateCommand(_ => ShowAppSettings(), _ => true);
             DatabaseSettingsCommand = new DelegateCommand(_ => ShowDatabaseSettings(), _ => true);
             ToggleViewCommand = new DelegateCommand(_ => ToggleView(), _ => true);
+            SwitchThemeCommand = new DelegateCommand(_ => SwitchTheme(), _ => true);
             
             // 初期ビューを設定
             LoadInitialView();
@@ -236,6 +258,7 @@ namespace WpfScheduledApp20250729.ViewModels
         public event EventHandler WindowActivateRequested;
         public event EventHandler<TaskActionRequestedEventArgs> TaskActionRequested;
         public event EventHandler<ResultRequestedEventArgs> ResultRequested;
+        public event EventHandler<ThemeChangedEventArgs> ThemeChanged;
 
         public class TaskActionRequestedEventArgs : EventArgs
         {
@@ -254,6 +277,16 @@ namespace WpfScheduledApp20250729.ViewModels
             public ResultRequestedEventArgs(GamingResultViewModel viewModel)
             {
                 ViewModel = viewModel;
+            }
+        }
+
+        public class ThemeChangedEventArgs : EventArgs
+        {
+            public DesignTheme NewTheme { get; }
+            
+            public ThemeChangedEventArgs(DesignTheme newTheme)
+            {
+                NewTheme = newTheme;
             }
         }
 
@@ -286,6 +319,31 @@ namespace WpfScheduledApp20250729.ViewModels
                 CurrentView = new ReadTaskControl();
                 LoadTableData();
             }
+        }
+
+        private void SwitchTheme()
+        {
+            // テーマを順番に切り替え: Gaming → Library → Terminator → Gaming...
+            CurrentTheme = (DesignTheme)(((int)CurrentTheme + 1) % 3);
+            
+            // プロパティ変更通知
+            OnPropertyChanged(nameof(IsGamingTheme));
+            OnPropertyChanged(nameof(IsLibraryTheme));
+            OnPropertyChanged(nameof(IsTerminatorTheme));
+            
+            // テーマに応じたメッセージ表示
+            string themeMessage = CurrentTheme switch
+            {
+                DesignTheme.Gaming => "🎮 GAMING MODE ACTIVATED!",
+                DesignTheme.Library => "📚 LIBRARY MODE ACTIVATED!",
+                DesignTheme.Terminator => "🤖 TERMINATOR MODE ACTIVATED! TARGET ACQUIRED.",
+                _ => "UNKNOWN THEME"
+            };
+            
+            MessageBox.Show(themeMessage, "THEME SWITCHED");
+            
+            // Windowのスタイルを更新するため、Windowへイベント通知
+            ThemeChanged?.Invoke(this, new ThemeChangedEventArgs(CurrentTheme));
         }
 
         private async void LoadLibraryData()
