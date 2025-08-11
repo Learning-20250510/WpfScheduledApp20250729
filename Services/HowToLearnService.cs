@@ -4,7 +4,7 @@ using WpfScheduledApp20250729.Models.Entities;
 
 namespace WpfScheduledApp20250729.Services
 {
-    internal class HowToLearnService : BaseService<HowToLearn>
+    public class HowToLearnService : BaseService<HowToLearn>
     {
         public HowToLearnService(BaseDbContext context) : base(context)
         {

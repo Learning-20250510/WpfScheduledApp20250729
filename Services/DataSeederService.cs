@@ -3,7 +3,7 @@ using System;
 
 namespace WpfScheduledApp20250729.Services
 {
-    internal class DataSeederService
+    public class DataSeederService
     {
         private readonly BaseDbContext _context;
         private readonly ArchitectureService _architectureService;

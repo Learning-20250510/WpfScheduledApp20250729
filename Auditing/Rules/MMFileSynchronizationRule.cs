@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WpfScheduledApp20250729.Auditing.Interfaces;
 using WpfScheduledApp20250729.Auditing.Models;
 using WpfScheduledApp20250729.Services;
@@ -22,7 +23,7 @@ namespace WpfScheduledApp20250729.Auditing.Rules
             _dataSeederService = dataSeederService ?? throw new ArgumentNullException(nameof(dataSeederService));
         }
 
-        public async Task<IEnumerable<AuditResult>> ExecuteAsync()
+        public async Task<IEnumerable<AuditResult>> ExecuteAsync(DbContext context)
         {
             var results = new List<AuditResult>();
 

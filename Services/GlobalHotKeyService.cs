@@ -119,7 +119,12 @@ namespace WpfScheduledApp20250729.Services
             return RegisterHotKey(windowHandle, hotkeyId, (int)modifiers, vKey) != 0;
         }
 
-        public bool UnregisterHotKey(IntPtr windowHandle, int hotkeyId)
+        bool IGlobalHotKeyService.UnregisterHotKey(IntPtr windowHandle, int hotkeyId)
+        {
+            return UnregisterHotKey(windowHandle, hotkeyId) != 0;
+        }
+
+        private bool UnregisterHotKeyInternal(IntPtr windowHandle, int hotkeyId)
         {
             return UnregisterHotKey(windowHandle, hotkeyId) != 0;
         }
@@ -160,7 +165,7 @@ namespace WpfScheduledApp20250729.Services
             StopKeyboardHook();
             foreach (var hotkeyId in _hotKeyNames.Keys)
             {
-                UnregisterHotKey(windowHandle, hotkeyId);
+                UnregisterHotKeyInternal(windowHandle, hotkeyId);
             }
         }
     }

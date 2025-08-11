@@ -4,7 +4,7 @@ using WpfScheduledApp20250729.Models.Entities;
 
 namespace WpfScheduledApp20250729.Services
 {
-    internal class RelationExtensionAppService : BaseService<RelationExtensionApp>
+    public class RelationExtensionAppService : BaseService<RelationExtensionApp>
     {
         public RelationExtensionAppService(BaseDbContext context) : base(context)
         {

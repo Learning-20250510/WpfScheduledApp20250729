@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WpfScheduledApp20250729.Services
 {
-    internal class MotivationService : BaseService<Motivation>
+    public class MotivationService : BaseService<Motivation>
     {
         public MotivationService(BaseDbContext context) : base(context)
         {

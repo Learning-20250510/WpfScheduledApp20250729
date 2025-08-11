@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WpfScheduledApp20250729
 {
-    internal abstract class NotificationObject : INotifyPropertyChanged
+    public abstract class NotificationObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

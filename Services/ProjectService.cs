@@ -4,7 +4,7 @@ using WpfScheduledApp20250729.Models.Entities;
 
 namespace WpfScheduledApp20250729.Services
 {
-    internal class ProjectService : BaseService<Project>
+    public class ProjectService : BaseService<Project>
     {
         public ProjectService(BaseDbContext context) : base(context)
         {

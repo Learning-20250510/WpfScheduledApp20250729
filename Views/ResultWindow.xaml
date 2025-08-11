@@ -1,299 +1,139 @@
-﻿<Window x:Class="WpfScheduledApp20250729.Views.ResultWindow"
+<Window x:Class="WpfScheduledApp20250729.Views.ResultWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfScheduledApp20250729.Views"
         mc:Ignorable="d"
-        Title="🏆 DAILY RESULTS 🏆" Height="800" Width="1000"
-        Background="#0D1117" WindowStyle="None" AllowsTransparency="True"
+        Title="DAILY RESULTS" Height="800" Width="1000"
+        Background="{StaticResource DarkBackground}" WindowStyle="None" AllowsTransparency="True"
         WindowStartupLocation="CenterScreen">
-
+    
     <Window.Resources>
-        <!-- ゲーミングリソース -->
-        <LinearGradientBrush x:Key="GoldGradient" StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#FFFFFF00" Offset="0"/>
-            <GradientStop Color="#FFFF8000" Offset="0.5"/>
-            <GradientStop Color="#FFFFAA00" Offset="1"/>
-        </LinearGradientBrush>
-        
-        <LinearGradientBrush x:Key="ExpGradient" StartPoint="0,0" EndPoint="1,0">
-            <GradientStop Color="#FF00FF00" Offset="0"/>
-            <GradientStop Color="#FF80FF00" Offset="0.5"/>
-            <GradientStop Color="#FFFFFF00" Offset="1"/>
-        </LinearGradientBrush>
-        
-        <LinearGradientBrush x:Key="DarkGradient" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#FF1A1A2E" Offset="0"/>
-            <GradientStop Color="#FF0F0F23" Offset="1"/>
-        </LinearGradientBrush>
-
-        <!-- EXP数値アニメーション -->
-        <Storyboard x:Key="ExpNumberAnimation">
-            <DoubleAnimation x:Name="ExpCountAnimation" 
-                           Storyboard.TargetProperty="(TextBlock.Tag)"
-                           From="0" Duration="0:0:2" 
-                           EasingFunction="{x:Static PowerEase.Default}"/>
-        </Storyboard>
-
-        <!-- ProgressBar成長アニメーション -->
-        <Storyboard x:Key="ProgressBarGrowthAnimation">
-            <DoubleAnimation x:Name="ProgressGrowthAnimation"
-                           Storyboard.TargetProperty="Width"
-                           From="0" Duration="0:0:3"
-                           EasingFunction="{x:Static QuadraticEase.Default}"/>
-        </Storyboard>
-
-        <!-- フローティングテキストアニメーション -->
-        <Storyboard x:Key="FloatingExpAnimation" x:Name="FloatingExpStoryboard">
-            <DoubleAnimation Storyboard.TargetProperty="(Canvas.Top)"
-                           From="0" To="-50" Duration="0:0:2"/>
-            <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                           From="1" To="0" Duration="0:0:2"/>
-            <DoubleAnimation Storyboard.TargetProperty="(TextBlock.FontSize)"
-                           From="24" To="32" Duration="0:0:0.5" AutoReverse="True"/>
-        </Storyboard>
-
-        <!-- ゲーミングボタンスタイル -->
-        <Style x:Key="GamingButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="{StaticResource GoldGradient}"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="BorderBrush" Value="#FFFFFF00"/>
-            <Setter Property="FontFamily" Value="Consolas"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect Color="#FFFFFF00" BlurRadius="15" ShadowDepth="0"/>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ResultWindowResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
 
-    <Border Background="{StaticResource DarkGradient}" CornerRadius="15">
-        <Border.Effect>
-            <DropShadowEffect Color="Black" BlurRadius="25" ShadowDepth="0"/>
-        </Border.Effect>
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         
-        <Grid Margin="30">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <!-- Header -->
+        <Border Grid.Row="0" Style="{StaticResource ResultCardStyle}" Margin="0,0,0,20">
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="DAILY MISSION COMPLETE" 
+                          Foreground="{StaticResource GoldGradient}"
+                          FontSize="32" FontWeight="Bold" FontFamily="Consolas"
+                          HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                <TextBlock Text="{Binding TodayDate, StringFormat='{}{0:yyyy/MM/dd}'}" 
+                          Foreground="#FFAAAAAA" FontSize="18" FontWeight="Bold" 
+                          FontFamily="Consolas" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
             
-            <!-- ヘッダー -->
-            <Border Grid.Row="0" Background="#FF1A1A2E" CornerRadius="10" 
-                   BorderBrush="{StaticResource GoldGradient}" BorderThickness="3" Margin="0,0,0,20">
-                <Border.Effect>
-                    <DropShadowEffect Color="#FFFFFF00" BlurRadius="20" ShadowDepth="0" Opacity="0.7"/>
-                </Border.Effect>
-                <StackPanel Margin="30,20">
-                    <TextBlock Text="🏆 DAILY MISSION COMPLETE 🏆" 
-                              Foreground="{StaticResource GoldGradient}"
-                              FontSize="32" FontWeight="Bold" FontFamily="Consolas"
-                              HorizontalAlignment="Center" Margin="0,0,0,10"/>
-                    <TextBlock Text="{Binding TodayDate, StringFormat='📅 {0:yyyy/MM/dd}'}" 
-                              Foreground="#FFAAAAAA" FontSize="18" FontWeight="Bold" 
-                              FontFamily="Consolas" HorizontalAlignment="Center"/>
+            <!-- Left: Statistics -->
+            <Border Grid.Column="0" Style="{StaticResource ResultCardStyle}">
+                <StackPanel>
+                    <TextBlock Text="TODAY'S STATISTICS" Foreground="#FF00FFFF" 
+                              FontSize="20" FontWeight="Bold" FontFamily="Consolas" 
+                              HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                    
+                    <UniformGrid Columns="2" Rows="6">
+                        <!-- Total Tasks -->
+                        <TextBlock Text="TOTAL TASKS" Foreground="#FFFFFF00" Style="{StaticResource StatTextStyle}"/>
+                        <TextBlock Text="{Binding TotalTasks}" Foreground="#FFFFFF00" Style="{StaticResource NumberTextStyle}"/>
+                        
+                        <!-- Completed Tasks -->
+                        <TextBlock Text="COMPLETED" Foreground="#FF00FF00" Style="{StaticResource StatTextStyle}"/>
+                        <TextBlock Text="{Binding CompletedTasks}" Foreground="#FF00FF00" Style="{StaticResource NumberTextStyle}"/>
+                        
+                        <!-- Remaining Tasks -->
+                        <TextBlock Text="REMAINING" Foreground="#FFFF4444" Style="{StaticResource StatTextStyle}"/>
+                        <TextBlock Text="{Binding RemainingTasks}" Foreground="#FFFF4444" Style="{StaticResource NumberTextStyle}"/>
+                        
+                        <!-- Total Time -->
+                        <TextBlock Text="TOTAL TIME" Foreground="#FFFF8000" Style="{StaticResource StatTextStyle}"/>
+                        <TextBlock Text="{Binding TotalTime}" Foreground="#FFFF8000" Style="{StaticResource NumberTextStyle}"/>
+                        
+                        <!-- Remaining Time -->
+                        <TextBlock Text="REMAINING TIME" Foreground="#FFFF0080" Style="{StaticResource StatTextStyle}"/>
+                        <TextBlock Text="{Binding RemainingTime}" Foreground="#FFFF0080" Style="{StaticResource NumberTextStyle}"/>
+                        
+                        <!-- On Time Clears -->
+                        <TextBlock Text="ON TIME CLEARS" Foreground="#FF00FFAA" Style="{StaticResource StatTextStyle}"/>
+                        <TextBlock Text="{Binding OnTimeClears}" Foreground="#FF00FFAA" Style="{StaticResource NumberTextStyle}"/>
+                    </UniformGrid>
                 </StackPanel>
             </Border>
             
-            <!-- メインコンテンツ -->
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                
-                <!-- 左側：統計情報 -->
-                <Border Grid.Column="0" Background="#FF0A0A1A" CornerRadius="12"
-                       BorderBrush="#FF00FFFF" BorderThickness="2" 
-                       Margin="0,0,15,0">
-                    <Border.Effect>
-                        <DropShadowEffect Color="#FF00FFFF" BlurRadius="15" ShadowDepth="0" Opacity="0.4"/>
-                    </Border.Effect>
-                    <StackPanel Margin="25">
-                        <TextBlock Text="📊 TODAY'S STATISTICS" Foreground="#FF00FFFF" 
-                                  FontSize="20" FontWeight="Bold" FontFamily="Consolas" 
-                                  HorizontalAlignment="Center" Margin="0,0,0,25"/>
-                        
-                        <!-- 総タスク数 -->
-                        <Border Background="#FF1A1A2E" CornerRadius="8" Padding="20" Margin="0,10">
-                            <StackPanel>
-                                <TextBlock Text="📝 TOTAL TASKS" Foreground="#FFFFFF00" 
-                                          FontSize="16" FontFamily="Consolas" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding TotalTasks}" Foreground="White" 
-                                          FontSize="36" FontFamily="Consolas" FontWeight="Bold"
-                                          HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                        
-                        <!-- 完了タスク数 -->
-                        <Border Background="#FF1A1A2E" CornerRadius="8" Padding="20" Margin="0,10">
-                            <StackPanel>
-                                <TextBlock Text="✅ COMPLETED TASKS" Foreground="#FF00FF00" 
-                                          FontSize="16" FontFamily="Consolas" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding CompletedTasks}" Foreground="#FF00FF00" 
-                                          FontSize="36" FontFamily="Consolas" FontWeight="Bold"
-                                          HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                        
-                        <!-- 残りタスク数 -->
-                        <Border Background="#FF1A1A2E" CornerRadius="8" Padding="20" Margin="0,10">
-                            <StackPanel>
-                                <TextBlock Text="⏳ REMAINING TASKS" Foreground="#FFFF4444" 
-                                          FontSize="16" FontFamily="Consolas" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding RemainingTasks}" Foreground="#FFFF4444" 
-                                          FontSize="36" FontFamily="Consolas" FontWeight="Bold"
-                                          HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                        
-                        <!-- 総推定時間 -->
-                        <Border Background="#FF1A1A2E" CornerRadius="8" Padding="20" Margin="0,10">
-                            <StackPanel>
-                                <TextBlock Text="⏱️ TOTAL TIME" Foreground="#FFFF8000" 
-                                          FontSize="16" FontFamily="Consolas" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding TotalEstimatedTime, StringFormat='{0} min'}" 
-                                          Foreground="#FFFF8000" FontSize="28" FontFamily="Consolas" 
-                                          FontWeight="Bold" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                        
-                        <!-- 残り時間 -->
-                        <Border Background="#FF1A1A2E" CornerRadius="8" Padding="20" Margin="0,10">
-                            <StackPanel>
-                                <TextBlock Text="🕒 REMAINING TIME" Foreground="#FFFF0080" 
-                                          FontSize="16" FontFamily="Consolas" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding RemainingEstimatedTime, StringFormat='{0} min'}" 
-                                          Foreground="#FFFF0080" FontSize="28" FontFamily="Consolas" 
-                                          FontWeight="Bold" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                        
-                        <!-- 時間内クリア回数 -->
-                        <Border Background="#FF1A1A2E" CornerRadius="8" Padding="20" Margin="0,10">
-                            <StackPanel>
-                                <TextBlock Text="⏰ CLEAR IN TIME" Foreground="#FF00FFAA" 
-                                          FontSize="16" FontFamily="Consolas" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding ClearTimesinTIme}" 
-                                          Foreground="#FF00FFAA" FontSize="28" FontFamily="Consolas" 
-                                          FontWeight="Bold" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                        
-                        <!-- 時間外クリア回数 -->
-                        <Border Background="#FF1A1A2E" CornerRadius="8" Padding="20" Margin="0,10">
-                            <StackPanel>
-                                <TextBlock Text="⏰ CLEAR OUT OF TIME" Foreground="#FFAA8000" 
-                                          FontSize="16" FontFamily="Consolas" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding ClearTImesoutoftIme}" 
-                                          Foreground="#FFAA8000" FontSize="28" FontFamily="Consolas" 
-                                          FontWeight="Bold" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-                </Border>
-                
-                <!-- 右側：EXPバー -->
-                <Border Grid.Column="1" Background="#FF0A0A1A" CornerRadius="12"
-                       BorderBrush="{StaticResource GoldGradient}" BorderThickness="2" 
-                       Margin="15,0,0,0">
-                    <Border.Effect>
-                        <DropShadowEffect Color="#FFFFFF00" BlurRadius="15" ShadowDepth="0" Opacity="0.4"/>
-                    </Border.Effect>
-                    <StackPanel Margin="25">
-                        <TextBlock Text="⚡ EXPERIENCE GAINED ⚡" Foreground="{StaticResource GoldGradient}" 
-                                  FontSize="20" FontWeight="Bold" FontFamily="Consolas" 
-                                  HorizontalAlignment="Center" Margin="0,0,0,25"/>
-                        
-                        <!-- EXPバー -->
-                        <Canvas Height="60" Margin="0,20">
-                            <Border Canvas.Left="0" Canvas.Top="0" 
-                                   Background="#FF2A2A2A" Height="50" Width="400" 
-                                   CornerRadius="25">
-                                <Border x:Name="ExpProgressBar" 
-                                       Background="{StaticResource ExpGradient}" 
-                                       Width="{Binding ExpProgressWidth}" 
-                                       HorizontalAlignment="Left"
-                                       CornerRadius="25">
-                                    <Border.Effect>
-                                        <DropShadowEffect Color="#FF00FF00" BlurRadius="20" ShadowDepth="0"/>
-                                    </Border.Effect>
-                                </Border>
-                            </Border>
+            <!-- Right: Experience -->
+            <Border Grid.Column="1" Style="{StaticResource ResultCardStyle}">
+                <StackPanel>
+                    <TextBlock Text="EXPERIENCE GAINED" Foreground="{StaticResource GoldGradient}" 
+                              FontSize="20" FontWeight="Bold" FontFamily="Consolas" 
+                              HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                    
+                    <!-- EXP Bar -->
+                    <Border Background="#FF333333" CornerRadius="10" Height="40" Margin="0,20">
+                        <Grid>
+                            <Border Background="{StaticResource GoldGradient}" 
+                                   Width="{Binding ExpBarWidth}" 
+                                   HorizontalAlignment="Left" CornerRadius="10"/>
+                            <TextBlock Text="{Binding ExpText}" 
+                                      Foreground="White" FontWeight="Bold" 
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Progress Details -->
+                    <StackPanel Margin="0,20">
+                        <UniformGrid Columns="2" Rows="3">
+                            <TextBlock Text="LEVEL" Foreground="#FFFF8800" Style="{StaticResource StatTextStyle}"/>
+                            <TextBlock Text="{Binding CurrentLevel}" Foreground="#FFFF8800" Style="{StaticResource NumberTextStyle}"/>
                             
-                            <!-- フローティングEXPテキスト -->
-                            <TextBlock x:Name="FloatingExpText" Canvas.Left="200" Canvas.Top="15"
-                                      Text="{Binding GainedExp, StringFormat='+{0} EXP'}" 
-                                      Foreground="#FFFFFF00" FontSize="24" FontWeight="Bold" 
-                                      FontFamily="Consolas" HorizontalAlignment="Center"
-                                      Opacity="0"/>
-                        </Canvas>
-                        
-                        <!-- EXP数値表示 -->
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
-                            <TextBlock Text="EXP: " Foreground="#FFAAAAAA" FontSize="18" FontFamily="Consolas"/>
-                            <TextBlock x:Name="CurrentExpText" Text="{Binding CurrentExp}" 
-                                      Foreground="{StaticResource GoldGradient}" FontSize="24" 
-                                      FontFamily="Consolas" FontWeight="Bold"/>
-                            <TextBlock Text=" / " Foreground="#FFAAAAAA" FontSize="18" FontFamily="Consolas"/>
-                            <TextBlock Text="{Binding MaxExp}" Foreground="#FFAAAAAA" 
-                                      FontSize="18" FontFamily="Consolas"/>
-                        </StackPanel>
-                        
-                        <!-- 完了率円グラフ風表示 -->
-                        <Border Background="#FF1A1A2E" CornerRadius="15" Padding="30" Margin="0,30">
-                            <StackPanel>
-                                <TextBlock Text="🎯 COMPLETION RATE" Foreground="#FFFFFF00" 
-                                          FontSize="18" FontFamily="Consolas" FontWeight="Bold"
-                                          HorizontalAlignment="Center" Margin="0,0,0,15"/>
-                                <Ellipse Width="120" Height="120" 
-                                        Fill="#FF2A2A2A" Stroke="{StaticResource ExpGradient}" 
-                                        StrokeThickness="8">
-                                    <Ellipse.Effect>
-                                        <DropShadowEffect Color="#FF00FF00" BlurRadius="10" ShadowDepth="0"/>
-                                    </Ellipse.Effect>
-                                </Ellipse>
-                                <TextBlock Text="{Binding CompletionRate, StringFormat='{0}%'}" 
-                                          Foreground="White" FontSize="32" FontWeight="Bold" 
-                                          FontFamily="Consolas" HorizontalAlignment="Center" 
-                                          Margin="0,-90,0,0"/>
-                                <TextBlock Text="COMPLETE" Foreground="#FFAAAAAA" 
-                                          FontSize="14" FontFamily="Consolas" 
-                                          HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                            </StackPanel>
-                        </Border>
+                            <TextBlock Text="EXP GAINED" Foreground="#FFFFFF00" Style="{StaticResource StatTextStyle}"/>
+                            <TextBlock Text="{Binding ExpGained}" Foreground="#FFFFFF00" Style="{StaticResource NumberTextStyle}"/>
+                            
+                            <TextBlock Text="COMPLETION RATE" Foreground="#FFFFFF00" Style="{StaticResource StatTextStyle}"/>
+                            <TextBlock Text="{Binding CompletionRate, StringFormat='{}{0}%'}" Foreground="#FFFFFF00" Style="{StaticResource NumberTextStyle}"/>
+                        </UniformGrid>
                     </StackPanel>
-                </Border>
-            </Grid>
-            
-            <!-- アニメーション開始ボタン -->
-            <Border Grid.Row="2" Margin="0,20,0,15">
-                <Button Content="🎮 START EXP ANIMATION" 
-                       Command="{Binding StartAnimationCommand}"
-                       Style="{StaticResource GamingButtonStyle}"
-                       Padding="30,15" FontSize="18"/>
-            </Border>
-            
-            <!-- フッター -->
-            <Border Grid.Row="3" Background="#FF1A1A2E" CornerRadius="10" 
-                   BorderBrush="#FF333333" BorderThickness="1" Padding="20">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="📈 VIEW DETAILS" 
-                           Style="{StaticResource GamingButtonStyle}"
-                           Padding="20,10" Margin="10,0" FontSize="14"/>
-                    <Button Content="🔄 RESET PROGRESS" 
-                           Style="{StaticResource GamingButtonStyle}"
-                           Padding="20,10" Margin="10,0" FontSize="14"/>
-                    <Button Content="❌ CLOSE" 
-                           Style="{StaticResource GamingButtonStyle}"
-                           Padding="20,10" Margin="10,0" FontSize="14"/>
                 </StackPanel>
             </Border>
         </Grid>
-    </Border>
+        
+        <!-- Actions -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+            <Button Content="START EXP ANIMATION" 
+                    Command="{Binding StartExpAnimationCommand}" 
+                    Style="{StaticResource ResultCardStyle}" 
+                    Background="{StaticResource GoldGradient}" 
+                    Foreground="Black" FontWeight="Bold"
+                    Width="180" Height="40" Margin="10"/>
+            <Button Content="VIEW DETAILS" 
+                    Command="{Binding ViewDetailsCommand}"
+                    Background="#FF21262D" Foreground="White" FontWeight="Bold"
+                    Width="120" Height="40" Margin="10"/>
+            <Button Content="RESET PROGRESS" 
+                    Command="{Binding ResetProgressCommand}"
+                    Background="#FF21262D" Foreground="White" FontWeight="Bold"
+                    Width="140" Height="40" Margin="10"/>
+            <Button Content="CLOSE" 
+                    Command="{Binding CloseCommand}"
+                    Background="#FF21262D" Foreground="White" FontWeight="Bold"
+                    Width="80" Height="40" Margin="10"/>
+        </StackPanel>
+    </Grid>
 </Window>

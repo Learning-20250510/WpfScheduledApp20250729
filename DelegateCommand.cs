@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace WpfScheduledApp20250729
 {
-    internal class DelegateCommand : ICommand
+    public class DelegateCommand : ICommand
     {
         /// <summary>
         /// この２つはデリゲートつまり、methodが登録しておける入れ物、so,要所要所でNullとかでるのは

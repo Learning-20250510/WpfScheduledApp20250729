@@ -7,7 +7,7 @@ namespace WpfScheduledApp20250729.Models.Context
     {
         public DbSet<HighTask> HighTasks { get; set; }
         public DbSet<Architecture> Architectures { get; set; }
-        public DbSet<HowToLearn> HowToLearns { get; set; }
+        public DbSet<Entities.HowToLearn> HowToLearns { get; set; }
         public DbSet<PeriodicallyCycle> PeriodicallyCycles { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<MiddleTask> MiddleTasks { get; set; }

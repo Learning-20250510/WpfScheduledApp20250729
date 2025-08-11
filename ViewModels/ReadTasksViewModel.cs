@@ -13,7 +13,7 @@ using WpfScheduledApp20250729.Models;
 
 namespace WpfScheduledApp20250729.ViewModels
 {
-    class ReadTasksViewModel : NotificationObject
+    public class ReadTasksViewModel : NotificationObject
     {
         private readonly IWindowService _windowService;
         private readonly IGlobalHotKeyService _globalHotKeyService;
@@ -331,11 +331,11 @@ namespace WpfScheduledApp20250729.ViewModels
             CurrentTheme = (DesignTheme)(((int)CurrentTheme + 1) % 5);
             
             // プロパティ変更通知
-            OnPropertyChanged(nameof(IsGamingTheme));
-            OnPropertyChanged(nameof(IsLibraryTheme));
-            OnPropertyChanged(nameof(IsTerminatorTheme));
-            OnPropertyChanged(nameof(IsJapaneseTheme));
-            OnPropertyChanged(nameof(IsMonochromeTheme));
+            RaisePropertyChanged(nameof(IsGamingTheme));
+            RaisePropertyChanged(nameof(IsLibraryTheme));
+            RaisePropertyChanged(nameof(IsTerminatorTheme));
+            RaisePropertyChanged(nameof(IsJapaneseTheme));
+            RaisePropertyChanged(nameof(IsMonochromeTheme));
             
             // テーマに応じたメッセージ表示
             string themeMessage = CurrentTheme switch

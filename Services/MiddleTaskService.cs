@@ -4,7 +4,7 @@ using WpfScheduledApp20250729.Models.Entities;
 
 namespace WpfScheduledApp20250729.Services
 {
-    internal class MiddleTaskService : BaseService<MiddleTask>
+    public class MiddleTaskService : BaseService<MiddleTask>
     {
         public MiddleTaskService(BaseDbContext context) : base(context)
         {

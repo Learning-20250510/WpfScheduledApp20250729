@@ -126,7 +126,7 @@ namespace WpfScheduledApp20250729.ViewModels
 
         #region Commands
 
-        public ICommand StartAnimationCommand => new DelegateCommand(StartExpAnimation);
+        public ICommand StartAnimationCommand => new DelegateCommand(_ => StartExpAnimation());
 
         #endregion
 
@@ -170,7 +170,7 @@ namespace WpfScheduledApp20250729.ViewModels
                 CalculateExp();
 
                 // プロパティ更新通知
-                OnPropertyChanged(nameof(CompletionRate));
+                RaisePropertyChanged(nameof(CompletionRate));
             }
             catch (Exception ex)
             {
@@ -258,7 +258,7 @@ namespace WpfScheduledApp20250729.ViewModels
             // プログレスバーの幅計算（400pxが最大）
             ExpProgressWidth = (_currentExp / (double)_maxExp) * 400;
             
-            OnPropertyChanged(nameof(GainedExp));
+            RaisePropertyChanged(nameof(GainedExp));
         }
 
         private void StartExpAnimation()
@@ -285,7 +285,7 @@ namespace WpfScheduledApp20250729.ViewModels
                 // プログレスバーも同時にアニメーション
                 ExpProgressWidth = (_animatedExp / (double)_maxExp) * 400;
                 
-                OnPropertyChanged(nameof(ExpProgressWidth));
+                RaisePropertyChanged(nameof(ExpProgressWidth));
             }
             else
             {

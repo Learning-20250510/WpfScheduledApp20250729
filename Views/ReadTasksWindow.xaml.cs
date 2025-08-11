@@ -11,7 +11,7 @@ namespace WpfScheduledApp20250729.Views
     /// </summary>
     public partial class ReadTasksWindow : Window
     {
-        private IGlobalHotKeyService _globalHotKeyService;
+        private IGlobalHotKeyService? _globalHotKeyService;
         private IntPtr _windowHandle;
         private const int WM_HOTKEY = 0x0312;
 
@@ -72,19 +72,19 @@ namespace WpfScheduledApp20250729.Views
             base.OnClosed(e);
         }
 
-        private void OnWindowActivateRequested(object sender, EventArgs e)
+        private void OnWindowActivateRequested(object? sender, EventArgs e)
         {
             Activate();
             Focus();
         }
 
-        private void OnTaskActionRequested(object sender, ReadTasksViewModel.TaskActionRequestedEventArgs e)
+        private void OnTaskActionRequested(object? sender, ReadTasksViewModel.TaskActionRequestedEventArgs e)
         {
             var taskActionWindow = new GamingTaskActionWindow(e.ViewModel);
             taskActionWindow.Show();
         }
 
-        private void OnResultRequested(object sender, ReadTasksViewModel.ResultRequestedEventArgs e)
+        private void OnResultRequested(object? sender, ReadTasksViewModel.ResultRequestedEventArgs e)
         {
             var resultWindow = new GamingResultWindow(e.ViewModel);
             resultWindow.Show();

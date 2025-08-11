@@ -4,7 +4,7 @@ using WpfScheduledApp20250729.Models.Entities;
 
 namespace WpfScheduledApp20250729.Services
 {
-    internal class PeriodicallyCycleService : BaseService<PeriodicallyCycle>
+    public class PeriodicallyCycleService : BaseService<PeriodicallyCycle>
     {
         public PeriodicallyCycleService(BaseDbContext context) : base(context)
         {

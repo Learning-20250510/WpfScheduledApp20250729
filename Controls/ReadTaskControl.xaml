@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WpfScheduledApp20250729.Controls.ReadTaskControl"
+<UserControl x:Class="WpfScheduledApp20250729.Controls.ReadTaskControl"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,7 +9,7 @@
         <ListView ItemsSource="{Binding Tasks}">
             <ListView.View>
                 <GridView>
-                    <!-- ✅ 動的ボタン列 -->
+                    <!-- Dynamic button columns -->
                     <GridViewColumn Header="操作" Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

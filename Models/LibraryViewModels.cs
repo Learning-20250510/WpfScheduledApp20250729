@@ -62,7 +62,7 @@ namespace WpfScheduledApp20250729.Models
             {
                 ProgressWidth = ((double)CompletedTasks / TotalTasks) * 400; // 400px max width
             }
-            OnPropertyChanged(nameof(ProgressPercentage));
+            RaisePropertyChanged(nameof(ProgressPercentage));
         }
 
         public void UpdateProgress()
@@ -96,7 +96,7 @@ namespace WpfScheduledApp20250729.Models
             set 
             { 
                 SetProperty(ref _isCompleted, value);
-                OnPropertyChanged(nameof(StatusIcon));
+                RaisePropertyChanged(nameof(StatusIcon));
             }
         }
 

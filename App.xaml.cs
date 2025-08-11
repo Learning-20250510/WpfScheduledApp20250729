@@ -1,4 +1,4 @@
-﻿using System.Configuration;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 using WpfScheduledApp20250729.Services;
@@ -46,6 +46,7 @@ namespace WpfScheduledApp20250729
                 var highTaskService = new HighTaskService(dbContext);
                 var middleTaskService = new MiddleTaskService(dbContext);
                 var lowTaskService = new LowTaskService(dbContext);
+                var motivationService = new MotivationService(dbContext);
 
                 // 初期データ作成サービス
                 var dataSeeder = new DataSeederService(
@@ -54,7 +55,9 @@ namespace WpfScheduledApp20250729
                     projectService, 
                     howToLearnService, 
                     periodicallyCycleService,
-                    relationExtensionAppService);
+                    relationExtensionAppService,
+                    highTaskService,
+                    motivationService);
 
                 // データベース接続確認と初期データ作成
                 if (await dataSeeder.CanConnectToDatabaseAsync())
@@ -75,9 +78,14 @@ namespace WpfScheduledApp20250729
                     return;
                 }
 
+                // 必要なサービスを追加で作成
+                var globalHotKeyService = new GlobalHotKeyService();
+                var taskActionService = new TaskActionService();
+                var resultService = new ResultService();
+
                 // MainWindowとViewModelを作成
                 var mainWindow = new ReadTasksWindow();
-                var mainViewModel = new ReadTasksViewModel(windowService, highTaskService, middleTaskService, lowTaskService, architectureService, projectService);
+                var mainViewModel = new ReadTasksViewModel(windowService, globalHotKeyService, taskActionService, resultService, highTaskService, middleTaskService, lowTaskService, architectureService, projectService);
 
                 mainWindow.DataContext = mainViewModel;
                 mainWindow.Show();

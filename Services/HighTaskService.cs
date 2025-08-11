@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 using WpfScheduledApp20250729.Models.Context;
 using WpfScheduledApp20250729.Models.Entities;
 
 namespace WpfScheduledApp20250729.Services
 {
-    internal class HighTaskService : BaseService<HighTask>
+    public class HighTaskService : BaseService<HighTask>
     {
         public HighTaskService(BaseDbContext context) : base(context)
         {

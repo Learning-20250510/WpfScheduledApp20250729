@@ -187,10 +187,14 @@ namespace WpfScheduledApp20250729.ViewModels
         {
             get
             {
-                return _generateMMFileCommand ??= new DelegateCommand(
-                    _ => GenerateMMFile(),
-                    _ => _task?.HTL == 9 || _task?.HTL == 11
-                );
+                if (_generateMMFileCommand == null)
+                {
+                    _generateMMFileCommand = new DelegateCommand(
+                        _ => GenerateMMFile(),
+                        _ => _task?.HTL == 9 || _task?.HTL == 11
+                    );
+                }
+                return _generateMMFileCommand;
             }
         }
 
@@ -199,10 +203,14 @@ namespace WpfScheduledApp20250729.ViewModels
         {
             get
             {
-                return _completeTaskCommand ??= new DelegateCommand(
-                    _ => CompleteTask(),
-                    _ => _task != null
-                );
+                if (_completeTaskCommand == null)
+                {
+                    _completeTaskCommand = new DelegateCommand(
+                        _ => CompleteTask(),
+                        _ => _task != null
+                    );
+                }
+                return _completeTaskCommand;
             }
         }
 
@@ -306,8 +314,11 @@ namespace WpfScheduledApp20250729.ViewModels
         {
             if (!_disposed && disposing)
             {
-                _timer?.Stop();
-                _timer?.Tick -= Timer_Tick;
+                if (_timer != null)
+                {
+                    _timer.Stop();
+                    _timer.Tick -= Timer_Tick;
+                }
                 GlobalHotKeyService.KeyPressed -= OnKeyPressed;
                 _disposed = true;
             }
@@ -329,9 +340,9 @@ namespace WpfScheduledApp20250729.ViewModels
             if (_currentTypingCount > 0)
             {
                 _currentTypingCount = Math.Max(0, _currentTypingCount - _typingDecrementValue);
-                OnPropertyChanged(nameof(CurrentTypingCount));
-                OnPropertyChanged(nameof(TypingProgressWidth));
-                OnPropertyChanged(nameof(TypingProgressText));
+                RaisePropertyChanged(nameof(CurrentTypingCount));
+                RaisePropertyChanged(nameof(TypingProgressWidth));
+                RaisePropertyChanged(nameof(TypingProgressText));
             }
         }
 
@@ -351,11 +362,11 @@ namespace WpfScheduledApp20250729.ViewModels
             _typingDecrementValue = _typingSettings.DecrementPerKey;
             _currentTypingCount = _maxTypingCount;
 
-            OnPropertyChanged(nameof(MaxTypingCount));
-            OnPropertyChanged(nameof(TypingDecrementValue));
-            OnPropertyChanged(nameof(CurrentTypingCount));
-            OnPropertyChanged(nameof(TypingProgressWidth));
-            OnPropertyChanged(nameof(TypingProgressText));
+            RaisePropertyChanged(nameof(MaxTypingCount));
+            RaisePropertyChanged(nameof(TypingDecrementValue));
+            RaisePropertyChanged(nameof(CurrentTypingCount));
+            RaisePropertyChanged(nameof(TypingProgressWidth));
+            RaisePropertyChanged(nameof(TypingProgressText));
         }
 
         private int GetMaxValueByType(int? architectureId, int? howToLearnId)
@@ -451,18 +462,6 @@ namespace WpfScheduledApp20250729.ViewModels
                 return $"{percentage}% POWER REMAINING";
             }
         }
-
-        public ICommand GenerateMMFileCommand => new DelegateCommand(() =>
-        {
-            // MMファイル生成処理
-            // TODO: 実装
-        });
-
-        public ICommand CompleteTaskCommand => new DelegateCommand(() =>
-        {
-            // タスク完了処理
-            // TODO: 実装
-        });
 
         #endregion
     }
