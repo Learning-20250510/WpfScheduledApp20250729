@@ -11,6 +11,9 @@
         WindowStartupLocation="CenterScreen">
     
     <Window.Resources>
+        <!-- コンバーター -->
+        <local:BoolToViewButtonTextConverter x:Key="BoolToViewButtonTextConverter"/>
+        
         <!-- ゲーミング風グラデーション -->
         <LinearGradientBrush x:Key="GamingGradient" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#FF00D4AA" Offset="0"/>
@@ -168,6 +171,18 @@
                            Margin="0,0,10,0"
                            Padding="15,8"
                            FontSize="12"/>
+                           
+                    <!-- 表示切り替えボタン -->
+                    <Button Content="{Binding IsLibraryView, Converter={StaticResource BoolToViewButtonTextConverter}}" 
+                           Style="{StaticResource GamingButtonStyle}"
+                           Command="{Binding ToggleViewCommand}"
+                           Margin="0,0,10,0"
+                           Padding="15,8"
+                           FontSize="12">
+                        <Button.ToolTip>
+                            <TextBlock Text="Switch between Table and Library view" Foreground="White"/>
+                        </Button.ToolTip>
+                    </Button>
                     
                     <ComboBox Width="120" Height="35" 
                              Background="#FF1A1A2E"

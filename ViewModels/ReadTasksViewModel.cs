@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Threading.Tasks;
 using WpfScheduledApp20250729;
 using WpfScheduledApp20250729.Interfaces;
 using WpfScheduledApp20250729.Services;
@@ -44,6 +46,21 @@ namespace WpfScheduledApp20250729.ViewModels
             set => SetProperty(ref _letsStartCheckBox, value);
         }
 
+        // 図書館表示機能
+        private bool _isLibraryView = false;
+        public bool IsLibraryView
+        {
+            get => _isLibraryView;
+            set => SetProperty(ref _isLibraryView, value);
+        }
+
+        private ObservableCollection<HTLSectionViewModel> _htlSections = new();
+        public ObservableCollection<HTLSectionViewModel> HTLSections
+        {
+            get => _htlSections;
+            set => SetProperty(ref _htlSections, value);
+        }
+
         public DelegateCommand SearchCommand { get; }
         public DelegateCommand HighTaskCommand { get; }
         public DelegateCommand MiddleTaskCommand { get; }
@@ -52,6 +69,7 @@ namespace WpfScheduledApp20250729.ViewModels
         public DelegateCommand ActionTaskCommand { get; }
         public DelegateCommand AppSettingsCommand { get; }
         public DelegateCommand DatabaseSettingsCommand { get; }
+        public DelegateCommand ToggleViewCommand { get; }
 
         public ReadTasksViewModel(IWindowService windowService, IGlobalHotKeyService globalHotKeyService, ITaskActionService taskActionService, IResultService resultService, HighTaskService highTaskService, MiddleTaskService middleTaskService, LowTaskService lowTaskService, ArchitectureService architectureService, ProjectService projectService)
         {
@@ -77,6 +95,10 @@ namespace WpfScheduledApp20250729.ViewModels
             ActionTaskCommand = new DelegateCommand(_ => ShowTaskAction(), _ => true);
             AppSettingsCommand = new DelegateCommand(_ => ShowAppSettings(), _ => true);
             DatabaseSettingsCommand = new DelegateCommand(_ => ShowDatabaseSettings(), _ => true);
+            ToggleViewCommand = new DelegateCommand(_ => ToggleView(), _ => true);
+            
+            // 初期ビューを設定
+            LoadInitialView();
         }
 
         private void ExecuteSearch()
@@ -233,6 +255,159 @@ namespace WpfScheduledApp20250729.ViewModels
             {
                 ViewModel = viewModel;
             }
+        }
+
+        #endregion
+
+        #region 図書館表示機能
+
+        private void LoadInitialView()
+        {
+            // 初期はテーブルビューを表示
+            CurrentView = new ReadTaskControl();
+            LoadLibraryData();
+        }
+
+        private void ToggleView()
+        {
+            IsLibraryView = !IsLibraryView;
+            
+            if (IsLibraryView)
+            {
+                // 図書館表示に切り替え
+                var libraryControl = new LibraryTaskControl();
+                libraryControl.DataContext = this;
+                CurrentView = libraryControl;
+                LoadLibraryData();
+            }
+            else
+            {
+                // テーブル表示に戻す
+                CurrentView = new ReadTaskControl();
+                LoadTableData();
+            }
+        }
+
+        private async void LoadLibraryData()
+        {
+            try
+            {
+                // LowTaskからデータを取得
+                var lowTasks = await GetTodayLowTasksAsync();
+                
+                // HTL別にグループ化
+                var htlGroups = lowTasks.GroupBy(t => t.HowToLearnName).ToList();
+                
+                HTLSections.Clear();
+                
+                foreach (var htlGroup in htlGroups)
+                {
+                    var section = new HTLSectionViewModel
+                    {
+                        HTLName = htlGroup.Key,
+                        HTLIcon = HTLStatistics.GetHTLIcon(htlGroup.Key),
+                        ClearCount = await GetHTLClearCountAsync(htlGroup.Key)
+                    };
+                    
+                    // タスクをLibraryTaskViewModelに変換
+                    foreach (var task in htlGroup)
+                    {
+                        var libraryTask = LibraryTaskViewModel.FromLowTask(task);
+                        section.Tasks.Add(libraryTask);
+                    }
+                    
+                    section.UpdateProgress();
+                    HTLSections.Add(section);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"図書館データ読み込みエラー: {ex.Message}", "エラー");
+            }
+        }
+
+        private void LoadTableData()
+        {
+            // 既存のテーブルデータ読み込み処理
+            ShowLowTasks();
+        }
+
+        private async Task<System.Collections.Generic.List<Models.Entities.LowTask>> GetTodayLowTasksAsync()
+        {
+            // 実際の実装ではLowTaskServiceを使用
+            // 今日のタスクを取得する仮実装
+            return await Task.FromResult(new System.Collections.Generic.List<Models.Entities.LowTask>
+            {
+                new Models.Entities.LowTask
+                {
+                    Id = 1,
+                    Description = "FreePlane MMファイル作成",
+                    EstimatedTime = 30,
+                    ExecutionDate = DateOnly.FromDateTime(DateTime.Today),
+                    ExecutionTime = new TimeOnly(9, 0),
+                    LastClearedAt = DateTime.Today.AddHours(-1),
+                    HowToLearnName = "FreePlane",
+                    MiddleTaskMName = "学習計画",
+                    ProjectName = "知識管理",
+                    MiddleTaskId = 1,
+                    ProjectId = 1
+                },
+                new Models.Entities.LowTask
+                {
+                    Id = 2,
+                    Description = "PDF資料読み込み",
+                    EstimatedTime = 45,
+                    ExecutionDate = DateOnly.FromDateTime(DateTime.Today),
+                    ExecutionTime = new TimeOnly(10, 0),
+                    LastClearedAt = DateTime.Today.AddHours(2),
+                    HowToLearnName = "PDF",
+                    MiddleTaskMName = "資料研究",
+                    ProjectName = "技術学習",
+                    MiddleTaskId = 2,
+                    ProjectId = 1
+                },
+                new Models.Entities.LowTask
+                {
+                    Id = 3,
+                    Description = "動画教材視聴",
+                    EstimatedTime = 60,
+                    ExecutionDate = DateOnly.FromDateTime(DateTime.Today),
+                    ExecutionTime = new TimeOnly(14, 0),
+                    LastClearedAt = DateTime.Today.AddHours(-2),
+                    HowToLearnName = "Movie",
+                    MiddleTaskMName = "動画学習",
+                    ProjectName = "スキルアップ",
+                    MiddleTaskId = 3,
+                    ProjectId = 2
+                },
+                new Models.Entities.LowTask
+                {
+                    Id = 4,
+                    Description = "Webページ調査",
+                    EstimatedTime = 25,
+                    ExecutionDate = DateOnly.FromDateTime(DateTime.Today),
+                    ExecutionTime = new TimeOnly(16, 0),
+                    LastClearedAt = DateTime.Today.AddHours(-3),
+                    HowToLearnName = "WebPage",
+                    MiddleTaskMName = "情報収集",
+                    ProjectName = "リサーチ",
+                    MiddleTaskId = 4,
+                    ProjectId = 2
+                }
+            });
+        }
+
+        private async Task<int> GetHTLClearCountAsync(string htlName)
+        {
+            // HTL別の累計クリア回数を取得（仮実装）
+            return await Task.FromResult(htlName switch
+            {
+                "FreePlane" => 15,
+                "PDF" => 23,
+                "Movie" => 8,
+                "WebPage" => 12,
+                _ => 5
+            });
         }
 
         #endregion
